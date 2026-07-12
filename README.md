@@ -1,97 +1,130 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# LetsMessageEncrypt
 
-# Getting Started
+A React Native CLI app for encrypting and decrypting messages between app instances using pre-shared secrets. Keys are identified by human-readable names, and the MD5 hash of each secret acts as a fingerprint you can share to verify both sides match.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- **Create / import keys** — name + passphrase, with optional auto-generated secrets
+- **MD5 fingerprint** — displayed for each key so you can verify pre-shared setup
+- **AES encryption** — messages encrypted with AES-128-CBC, key derived from MD5(secret)
+- **Local storage** — keys persisted on device via AsyncStorage
+- **Two tabs** — Keys (manage) and Encrypt (encrypt/decrypt messages)
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Prerequisites
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- Node.js >= 22.11
+- For iOS: Xcode, CocoaPods (`sudo gem install cocoapods`)
+- For Android: Android Studio, JDK, Android SDK
 
-```sh
-# Using npm
-npm start
+## Setup
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```bash
+cd LetsMessageEncrypt
+npm install
 ```
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
+```bash
+cd ios
+bundle install        # first time only
 bundle exec pod install
+cd ..
+npx react-native run-ios
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Android
 
-```sh
-# Using npm
-npm run ios
+Start an emulator or connect a device, then:
 
-# OR using Yarn
-yarn ios
+```bash
+npx react-native run-android
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Metro bundler
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+If Metro is not already running:
 
-## Step 3: Modify your app
+```bash
+npm start
+```
 
-Now that you have successfully run the app, let's make changes!
+## How the encrypt/decrypt flow works
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### 1. Device A creates a key
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+1. Open the **Keys** tab.
+2. Enter a name (e.g. `Dominic`) and a secret (or tap **Generate secret**).
+3. Tap **Save key**.
+4. Share either:
+   - the **secret** (passphrase), or
+   - the **MD5 hash** (fingerprint) so Device B can confirm they match after import.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+### 2. Device B imports the same key
 
-## Congratulations! :tada:
+1. Open the **Keys** tab.
+2. Enter the **same name** and **same secret** as Device A.
+3. Tap **Save key**.
+4. Compare MD5 hashes — they must be identical.
 
-You've successfully run and modified your React Native App. :partying_face:
+### 3. Encrypt on Device A
 
-### Now what?
+1. Open the **Encrypt** tab and select the key.
+2. Type a message and tap **Encrypt**.
+3. Copy the base64 ciphertext and send it to Device B (SMS, chat, email, etc.).
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+### 4. Decrypt on Device B
 
-# Troubleshooting
+1. Open the **Encrypt** tab and select the matching key.
+2. Paste the ciphertext and tap **Decrypt**.
+3. The original plaintext appears.
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## Cryptography details
 
-# Learn More
+| Step | Method |
+|------|--------|
+| Fingerprint | `MD5(secret)` → 32-char hex string |
+| AES key | `MD5(secret)` as 128-bit key material |
+| IV | `MD5(secret + ":iv")` (deterministic, same on both devices) |
+| Mode | AES-128-CBC with PKCS7 padding |
+| Output | Raw ciphertext encoded as base64 |
 
-To learn more about React Native, take a look at the following resources:
+Both instances derive identical key material from the same secret, so ciphertext produced on one device decrypts on the other without transmitting an IV separately.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+> **Note:** MD5 is used here as requested for fingerprinting and key derivation. For production security, prefer modern KDFs (e.g. PBKDF2, Argon2) and SHA-256+.
+
+## Project structure
+
+```
+LetsMessageEncrypt/
+├── App.tsx                          # Root app with tab navigation
+├── src/
+│   ├── types.ts                     # SavedKey type
+│   ├── services/
+│   │   ├── cryptoService.ts         # MD5, AES encrypt/decrypt
+│   │   └── keyStorage.ts            # AsyncStorage persistence
+│   └── components/
+│       ├── CreateKeyTab.tsx         # Key creation & list
+│       └── EncryptDecryptTab.tsx    # Encrypt/decrypt UI
+├── android/                         # Android native project
+├── ios/                             # iOS native project
+└── __tests__/                       # Unit tests
+```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start Metro bundler |
+| `npm run ios` | Run on iOS simulator |
+| `npm run android` | Run on Android emulator/device |
+| `npm test` | Run Jest tests |
+| `npm run lint` | Run ESLint |
+
+## Tests
+
+```bash
+npm test
+```
+
+Tests cover MD5 fingerprint stability and round-trip encrypt/decrypt behavior.
