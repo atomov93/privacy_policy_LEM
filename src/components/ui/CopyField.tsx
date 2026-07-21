@@ -1,8 +1,8 @@
 import React, {useCallback} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
 import {useTranslation} from 'react-i18next';
 
+import {copySensitiveText} from '../../services/clipboard';
 import {triggerLightHaptic} from '../../services/haptics';
 import {shareText} from '../../services/share';
 import {MIN_TOUCH_TARGET, useTheme} from './theme';
@@ -40,7 +40,7 @@ export function CopyField({
     if (!value) {
       return;
     }
-    Clipboard.setString(value);
+    void copySensitiveText(value);
     triggerLightHaptic();
     showToast(t('common.copied'));
   }, [showToast, t, value]);

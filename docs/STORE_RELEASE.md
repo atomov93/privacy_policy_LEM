@@ -9,7 +9,7 @@ Release checklist for **Google Play** and **Apple App Store**.
 | App name | LetsMessageEncrypt |
 | Android package | `com.letsmessageencrypt` |
 | iOS bundle ID | `org.tts.LetsMessageEncrypt` |
-| Version | 1.0 (build 1) |
+| Version | 1.0.1 (Android versionCode 2) |
 | Category | Productivity / Utilities |
 
 > **Trademark note:** Avoid confusion with the “Let’s Encrypt” certificate authority. This app is a separate offline messaging encryptor named LetsMessageEncrypt.
@@ -71,7 +71,7 @@ android/app/build/outputs/bundle/release/app-release.aab
    - **Store listing** — description, screenshots, icon
 3. **Release → Production → Create new release**
 4. Upload `app-release.aab`
-5. **Release name:** 1.0.0
+5. **Release name:** 1.0.1
 6. Submit for review
 
 ### Play signing
@@ -115,7 +115,7 @@ In Xcode:
 2. **Product → Archive**
 3. When Organizer opens → **Distribute App**
 4. **App Store Connect** → Upload
-5. Answer export compliance: **No** (standard encryption only — `ITSAppUsesNonExemptEncryption` is already `false` in Info.plist)
+5. Answer export compliance carefully against Apple’s **current** App Store Connect questionnaire. The app’s primary purpose includes cryptography; do not treat exemption as automatic. Re-verify `ITSAppUsesNonExemptEncryption` in Info.plist against Apple’s latest guidance before each submission.
 
 **Option 2 — command line**
 
@@ -199,7 +199,7 @@ Keys and messages stay on your device. No account. No cloud.
 Common fixes:
 
 - **Missing privacy policy** → host `docs/PRIVACY_POLICY.md` and add URL
-- **Encryption export** (iOS) → confirm standard encryption exemption
+- **Encryption export** (iOS) → re-check Apple’s current questions; do not assume automatic exemption because encryption is a core feature
 - **Camera permission** → already declared in Info.plist / Android manifest
 - **Name confusion with Let’s Encrypt CA** → clarify in review notes or rename listing
 

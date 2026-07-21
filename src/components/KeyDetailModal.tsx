@@ -37,6 +37,7 @@ interface KeyDetailModalProps {
   onClose: () => void;
   onDelete: (key: SavedKey) => void;
   onShareQr: (key: SavedKey) => void;
+  onShareLme: (key: SavedKey) => void;
 }
 
 export function KeyDetailModal({
@@ -45,6 +46,7 @@ export function KeyDetailModal({
   onClose,
   onDelete,
   onShareQr,
+  onShareLme,
 }: KeyDetailModalProps) {
   const {colors} = useTheme();
   const {contentPadding} = useSheetInsets();
@@ -107,6 +109,14 @@ export function KeyDetailModal({
     onClose();
     onShareQr(keyItem);
   }, [keyItem, onClose, onShareQr]);
+
+  const handleShareLme = useCallback(() => {
+    if (!keyItem) {
+      return;
+    }
+    onClose();
+    onShareLme(keyItem);
+  }, [keyItem, onClose, onShareLme]);
 
   if (!keyItem) {
     return null;
@@ -230,7 +240,7 @@ export function KeyDetailModal({
           <Section
             title={t('keyRow.sectionShare')}
             footer={t('keyRow.sectionShareFooter')}>
-            <SectionRow isLast>
+            <SectionRow>
               <MenuRow
                 iconNode={<QrIcon color={colors.securityTint} />}
                 title={t('keyRow.shareQr')}
@@ -240,6 +250,18 @@ export function KeyDetailModal({
                   name: keyItem.name,
                 })}
                 accessibilityHint={t('keyRow.shareQrHint')}
+              />
+            </SectionRow>
+            <SectionRow isLast>
+              <MenuRow
+                icon="📄"
+                title={t('keyRow.shareLme')}
+                subtitle={t('keyRow.shareLmeSubtitle')}
+                onPress={handleShareLme}
+                accessibilityLabel={t('keyRow.shareViaLme', {
+                  name: keyItem.name,
+                })}
+                accessibilityHint={t('keyRow.shareLmeHint')}
               />
             </SectionRow>
           </Section>

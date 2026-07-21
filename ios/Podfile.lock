@@ -1523,6 +1523,28 @@ PODS:
     - Yoga
   - react-native-biometrics (3.0.1):
     - React-Core
+  - react-native-document-picker (12.0.1):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - react-native-get-random-values (2.0.0):
     - hermes-engine
     - RCTRequired
@@ -2077,6 +2099,30 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - RNFS (2.20.0):
+    - React-Core
+  - RNKeychain (10.0.0):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNLocalize (3.7.0):
     - hermes-engine
     - RCTRequired
@@ -2100,6 +2146,28 @@ PODS:
     - ReactNativeDependencies
     - Yoga
   - RNReactNativeHapticFeedback (3.0.0):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
+  - RNShare (12.3.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2214,6 +2282,7 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - React-mutationobservernativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/mutationobserver`)
   - react-native-biometrics (from `../node_modules/react-native-biometrics`)
+  - "react-native-document-picker (from `../node_modules/@react-native-documents/picker`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -2254,8 +2323,11 @@ DEPENDENCIES:
   - ReactNativeCameraKit (from `../node_modules/react-native-camera-kit`)
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
+  - RNFS (from `../node_modules/react-native-fs`)
+  - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -2354,6 +2426,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/mutationobserver"
   react-native-biometrics:
     :path: "../node_modules/react-native-biometrics"
+  react-native-document-picker:
+    :path: "../node_modules/@react-native-documents/picker"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-quick-base64:
@@ -2434,10 +2508,16 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
+  RNKeychain:
+    :path: "../node_modules/react-native-keychain"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNReactNativeHapticFeedback:
     :path: "../node_modules/react-native-haptic-feedback"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -2490,6 +2570,7 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 2eb3f49d0d8e77b5343455eccd057010b8d38b6b
   React-mutationobservernativemodule: f0a0d5ae9b51caf7becbeabf836d716cfedb6bf2
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
+  react-native-document-picker: 15cca2d1a6bfb6d0d3ff0283bd9b903e57cb028b
   react-native-get-random-values: 68792987aef40e8aa72dc448d97e009d1f440c88
   react-native-quick-base64: 5c829c9016276132ac03c4d598c8d256b964e6ac
   react-native-safe-area-context: fb5c8ee9f6dd62ef710611b3d370c501f42a4ac0
@@ -2530,8 +2611,11 @@ SPEC CHECKSUMS:
   ReactNativeCameraKit: cf0ae8d9e1ab991453dbe97c3ba98e69f1f0bc5b
   ReactNativeDependencies: fa0a54b3f5319ae0e3b9aff32bfee7a424b88e66
   RNCClipboard: 715fa7c6c8366f17d00f05a439ee7488f390fa5f
+  RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
+  RNKeychain: 6778b35b5bd067c322f8479526ac09b1d61f31d0
   RNLocalize: f370284ea42c48f29f0d8dd3a7bcc28a04f82155
   RNReactNativeHapticFeedback: 16e5f7fd37e2acc5a33ea14f48bfd88ff43776ee
+  RNShare: 7344a3a7d4e5df58c356ad0f79e4a3ef1325c635
   RNSVG: 6cae8d4082913be2eb43eaec2a456222c42195ed
   Yoga: fe50ab299e578f397fef753cf309c6703a4db29b
 

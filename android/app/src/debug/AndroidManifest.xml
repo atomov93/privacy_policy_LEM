@@ -1,0 +1,4 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Metro / debug tooling only — release builds omit INTERNET. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest>

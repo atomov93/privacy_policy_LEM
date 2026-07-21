@@ -1,13 +1,16 @@
 # LetsMessageEncrypt
 
-A React Native CLI app for encrypting and decrypting messages between app instances using pre-shared secrets. Keys are identified by human-readable names, and the MD5 hash of each secret acts as a fingerprint you can share to verify both sides match.
+A React Native CLI app for encrypting and decrypting messages between devices using pre-shared secrets. Keys are identified by human-readable names. Fingerprints use **SHA-256** so both sides can verify they share the same secret.
 
 ## Features
 
 - **Create / import keys** — name + passphrase, with optional auto-generated secrets
-- **MD5 fingerprint** — displayed for each key so you can verify pre-shared setup
-- **AES encryption** — messages encrypted with AES-128-CBC, key derived from MD5(secret)
-- **Local storage** — keys persisted on device via AsyncStorage
+- **SHA-256 fingerprint** — displayed for each key so you can verify pre-shared setup
+- **Authenticated encryption** — PBKDF2-SHA256, AES-256-CBC, random IV/salt, HMAC-SHA256 (`v3:` ciphertext)
+- **Secure local storage** — key database encrypted with a Keychain/Keystore-backed wrapping key
+- **PIN-protected QR transfer** — secrets are never encoded as plaintext in QR codes
+- **Encrypted `.lme` key files** — share keys remotely; passphrase required separately
+- **Biometric / screen lock** — fails closed when authentication is unavailable
 - **Two tabs** — Keys (manage) and Encrypt (encrypt/decrypt messages)
 
 ## Prerequisites
@@ -19,7 +22,7 @@ A React Native CLI app for encrypting and decrypting messages between app instan
 ## Setup
 
 ```bash
-cd LetsMessageEncrypt
+cd LetsEncryptApp
 npm install
 ```
 
@@ -43,8 +46,6 @@ npx react-native run-android
 
 ### Metro bundler
 
-If Metro is not already running:
-
 ```bash
 npm start
 ```
@@ -54,77 +55,58 @@ npm start
 ### 1. Device A creates a key
 
 1. Open the **Keys** tab.
-2. Enter a name (e.g. `Dominic`) and a secret (or tap **Generate secret**).
+2. Enter a name and a secret (or tap **Generate**).
 3. Tap **Save key**.
-4. Share either:
-   - the **secret** (passphrase), or
-   - the **MD5 hash** (fingerprint) so Device B can confirm they match after import.
+4. Share either the **secret**, the **SHA-256 fingerprint**, or a **PIN-protected QR**.
 
 ### 2. Device B imports the same key
 
-1. Open the **Keys** tab.
-2. Enter the **same name** and **same secret** as Device A.
-3. Tap **Save key**.
-4. Compare MD5 hashes — they must be identical.
+1. Open the **Keys** tab → Join key.
+2. Scan the QR and enter the transfer PIN, or enter name + secret + fingerprint manually.
+3. Compare fingerprints — they must match.
 
-### 3. Encrypt on Device A
+### 3. Encrypt / decrypt
 
 1. Open the **Encrypt** tab and select the key.
-2. Type a message and tap **Encrypt**.
-3. Copy the base64 ciphertext and send it to Device B (SMS, chat, email, etc.).
-
-### 4. Decrypt on Device B
-
-1. Open the **Encrypt** tab and select the matching key.
-2. Paste the ciphertext and tap **Decrypt**.
-3. The original plaintext appears.
+2. Encrypt produces `v3:` authenticated ciphertext.
+3. Decrypt accepts `v3:` and older `v2:` ciphertext. Unauthenticated legacy MD5/AES-CBC is **off by default** and requires an explicit “Legacy decrypt (insecure)” toggle.
 
 ## Cryptography details
 
+See [docs/CRYPTO.md](docs/CRYPTO.md) for the full format specification.
+
 | Step | Method |
 |------|--------|
-| Fingerprint | `MD5(secret)` → 32-char hex string |
-| AES key | `MD5(secret)` as 128-bit key material |
-| IV | `MD5(secret + ":iv")` (deterministic, same on both devices) |
-| Mode | AES-128-CBC with PKCS7 padding |
-| Output | Raw ciphertext encoded as base64 |
+| Fingerprint | `SHA-256(secret)` → 64-char hex |
+| Message KDF (v3) | PBKDF2-SHA256, 100 000 iterations, **per-message random salt** |
+| Encryption | AES-256-CBC + PKCS7, random IV |
+| Integrity | HMAC-SHA256 over `salt \|\| IV \|\| ciphertext` |
+| Output | `v3:` + Base64 payload |
+| Compatibility | Decrypts `v2:` (fixed app salt). Legacy MD5/CBC only with explicit opt-in |
 
-Both instances derive identical key material from the same secret, so ciphertext produced on one device decrypts on the other without transmitting an IV separately.
-
-> **Note:** MD5 is used here as requested for fingerprinting and key derivation. For production security, prefer modern KDFs (e.g. PBKDF2, Argon2) and SHA-256+.
+> **Note:** Older documentation that described MD5-derived AES-128-CBC as the current scheme is obsolete. That algorithm remains available only as an explicitly labeled insecure compatibility mode.
 
 ## Project structure
 
 ```
-LetsMessageEncrypt/
-├── App.tsx                          # Root app with tab navigation
-├── src/
-│   ├── types.ts                     # SavedKey type
-│   ├── services/
-│   │   ├── cryptoService.ts         # MD5, AES encrypt/decrypt
-│   │   └── keyStorage.ts            # AsyncStorage persistence
-│   └── components/
-│       ├── CreateKeyTab.tsx         # Key creation & list
-│       └── EncryptDecryptTab.tsx    # Encrypt/decrypt UI
-├── android/                         # Android native project
-├── ios/                             # iOS native project
-└── __tests__/                       # Unit tests
+LetsEncryptApp/
+├── App.tsx
+├── src/services/          # crypto, key storage, biometrics, QR, clipboard
+├── src/components/        # UI tabs and modals
+├── android/ / ios/        # native projects (FLAG_SECURE / privacy overlay)
+├── docs/                  # privacy, crypto, threat model, release guide
+└── __tests__/             # Jest security and regression suite
 ```
-
-## Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start Metro bundler |
-| `npm run ios` | Run on iOS simulator |
-| `npm run android` | Run on Android emulator/device |
-| `npm test` | Run Jest tests |
-| `npm run lint` | Run ESLint |
 
 ## Tests
 
 ```bash
 npm test
+npm run test:coverage
+npm run typecheck
+npm run lint
 ```
 
-Tests cover MD5 fingerprint stability and round-trip encrypt/decrypt behavior.
+## Security
+
+See [SECURITY.md](SECURITY.md) and [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md). Report vulnerabilities privately to the address listed in SECURITY.md.

@@ -7,6 +7,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TouchableWithoutFeedback,
   View,
@@ -20,6 +21,10 @@ import {
   warmKeyDerivation,
 } from '../services/cryptoService';
 import {triggerLightHaptic} from '../services/haptics';
+import {
+  MAX_CIPHERTEXT_LENGTH,
+  MAX_PLAINTEXT_LENGTH,
+} from '../services/limits';
 import {SavedKey} from '../types';
 import {
   Button,
@@ -53,6 +58,7 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
   const [fingerprintExpanded, setFingerprintExpanded] = useState(false);
   const [isEncrypting, setIsEncrypting] = useState(false);
   const [isDecrypting, setIsDecrypting] = useState(false);
+  const [allowLegacyDecrypt, setAllowLegacyDecrypt] = useState(false);
 
   const selectedKey = useMemo(
     () => keys.find(key => key.id === selectedKeyId) ?? keys[0] ?? null,
@@ -96,6 +102,13 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
       );
       return;
     }
+    if (plaintext.length > MAX_PLAINTEXT_LENGTH) {
+      Alert.alert(
+        t('encrypt.alertTooLong'),
+        t('encrypt.alertTooLongMessage'),
+      );
+      return;
+    }
     setIsEncrypting(true);
     setDecryptedOutput('');
     try {
@@ -124,9 +137,18 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
       );
       return;
     }
+    if (ciphertext.length > MAX_CIPHERTEXT_LENGTH) {
+      Alert.alert(
+        t('encrypt.alertTooLong'),
+        t('encrypt.alertTooLongMessage'),
+      );
+      return;
+    }
     setIsDecrypting(true);
     try {
-      const result = await decryptMessage(ciphertext, selectedKey.secret);
+      const result = await decryptMessage(ciphertext, selectedKey.secret, {
+        allowLegacy: allowLegacyDecrypt,
+      });
       setDecryptedOutput(result);
       triggerLightHaptic();
     } catch {
@@ -138,7 +160,7 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
     } finally {
       setIsDecrypting(false);
     }
-  }, [ciphertext, selectedKey, t]);
+  }, [allowLegacyDecrypt, ciphertext, selectedKey, t]);
 
   const handleUseEncryptedOutput = useCallback(() => {
     setCiphertext(encryptedOutput);
@@ -229,6 +251,7 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
                 multiline
                 autoComplete="off"
                 textContentType="none"
+                maxLength={MAX_PLAINTEXT_LENGTH}
                 accessibilityLabel={t('encrypt.messageInputA11y')}
                 style={styles.multiline}
               />
@@ -304,9 +327,32 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
                 autoCorrect={false}
                 autoComplete="off"
                 textContentType="none"
+                maxLength={MAX_CIPHERTEXT_LENGTH}
                 accessibilityLabel={t('encrypt.ciphertextInputA11y')}
                 style={styles.multilineCiphertext}
               />
+            </SectionRow>
+            <SectionRow>
+              <View style={styles.legacyRow}>
+                <View style={styles.legacyText}>
+                  <Text style={[styles.legacyTitle, {color: colors.label}]}>
+                    {t('encrypt.legacyToggle')}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.legacySubtitle,
+                      {color: colors.secondaryLabel},
+                    ]}>
+                    {t('encrypt.legacyToggleSubtitle')}
+                  </Text>
+                </View>
+                <Switch
+                  value={allowLegacyDecrypt}
+                  onValueChange={setAllowLegacyDecrypt}
+                  trackColor={{false: colors.separator, true: colors.securityTint}}
+                  accessibilityLabel={t('encrypt.legacyToggleA11y')}
+                />
+              </View>
             </SectionRow>
             <SectionRow isLast>
               <Button
@@ -396,5 +442,22 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     flex: 1,
+  },
+  legacyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  legacyText: {
+    flex: 1,
+    gap: 4,
+  },
+  legacyTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  legacySubtitle: {
+    fontSize: 13,
+    lineHeight: 18,
   },
 });

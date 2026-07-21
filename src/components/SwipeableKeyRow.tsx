@@ -18,12 +18,14 @@ interface SwipeableKeyRowProps {
   item: SavedKey;
   onDelete: (key: SavedKey) => void;
   onShareQr: (key: SavedKey) => void;
+  onShareLme: (key: SavedKey) => void;
 }
 
 export function SwipeableKeyRow({
   item,
   onDelete,
   onShareQr,
+  onShareLme,
 }: SwipeableKeyRowProps) {
   const {colors} = useTheme();
   const {t} = useTranslation();
@@ -117,6 +119,7 @@ export function SwipeableKeyRow({
         onClose={() => setShowDetails(false)}
         onDelete={onDelete}
         onShareQr={onShareQr}
+        onShareLme={onShareLme}
       />
     </>
   );

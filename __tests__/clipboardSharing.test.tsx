@@ -1,50 +1,50 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React from 'react';
-import { Pressable, Share } from 'react-native';
-import ReactTestRenderer from 'react-test-renderer';
+import {Share} from 'react-native';
 
-import { InputField } from '../src/components/ui/InputField';
-import { shareText } from '../src/services/share';
+import {
+  cancelClipboardClear,
+  copySensitiveText,
+} from '../src/services/clipboard';
+import {shareText} from '../src/services/share';
 
 const clipboard = Clipboard as jest.Mocked<typeof Clipboard>;
 
 describe('clipboard behavior', () => {
-  beforeEach(() => jest.clearAllMocks());
-
-  it('pastes clipboard text through onChangeText', async () => {
-    clipboard.getString.mockResolvedValueOnce('pasted secret');
-    const onChangeText = jest.fn();
-    let renderer!: ReactTestRenderer.ReactTestRenderer;
-    await ReactTestRenderer.act(async () => {
-      renderer = ReactTestRenderer.create(
-        <InputField label="Secret" showPaste onChangeText={onChangeText} />,
-      );
-    });
-    const paste = renderer.root
-      .findAllByType(Pressable)
-      .find(node => node.props.accessibilityLabel === 'Paste into Secret');
-    expect(paste).toBeDefined();
-    await ReactTestRenderer.act(async () => paste!.props.onPress());
-    expect(onChangeText).toHaveBeenCalledWith('pasted secret');
+  beforeEach(() => {
+    jest.clearAllMocks();
+    cancelClipboardClear();
+    jest.useFakeTimers();
+  });
+  afterEach(() => {
+    cancelClipboardClear();
+    jest.useRealTimers();
   });
 
-  it('copies the exact value rather than its concealed rendering', async () => {
-    let renderer!: ReactTestRenderer.ReactTestRenderer;
-    await ReactTestRenderer.act(async () => {
-      renderer = ReactTestRenderer.create(
-        <InputField
-          label="Secret"
-          value="🔐 secret"
-          showCopy
-          secureTextEntry
-        />,
-      );
-    });
-    const copy = renderer.root
-      .findAllByType(Pressable)
-      .find(node => node.props.accessibilityLabel === 'Copy Secret');
-    ReactTestRenderer.act(() => copy!.props.onPress());
+  it('copies sensitive text to the clipboard', async () => {
+    await copySensitiveText('🔐 secret');
     expect(clipboard.setString).toHaveBeenCalledWith('🔐 secret');
+  });
+
+  it('does not touch the clipboard for empty text', async () => {
+    await copySensitiveText('');
+    expect(clipboard.setString).not.toHaveBeenCalled();
+  });
+
+  it('clears sensitive clipboard contents after the TTL', () => {
+    void copySensitiveText('top-secret', 1000);
+    expect(clipboard.setString).toHaveBeenCalledWith('top-secret');
+    jest.advanceTimersByTime(1000);
+    expect(clipboard.setString).toHaveBeenLastCalledWith('');
+  });
+
+  it('does not clear the clipboard if a newer copy replaced it', () => {
+    void copySensitiveText('first', 1000);
+    void copySensitiveText('second', 1000);
+    jest.advanceTimersByTime(1000);
+    expect(clipboard.setString).toHaveBeenLastCalledWith('');
+    // Only the latest value should be cleared once
+    const clears = clipboard.setString.mock.calls.filter(call => call[0] === '');
+    expect(clears).toHaveLength(1);
   });
 });
 

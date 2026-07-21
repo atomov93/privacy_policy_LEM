@@ -4,6 +4,7 @@ import {
   decryptMessage,
   encryptMessage,
   V2_PREFIX,
+  V3_PREFIX,
 } from '../src/services/cryptoService';
 
 function encryptLegacy(plaintext: string, secret: string): string {
@@ -29,8 +30,9 @@ describe('Unicode and empty-message handling', () => {
     );
   });
 
-  it.failing('round-trips an empty message', async () => {
+  it('round-trips an empty message', async () => {
     const encrypted = await encryptMessage('', 'empty-message-secret');
+    expect(encrypted.startsWith(V3_PREFIX)).toBe(true);
     await expect(
       decryptMessage(encrypted, 'empty-message-secret'),
     ).resolves.toBe('');
@@ -46,14 +48,16 @@ describe('Unicode and empty-message handling', () => {
 });
 
 describe('legacy ciphertext edge cases', () => {
-  it('decrypts valid legacy ciphertext surrounded by whitespace', async () => {
+  it('decrypts valid legacy ciphertext surrounded by whitespace when allowed', async () => {
     const ciphertext = encryptLegacy('legacy text', 'legacy-secret');
     await expect(
-      decryptMessage(`\n ${ciphertext} \t`, 'legacy-secret'),
+      decryptMessage(`\n ${ciphertext} \t`, 'legacy-secret', {
+        allowLegacy: true,
+      }),
     ).resolves.toBe('legacy text');
   });
 
-  it.each(['', 'not-base64!!!', 'AA==', 'v2:', 'v2:not-base64!!!'])(
+  it.each(['', 'not-base64!!!', 'AA==', 'v2:', 'v2:not-base64!!!', 'v3:'])(
     'rejects malformed ciphertext %j',
     async ciphertext => {
       await expect(
@@ -62,15 +66,15 @@ describe('legacy ciphertext edge cases', () => {
     },
   );
 
-  it('rejects a bit-flipped authenticated v2 payload', async () => {
+  it('rejects a bit-flipped authenticated v3 payload', async () => {
     const encrypted = await encryptMessage('authenticated', 'tamper-secret');
     const payload = CryptoJS.enc.Base64.parse(
-      encrypted.slice(V2_PREFIX.length),
+      encrypted.slice(V3_PREFIX.length),
     );
     payload.words[5] ^= 0x01000000;
     await expect(
       decryptMessage(
-        `${V2_PREFIX}${CryptoJS.enc.Base64.stringify(payload)}`,
+        `${V3_PREFIX}${CryptoJS.enc.Base64.stringify(payload)}`,
         'tamper-secret',
       ),
     ).rejects.toThrow();
@@ -80,9 +84,10 @@ describe('legacy ciphertext edge cases', () => {
 describe('cross-platform encryption compatibility', () => {
   it('decrypts a Node.js crypto reference vector', async () => {
     // Independently generated with node:crypto using PBKDF2-SHA256,
-    // AES-256-CBC and HMAC-SHA256 with a fixed IV.
+    // AES-256-CBC and HMAC-SHA256 with a fixed IV (v2 format).
     const fixture =
       'v2:ABEiM0RVZneImaq7zN3u/xCeYOMakx60KAqqPp7oa71J3RtmgjbF6VFsw3euB2t4LGY+M5JxrJ6runb5PTNs8XVr+bY8NmzzvlHzTLQUBw0=';
+    expect(fixture.startsWith(V2_PREFIX)).toBe(true);
     await expect(decryptMessage(fixture, 'cross-platform-🔐')).resolves.toBe(
       'Hello, 世界 🌍\nLine 2',
     );

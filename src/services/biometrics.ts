@@ -1,7 +1,5 @@
 import {Platform} from 'react-native';
-import ReactNativeBiometrics, {
-  BiometryTypes,
-} from 'react-native-biometrics';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
 import i18n from '../i18n';
 
@@ -51,7 +49,7 @@ export async function authenticateWithBiometrics(): Promise<boolean> {
   try {
     const available = await isBiometricAvailable();
     if (!available) {
-      return true;
+      return false;
     }
 
     const {success} = await rnBiometrics.simplePrompt({
@@ -72,7 +70,7 @@ export async function authenticateToRevealSecret(): Promise<boolean> {
   try {
     const available = await isBiometricAvailable();
     if (!available) {
-      return true;
+      return false;
     }
 
     const {success} = await rnBiometrics.simplePrompt({
@@ -87,4 +85,13 @@ export async function authenticateToRevealSecret(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/** Enable lock only after availability + a successful authentication. */
+export async function enableBiometricLockWithVerification(): Promise<boolean> {
+  const available = await isBiometricAvailable();
+  if (!available) {
+    return false;
+  }
+  return authenticateWithBiometrics();
 }

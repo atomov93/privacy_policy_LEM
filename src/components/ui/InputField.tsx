@@ -11,6 +11,7 @@ import {
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useTranslation} from 'react-i18next';
 
+import {copySensitiveText} from '../../services/clipboard';
 import {triggerLightHaptic} from '../../services/haptics';
 import {shareText} from '../../services/share';
 import {MIN_TOUCH_TARGET, useTheme} from './theme';
@@ -57,7 +58,7 @@ export function InputField({
     if (!text) {
       return;
     }
-    Clipboard.setString(text);
+    void copySensitiveText(text);
     triggerLightHaptic();
     showToast(t('common.copied'));
   }, [showToast, t, value]);

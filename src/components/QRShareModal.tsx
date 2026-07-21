@@ -1,11 +1,11 @@
-import React, {useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal, StyleSheet, Text, View} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import {useTranslation} from 'react-i18next';
 
-import {encodeKeyQrPayload} from '../services/qrPayload';
+import {encodeKeyQrPayload, EncodedQrTransfer} from '../services/qrPayload';
 import {SavedKey} from '../types';
-import {Button, useTheme} from './ui';
+import {Button, CopyField, useTheme} from './ui';
 
 interface QRShareModalProps {
   keyItem: SavedKey | null;
@@ -16,12 +16,23 @@ interface QRShareModalProps {
 export function QRShareModal({keyItem, visible, onClose}: QRShareModalProps) {
   const {colors} = useTheme();
   const {t} = useTranslation();
+  const [transfer, setTransfer] = useState<EncodedQrTransfer | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const qrValue = keyItem ? encodeKeyQrPayload(keyItem) : '';
-
-  const handleClose = useCallback(() => {
-    onClose();
-  }, [onClose]);
+  useEffect(() => {
+    if (!visible || !keyItem) {
+      setTransfer(null);
+      setError(null);
+      return;
+    }
+    try {
+      setTransfer(encodeKeyQrPayload(keyItem));
+      setError(null);
+    } catch {
+      setTransfer(null);
+      setError(t('qrShare.encodeFailed'));
+    }
+  }, [keyItem, t, visible]);
 
   if (!keyItem) {
     return null;
@@ -32,7 +43,7 @@ export function QRShareModal({keyItem, visible, onClose}: QRShareModalProps) {
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={handleClose}>
+      onRequestClose={onClose}>
       <View style={[styles.container, {backgroundColor: colors.background}]}>
         <Text style={[styles.title, {color: colors.label}]}>
           {t('qrShare.title')}
@@ -41,21 +52,37 @@ export function QRShareModal({keyItem, visible, onClose}: QRShareModalProps) {
           {t('qrShare.subtitle', {name: keyItem.name})}
         </Text>
 
-        <View
-          style={[
-            styles.qrCard,
-            {backgroundColor: colors.groupedBackground},
-          ]}>
-          <QRCode value={qrValue} size={280} ecl="M" />
-        </View>
+        {transfer ? (
+          <>
+            <View
+              style={[
+                styles.qrCard,
+                {backgroundColor: colors.groupedBackground},
+              ]}>
+              <QRCode value={transfer.payload} size={280} ecl="M" />
+            </View>
 
-        <Text style={[styles.warning, {color: colors.tertiaryLabel}]}>
-          {t('qrShare.warning')}
-        </Text>
+            <View style={styles.pinBlock}>
+              <CopyField
+                label={t('qrShare.transferPin')}
+                value={transfer.pin}
+                accessibilityLabel={t('qrShare.copyPinA11y')}
+                showShare={false}
+              />
+              <Text style={[styles.warning, {color: colors.tertiaryLabel}]}>
+                {t('qrShare.pinWarning')}
+              </Text>
+            </View>
+          </>
+        ) : (
+          <Text style={[styles.warning, {color: colors.secondaryLabel}]}>
+            {error ?? t('qrShare.encodeFailed')}
+          </Text>
+        )}
 
         <Button
           title={t('common.done')}
-          onPress={handleClose}
+          onPress={onClose}
           accessibilityLabel={t('qrShare.closeA11y')}
         />
       </View>
@@ -85,6 +112,10 @@ const styles = StyleSheet.create({
     padding: 24,
     borderRadius: 16,
     marginVertical: 8,
+  },
+  pinBlock: {
+    width: '100%',
+    gap: 8,
   },
   warning: {
     fontSize: 13,
