@@ -4,6 +4,7 @@ import {
   AppState,
   AppStateStatus,
   Keyboard,
+  Linking,
   Platform,
   Pressable,
   StatusBar,
@@ -21,7 +22,11 @@ import {LockScreen} from './src/components/LockScreen';
 import {ToastProvider, useContentLayout, EmojiIcon, useTheme} from './src/components/ui';
 import {initI18n} from './src/i18n';
 import {authenticateWithBiometrics} from './src/services/biometrics';
-import {loadKeys} from './src/services/keyStorage';
+import {clearDerivationCache} from './src/services/cryptoService';
+import {createAuthSession} from './src/services/appLockSession';
+import {KeyStorageError, loadKeys} from './src/services/keyStorage';
+import {isLmeFileContents} from './src/services/lmeFile';
+import {isLikelyLmeUri, readUriAsUtf8} from './src/services/lmeFileIO';
 import {
   getLanguage,
   isBiometricLockEnabled,
@@ -37,10 +42,14 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState<Tab>('keys');
   const [keys, setKeys] = useState<SavedKey[]>([]);
   const [loading, setLoading] = useState(true);
+  const [storageError, setStorageError] = useState<string | null>(null);
   const [i18nReady, setI18nReady] = useState(i18n.isInitialized);
   const [locked, setLocked] = useState(false);
+  const [pendingLmeContents, setPendingLmeContents] = useState<string | null>(
+    null,
+  );
   const appStateRef = useRef<AppStateStatus>(AppState.currentState);
-  const isAuthenticatingRef = useRef(false);
+  const authSessionRef = useRef(createAuthSession());
 
   useEffect(() => {
     if (i18n.isInitialized) {
@@ -53,25 +62,34 @@ function AppContent() {
       .finally(() => setI18nReady(true));
   }, [i18n.isInitialized]);
 
+  const lockNow = useCallback(() => {
+    authSessionRef.current.lock();
+    clearDerivationCache();
+    setLocked(true);
+  }, []);
+
   const handleUnlock = useCallback(async () => {
-    if (isAuthenticatingRef.current) {
+    const session = authSessionRef.current;
+    const generation = session.beginUnlock();
+    if (generation === null) {
       return;
     }
 
-    isAuthenticatingRef.current = true;
     try {
       const enabled = await isBiometricLockEnabled();
       if (!enabled) {
-        setLocked(false);
+        if (session.isCurrent(generation)) {
+          setLocked(false);
+        }
         return;
       }
 
       const success = await authenticateWithBiometrics();
-      if (success) {
+      if (success && session.isCurrent(generation)) {
         setLocked(false);
       }
     } finally {
-      isAuthenticatingRef.current = false;
+      session.endUnlock();
     }
   }, []);
 
@@ -84,9 +102,9 @@ function AppContent() {
       setLocked(false);
       return;
     }
-    setLocked(true);
+    lockNow();
     await handleUnlockRef.current();
-  }, []);
+  }, [lockNow]);
 
   useEffect(() => {
     if (!i18nReady) {
@@ -94,37 +112,76 @@ function AppContent() {
     }
 
     loadKeys()
-      .then(setKeys)
+      .then(loaded => {
+        setKeys(loaded);
+        setStorageError(null);
+      })
+      .catch((error: unknown) => {
+        setKeys([]);
+        setStorageError(
+          error instanceof KeyStorageError
+            ? error.message
+            : t('keys.storageLoadFailed'),
+        );
+      })
       .finally(() => setLoading(false));
 
     promptUnlockIfNeeded();
-  }, [i18nReady, promptUnlockIfNeeded]);
+  }, [i18nReady, promptUnlockIfNeeded, t]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextState => {
       const previousState = appStateRef.current;
       appStateRef.current = nextState;
 
-      if (nextState === 'background') {
+      if (nextState === 'inactive' || nextState === 'background') {
         isBiometricLockEnabled().then(enabled => {
           if (enabled) {
-            setLocked(true);
+            lockNow();
           }
         });
         return;
       }
 
-      if (previousState === 'background' && nextState === 'active') {
+      if (
+        (previousState === 'background' || previousState === 'inactive') &&
+        nextState === 'active'
+      ) {
         promptUnlockIfNeeded();
       }
     });
 
     return () => subscription.remove();
-  }, [promptUnlockIfNeeded]);
+  }, [lockNow, promptUnlockIfNeeded]);
 
   const handleKeysChange = useCallback((updated: SavedKey[]) => {
     setKeys(updated);
   }, []);
+
+  const ingestLmeUri = useCallback(async (uri: string | null) => {
+    if (!uri || !isLikelyLmeUri(uri)) {
+      return;
+    }
+    try {
+      const contents = await readUriAsUtf8(uri);
+      if (isLmeFileContents(contents)) {
+        setActiveTab('keys');
+        setPendingLmeContents(contents);
+      }
+    } catch {
+      // Ignore unreadable URIs from the OS.
+    }
+  }, []);
+
+  useEffect(() => {
+    Linking.getInitialURL().then(uri => {
+      void ingestLmeUri(uri);
+    });
+    const sub = Linking.addEventListener('url', event => {
+      void ingestLmeUri(event.url);
+    });
+    return () => sub.remove();
+  }, [ingestLmeUri]);
 
   if (!i18nReady) {
     return (
@@ -161,8 +218,21 @@ function AppContent() {
             <View style={styles.loading}>
               <ActivityIndicator size="large" color={colors.securityTint} />
             </View>
+          ) : storageError ? (
+            <View style={styles.loading}>
+              <Text
+                style={[styles.subtitle, {color: colors.secondaryLabel}]}
+                accessibilityRole="alert">
+                {storageError}
+              </Text>
+            </View>
           ) : activeTab === 'keys' ? (
-            <CreateKeyTab keys={keys} onKeysChange={handleKeysChange} />
+            <CreateKeyTab
+              keys={keys}
+              onKeysChange={handleKeysChange}
+              pendingLmeContents={pendingLmeContents}
+              onPendingLmeConsumed={() => setPendingLmeContents(null)}
+            />
           ) : (
             <EncryptDecryptTab keys={keys} />
           )}

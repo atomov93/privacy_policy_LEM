@@ -19,9 +19,16 @@ import {useTranslation} from 'react-i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {ensureCameraPermission} from '../services/cameraPermission';
-import {decodeKeyQrPayload, keyFromQrPayload} from '../services/qrPayload';
-import {addKey} from '../services/keyStorage';
+import {
+  decodeKeyQrPayload,
+  isEncryptedQrPayload,
+  keyFromQrPayload,
+  resetQrScanDebounce,
+  shouldProcessQrScan,
+} from '../services/qrPayload';
+import {addKey, findKeyByName} from '../services/keyStorage';
 import {triggerLightHaptic} from '../services/haptics';
+import {MAX_KEY_NAME_LENGTH} from '../services/limits';
 import {SavedKey} from '../types';
 import {Button, InputField, MIN_TOUCH_TARGET} from './ui';
 
@@ -74,11 +81,13 @@ export function QRScanModal({
   const {t} = useTranslation();
   const [scanned, setScanned] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
+  const [pendingRaw, setPendingRaw] = useState<string | null>(null);
   const [pendingPayload, setPendingPayload] = useState<Pick<
     SavedKey,
     'name' | 'secret'
   > | null>(null);
   const [keyName, setKeyName] = useState('');
+  const [transferPin, setTransferPin] = useState('');
   const [permissionStatus, setPermissionStatus] = useState<
     'checking' | 'granted' | 'denied'
   >('checking');
@@ -102,9 +111,12 @@ export function QRScanModal({
 
   const resetScanState = useCallback(() => {
     setScanned(false);
+    setPendingRaw(null);
     setPendingPayload(null);
     setKeyName('');
+    setTransferPin('');
     setCameraError(null);
+    resetQrScanDebounce();
   }, []);
 
   useEffect(() => {
@@ -128,23 +140,60 @@ export function QRScanModal({
   }, [visible]);
 
   const handleQrDecoded = useCallback((raw: string) => {
-    const payload = decodeKeyQrPayload(raw);
-    if (!payload) {
-      Alert.alert(t('qrScan.invalidQr'), t('qrScan.invalidQrMessage'));
+    if (!shouldProcessQrScan(raw)) {
       setScanned(false);
       return;
     }
+    if (!isEncryptedQrPayload(raw)) {
+      Alert.alert(t('qrScan.invalidQr'), t('qrScan.legacyQrRejected'));
+      setScanned(false);
+      return;
+    }
+    setPendingRaw(raw);
+  }, [t]);
 
+  const handleUnlockPayload = useCallback(() => {
+    if (!pendingRaw) {
+      return;
+    }
+    const payload = decodeKeyQrPayload(pendingRaw, transferPin.trim());
+    if (!payload) {
+      Alert.alert(t('qrScan.invalidPin'), t('qrScan.invalidPinMessage'));
+      return;
+    }
     setPendingPayload(payload);
     setKeyName(payload.name);
-  }, [t]);
+  }, [pendingRaw, t, transferPin]);
+
+  const persistImportedKey = useCallback(
+    async (trimmedName: string, payload: Pick<SavedKey, 'name' | 'secret'>) => {
+      const newKey = keyFromQrPayload({
+        ...payload,
+        name: trimmedName,
+      });
+      try {
+        const updated = await addKey(newKey);
+        triggerLightHaptic();
+        onKeyImported(updated);
+        Alert.alert(
+          t('qrScan.keyImported'),
+          t('qrScan.keyImportedMessage', {name: trimmedName}),
+        );
+        resetScanState();
+        onClose();
+      } catch {
+        Alert.alert(t('keys.alertSaveFailed'), t('keys.alertSaveFailedMessage'));
+      }
+    },
+    [onClose, onKeyImported, resetScanState, t],
+  );
 
   const handleSaveKey = useCallback(async () => {
     if (!pendingPayload) {
       return;
     }
 
-    const trimmedName = keyName.trim();
+    const trimmedName = keyName.trim().slice(0, MAX_KEY_NAME_LENGTH);
     if (!trimmedName) {
       Alert.alert(
         t('keys.alertMissingName'),
@@ -153,27 +202,27 @@ export function QRScanModal({
       return;
     }
 
-    const newKey = keyFromQrPayload({
-      ...pendingPayload,
-      name: trimmedName,
-    });
-    const updated = await addKey(newKey);
-    triggerLightHaptic();
-    onKeyImported(updated);
-    Alert.alert(
-      t('qrScan.keyImported'),
-      t('qrScan.keyImportedMessage', {name: trimmedName}),
-    );
-    resetScanState();
-    onClose();
-  }, [
-    keyName,
-    onClose,
-    onKeyImported,
-    pendingPayload,
-    resetScanState,
-    t,
-  ]);
+    const existing = await findKeyByName(trimmedName);
+    if (existing) {
+      Alert.alert(
+        t('keys.alertReplaceTitle'),
+        t('keys.alertReplaceMessage', {name: trimmedName}),
+        [
+          {text: t('common.cancel'), style: 'cancel'},
+          {
+            text: t('keys.replace'),
+            style: 'destructive',
+            onPress: () => {
+              void persistImportedKey(trimmedName, pendingPayload);
+            },
+          },
+        ],
+      );
+      return;
+    }
+
+    await persistImportedKey(trimmedName, pendingPayload);
+  }, [keyName, pendingPayload, persistImportedKey, t]);
 
   const handleRescan = useCallback(() => {
     resetScanState();
@@ -419,12 +468,69 @@ export function QRScanModal({
             <Text style={styles.subtitle}>
               {pendingPayload
                 ? t('qrScan.giveKeyName')
-                : t('qrScan.pointCamera')}
+                : pendingRaw
+                  ? t('qrScan.enterPin')
+                  : t('qrScan.pointCamera')}
             </Text>
-            {scanned && !pendingPayload && (
+            {scanned && !pendingRaw && !pendingPayload && (
               <Text style={styles.processing}>{t('qrScan.processing')}</Text>
             )}
           </View>
+
+          {pendingRaw && !pendingPayload && (
+            <KeyboardAvoidingView
+              style={styles.nameSheet}
+              behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+              <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                accessible={false}>
+                <View
+                  style={[
+                    styles.nameSheetCard,
+                    {
+                      paddingBottom: insets.bottom + 16,
+                      marginBottom: insets.bottom > 0 ? 0 : 16,
+                    },
+                  ]}>
+                  <Text style={styles.nameSheetTitle}>{t('qrScan.enterPinTitle')}</Text>
+                  <Text style={styles.nameSheetSubtitle}>
+                    {t('qrScan.enterPinSubtitle')}
+                  </Text>
+
+                  <InputField
+                    label={t('qrShare.transferPin')}
+                    placeholder="123456"
+                    value={transferPin}
+                    onChangeText={setTransferPin}
+                    keyboardType="number-pad"
+                    maxLength={6}
+                    autoFocus
+                    secureTextEntry
+                    showToggleSecret
+                    returnKeyType="done"
+                    onSubmitEditing={handleUnlockPayload}
+                  />
+
+                  <Button
+                    title={t('qrScan.unlockQr')}
+                    onPress={handleUnlockPayload}
+                    accessibilityLabel={t('qrScan.unlockQrA11y')}
+                  />
+
+                  <Pressable
+                    onPress={handleRescan}
+                    accessibilityRole="button"
+                    accessibilityLabel={t('qrScan.scanDifferentA11y')}
+                    style={({pressed}) => [
+                      styles.rescanButton,
+                      {opacity: pressed ? 0.6 : 1},
+                    ]}>
+                    <Text style={styles.rescanText}>{t('qrScan.scanAgain')}</Text>
+                  </Pressable>
+                </View>
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+          )}
 
           {pendingPayload && (
             <KeyboardAvoidingView
@@ -453,6 +559,7 @@ export function QRScanModal({
                     onChangeText={setKeyName}
                     autoCapitalize="words"
                     autoFocus
+                    maxLength={MAX_KEY_NAME_LENGTH}
                     returnKeyType="done"
                     onSubmitEditing={handleSaveKey}
                   />

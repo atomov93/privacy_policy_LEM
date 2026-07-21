@@ -1,39 +1,48 @@
 # Privacy Policy — LetsMessageEncrypt
 
-**Last updated:** July 12, 2026
+**Last updated:** July 22, 2026
 
 ## Overview
 
-LetsMessageEncrypt is a mobile app for encrypting and decrypting messages using pre-shared keys that you create or import. The app is designed to keep your keys and messages on your device.
+LetsMessageEncrypt is a mobile app for encrypting and decrypting messages using pre-shared keys that you create or import. The app is designed to keep your keys and messages on your device. It does not operate accounts or cloud sync.
 
 ## Data we collect
 
 **We do not collect, transmit, or sell your personal data.**
 
-The app does not include analytics, advertising, accounts, or cloud sync.
+The app does not include analytics, advertising, accounts, or developer-operated cloud sync.
 
 ## Data stored on your device
 
-The app stores the following locally on your phone or tablet:
+The app stores the following locally:
 
 - Key names you choose
 - Passphrases / shared secrets for encryption
 - Key fingerprints derived from those secrets
-- App settings (for example, biometric lock preference)
+- App settings (for example, biometric lock preference and language)
 
-This data stays in the app’s local storage unless you delete it or uninstall the app.
+Secrets in the key database are encrypted before being written to ordinary app storage. The encryption wrapping key is kept in the platform Keychain (iOS) or Keystore-backed secure storage (Android) and is intended to stay on that device.
+
+This data remains on the device until you delete keys, clear app data, or uninstall. However, copies can leave the app when you:
+
+- Copy text to the system clipboard (cleared automatically after a short delay when possible)
+- Share text or QR codes through other apps
+- Display a QR transfer (PIN-protected; still photographable)
+- Use OS backup, screenshot, screen-recording, crash-diagnostic, or keyboard features outside our control
+
+Android sets `FLAG_SECURE` to reduce app-switcher screenshots; iOS shows a privacy overlay when the app resigns active. These mitigations are not absolute against a compromised device or determined screen capture.
 
 ## Permissions
 
 | Permission | Why it is used |
 |------------|----------------|
 | Camera | Scan QR codes to import keys shared from another device |
-| Biometrics / screen lock | Optionally lock the app when it goes to the background |
-| Internet | Not used to send your keys or messages to our servers. React Native and some libraries may use network access for development or system services; the app’s core encrypt/decrypt flow works offline. |
+| Biometrics / screen lock | Optionally lock the app; unlock fails closed if authentication is unavailable |
+| Internet | Not used by the core encrypt/decrypt flow. Release Android builds omit the INTERNET permission; debug builds may include it for Metro tooling. |
 
 ## Encryption
 
-Messages are encrypted on your device before you copy or share the ciphertext through any channel you choose (messages, email, etc.). We do not operate servers that receive your plaintext or ciphertext.
+Messages are encrypted on your device before you copy or share ciphertext through any channel you choose. We do not operate servers that receive your plaintext, ciphertext, or secrets.
 
 ## Children
 
@@ -45,8 +54,4 @@ We may update this policy. The “Last updated” date at the top will change wh
 
 ## Contact
 
-For privacy questions, contact the app publisher at the support email listed on the App Store or Google Play listing.
-
----
-
-*Host this file at a public HTTPS URL (GitHub Pages, your website, Notion public page, etc.) and paste that URL into App Store Connect and Google Play Console.*
+For privacy questions, contact: **support@letsmessageencrypt.example** (replace with your production support address before store submission), or use the support email on the App Store / Google Play listing.

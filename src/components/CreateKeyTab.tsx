@@ -18,9 +18,14 @@ import {
   generateSecureId,
   getFingerprint,
 } from '../services/cryptoService';
-import {getBiometricLockSettingLabel} from '../services/biometrics';
+import {
+  enableBiometricLockWithVerification,
+  getBiometricLockSettingLabel,
+  isBiometricAvailable,
+} from '../services/biometrics';
 import {triggerLightHaptic} from '../services/haptics';
-import {addKey, deleteKey} from '../services/keyStorage';
+import {addKey, deleteKey, findKeyByName} from '../services/keyStorage';
+import {MAX_KEY_NAME_LENGTH, MAX_SECRET_LENGTH} from '../services/limits';
 import {
   getLanguage,
   isBiometricLockEnabled,
@@ -34,6 +39,8 @@ import {
 import {QRScanModal} from './QRScanModal';
 import {ImportKeyModal} from './ImportKeyModal';
 import {QRShareModal} from './QRShareModal';
+import {LmeShareModal} from './LmeShareModal';
+import {LmeImportModal} from './LmeImportModal';
 import {SwipeableKeyRow} from './SwipeableKeyRow';
 import {
   ActionCard,
@@ -53,9 +60,16 @@ type KeyMode = 'create' | 'join';
 interface CreateKeyTabProps {
   keys: SavedKey[];
   onKeysChange: (keys: SavedKey[]) => void;
+  pendingLmeContents?: string | null;
+  onPendingLmeConsumed?: () => void;
 }
 
-export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
+export function CreateKeyTab({
+  keys,
+  onKeysChange,
+  pendingLmeContents = null,
+  onPendingLmeConsumed,
+}: CreateKeyTabProps) {
   const {colors} = useTheme();
   const {contentStyle} = useContentLayout();
   const {t, i18n} = useTranslation();
@@ -64,8 +78,13 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
   const [secret, setSecret] = useState('');
   const [lastCreatedHash, setLastCreatedHash] = useState<string | null>(null);
   const [qrShareKey, setQrShareKey] = useState<SavedKey | null>(null);
+  const [lmeShareKey, setLmeShareKey] = useState<SavedKey | null>(null);
   const [showQrScan, setShowQrScan] = useState(false);
   const [showImportKey, setShowImportKey] = useState(false);
+  const [showLmeImport, setShowLmeImport] = useState(false);
+  const [lmeImportContents, setLmeImportContents] = useState<string | null>(
+    null,
+  );
   const [biometricLockOn, setBiometricLockOn] = useState(true);
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
@@ -79,6 +98,16 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
     });
   }, []);
 
+  useEffect(() => {
+    if (!pendingLmeContents) {
+      return;
+    }
+    setKeyMode('join');
+    setLmeImportContents(pendingLmeContents);
+    setShowLmeImport(true);
+    onPendingLmeConsumed?.();
+  }, [onPendingLmeConsumed, pendingLmeContents]);
+
   const fingerprintPreview = useMemo(() => {
     const trimmed = secret.trim();
     return trimmed.length > 0 ? getFingerprint(trimmed) : null;
@@ -89,8 +118,8 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
   }, []);
 
   const handleSave = useCallback(async () => {
-    const trimmedName = name.trim();
-    const trimmedSecret = secret.trim();
+    const trimmedName = name.trim().slice(0, MAX_KEY_NAME_LENGTH);
+    const trimmedSecret = secret.trim().slice(0, MAX_SECRET_LENGTH);
 
     if (!trimmedName) {
       Alert.alert(
@@ -116,30 +145,87 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
       createdAt: Date.now(),
     };
 
-    const updated = await addKey(newKey);
-    onKeysChange(updated);
-    triggerLightHaptic();
-    setLastCreatedHash(fingerprint);
-    setName('');
-    setSecret('');
-    Alert.alert(
-      t('keys.alertKeySaved'),
-      t('keys.alertKeySavedMessage', {name: trimmedName}),
-    );
+    const persist = async () => {
+      try {
+        const updated = await addKey(newKey);
+        onKeysChange(updated);
+        triggerLightHaptic();
+        setLastCreatedHash(fingerprint);
+        setName('');
+        setSecret('');
+        Alert.alert(
+          t('keys.alertKeySaved'),
+          t('keys.alertKeySavedMessage', {name: trimmedName}),
+        );
+      } catch {
+        Alert.alert(t('keys.alertSaveFailed'), t('keys.alertSaveFailedMessage'));
+      }
+    };
+
+    const existing = await findKeyByName(trimmedName);
+    if (existing) {
+      Alert.alert(
+        t('keys.alertReplaceTitle'),
+        t('keys.alertReplaceMessage', {name: trimmedName}),
+        [
+          {text: t('common.cancel'), style: 'cancel'},
+          {
+            text: t('keys.replace'),
+            style: 'destructive',
+            onPress: () => {
+              void persist();
+            },
+          },
+        ],
+      );
+      return;
+    }
+
+    await persist();
   }, [name, onKeysChange, secret, t]);
 
   const handleDelete = useCallback(
     async (key: SavedKey) => {
-      const updated = await deleteKey(key.id);
-      onKeysChange(updated);
+      try {
+        const updated = await deleteKey(key.id);
+        onKeysChange(updated);
+      } catch {
+        Alert.alert(t('keys.alertSaveFailed'), t('keys.alertSaveFailedMessage'));
+      }
     },
-    [onKeysChange],
+    [onKeysChange, t],
   );
 
-  const handleBiometricToggle = useCallback(async (enabled: boolean) => {
-    setBiometricLockOn(enabled);
-    await setBiometricLockEnabled(enabled);
-  }, []);
+  const handleBiometricToggle = useCallback(
+    async (enabled: boolean) => {
+      if (enabled) {
+        const available = await isBiometricAvailable();
+        if (!available) {
+          Alert.alert(
+            t('settings.biometricUnavailableTitle'),
+            t('settings.biometricUnavailableMessage'),
+          );
+          return;
+        }
+        const verified = await enableBiometricLockWithVerification();
+        if (!verified) {
+          Alert.alert(
+            t('settings.biometricVerifyFailedTitle'),
+            t('settings.biometricVerifyFailedMessage'),
+          );
+          return;
+        }
+      }
+      try {
+        setBiometricLockOn(enabled);
+        await setBiometricLockEnabled(enabled);
+      } catch {
+        setBiometricLockOn(!enabled);
+        Alert.alert(t('keys.alertSaveFailed'), t('keys.alertSaveFailedMessage'));
+      }
+    },
+    [t],
+  );
 
   const listHeader = (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -174,6 +260,7 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
                   onChangeText={setName}
                   autoCapitalize="words"
                   returnKeyType="next"
+                  maxLength={MAX_KEY_NAME_LENGTH}
                 />
               </SectionRow>
               <SectionRow isLast>
@@ -194,6 +281,7 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
                     showCopy
                     showShare
                     showToggleSecret
+                    maxLength={MAX_SECRET_LENGTH}
                   />
                 </View>
               </SectionRow>
@@ -246,6 +334,18 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
                 subtitle={t('keys.enterManuallyCardSubtitle')}
                 onPress={() => setShowImportKey(true)}
                 accessibilityLabel={t('keys.enterManuallyA11y')}
+              />
+            </ActionCardRow>
+            <ActionCardRow>
+              <ActionCard
+                icon="📄"
+                title={t('keys.importLme')}
+                subtitle={t('keys.importLmeSubtitle')}
+                onPress={() => {
+                  setLmeImportContents(null);
+                  setShowLmeImport(true);
+                }}
+                accessibilityLabel={t('keys.importLmeA11y')}
               />
             </ActionCardRow>
             <Text style={[styles.sectionFooter, {color: colors.tertiaryLabel}]}>
@@ -336,6 +436,7 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
             item={item}
             onDelete={handleDelete}
             onShareQr={setQrShareKey}
+            onShareLme={setLmeShareKey}
           />
         )}
       />
@@ -351,6 +452,11 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
         visible={qrShareKey !== null}
         onClose={() => setQrShareKey(null)}
       />
+      <LmeShareModal
+        keyItem={lmeShareKey}
+        visible={lmeShareKey !== null}
+        onClose={() => setLmeShareKey(null)}
+      />
       <QRScanModal
         visible={showQrScan}
         onClose={() => setShowQrScan(false)}
@@ -361,6 +467,15 @@ export function CreateKeyTab({keys, onKeysChange}: CreateKeyTabProps) {
         onClose={() => setShowImportKey(false)}
         onKeyImported={onKeysChange}
         onScanQr={() => setShowQrScan(true)}
+      />
+      <LmeImportModal
+        visible={showLmeImport}
+        onClose={() => {
+          setShowLmeImport(false);
+          setLmeImportContents(null);
+        }}
+        onKeyImported={onKeysChange}
+        initialContents={lmeImportContents}
       />
     </KeyboardAvoidingView>
   );

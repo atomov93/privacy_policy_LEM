@@ -20,7 +20,8 @@ import {
   getFingerprint,
 } from '../services/cryptoService';
 import {triggerLightHaptic} from '../services/haptics';
-import {addKey} from '../services/keyStorage';
+import {addKey, findKeyByName} from '../services/keyStorage';
+import {MAX_KEY_NAME_LENGTH, MAX_SECRET_LENGTH} from '../services/limits';
 import {SavedKey} from '../types';
 import {Button, InputField, useTheme} from './ui';
 
@@ -76,8 +77,8 @@ export function ImportKeyModal({
   }, [onClose, onScanQr, resetForm]);
 
   const handleImport = useCallback(async () => {
-    const trimmedName = name.trim();
-    const trimmedSecret = secret.trim();
+    const trimmedName = name.trim().slice(0, MAX_KEY_NAME_LENGTH);
+    const trimmedSecret = secret.trim().slice(0, MAX_SECRET_LENGTH);
     const normalizedExpected = normalizeFingerprint(expectedFingerprint);
 
     if (!trimmedName) {
@@ -118,14 +119,41 @@ export function ImportKeyModal({
       createdAt: Date.now(),
     };
 
-    const updated = await addKey(newKey);
-    triggerLightHaptic();
-    onKeyImported(updated);
-    Alert.alert(
-      t('qrScan.keyImported'),
-      t('importKey.alertKeyImportedMessage', {name: trimmedName}),
-    );
-    handleClose();
+    const persist = async () => {
+      try {
+        const updated = await addKey(newKey);
+        triggerLightHaptic();
+        onKeyImported(updated);
+        Alert.alert(
+          t('qrScan.keyImported'),
+          t('importKey.alertKeyImportedMessage', {name: trimmedName}),
+        );
+        handleClose();
+      } catch {
+        Alert.alert(t('keys.alertSaveFailed'), t('keys.alertSaveFailedMessage'));
+      }
+    };
+
+    const existing = await findKeyByName(trimmedName);
+    if (existing) {
+      Alert.alert(
+        t('keys.alertReplaceTitle'),
+        t('keys.alertReplaceMessage', {name: trimmedName}),
+        [
+          {text: t('common.cancel'), style: 'cancel'},
+          {
+            text: t('keys.replace'),
+            style: 'destructive',
+            onPress: () => {
+              void persist();
+            },
+          },
+        ],
+      );
+      return;
+    }
+
+    await persist();
   }, [
     expectedFingerprint,
     handleClose,
@@ -180,6 +208,7 @@ export function ImportKeyModal({
               onChangeText={setName}
               autoCapitalize="words"
               returnKeyType="next"
+              maxLength={MAX_KEY_NAME_LENGTH}
             />
 
             <InputField
@@ -192,6 +221,7 @@ export function ImportKeyModal({
               secureTextEntry
               showPaste
               showToggleSecret
+              maxLength={MAX_SECRET_LENGTH}
             />
 
             <InputField
@@ -202,6 +232,7 @@ export function ImportKeyModal({
               autoCapitalize="none"
               autoCorrect={false}
               showPaste
+              maxLength={128}
             />
 
             {fingerprintStatus === 'match' && (
