@@ -182,9 +182,9 @@ describe('lme encrypted key files', () => {
   it('rejects bit-flipped authenticated ciphertext', () => {
     const encoded = encodeLmeFile({name: 'Alice', secret: 'shared-secret'});
     const body = JSON.parse(encoded.contents.slice(LME_MAGIC.length + 1));
-    const flipped = Buffer.from(body.data, 'base64');
-    flipped[0] ^= 0xff;
-    body.data = flipped.toString('base64');
+    const words = CryptoJS.enc.Base64.parse(body.data);
+    words.words[0] ^= 0xff000000;
+    body.data = CryptoJS.enc.Base64.stringify(words);
     const tampered = `${LME_MAGIC}\n${JSON.stringify(body)}\n`;
     expect(decodeLmeFile(tampered, encoded.passphrase)).toBeNull();
   });

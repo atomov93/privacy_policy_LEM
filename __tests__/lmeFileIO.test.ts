@@ -16,12 +16,12 @@ import {
 } from '../src/services/lmeFileIO';
 import {LME_MIME_TYPE} from '../src/services/limits';
 
-const writeFile = RNFS.writeFile as jest.Mock;
-const readFile = RNFS.readFile as jest.Mock;
-const shareOpen = Share.open as jest.Mock;
-const pickMock = pick as jest.Mock;
-const keepLocalCopyMock = keepLocalCopy as jest.Mock;
-const isErrorWithCodeMock = isErrorWithCode as jest.Mock;
+const writeFile = RNFS.writeFile as unknown as jest.Mock;
+const readFile = RNFS.readFile as unknown as jest.Mock;
+const shareOpen = Share.open as unknown as jest.Mock;
+const pickMock = pick as unknown as jest.Mock;
+const keepLocalCopyMock = keepLocalCopy as unknown as jest.Mock;
+const isErrorWithCodeMock = isErrorWithCode as unknown as jest.Mock;
 
 describe('lmeFileIO', () => {
   const originalOs = Platform.OS;
