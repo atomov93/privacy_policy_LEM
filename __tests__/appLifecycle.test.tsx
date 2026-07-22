@@ -15,9 +15,11 @@ describe('app lock auth session', () => {
     const first = session.lock();
     const token = session.beginUnlock();
     expect(token).toBe(first);
+    expect(session.isAuthenticating).toBe(true);
     const second = session.lock();
     expect(second).not.toBe(first);
     expect(session.isCurrent(token!)).toBe(false);
     session.endUnlock();
+    expect(session.isAuthenticating).toBe(false);
   });
 });

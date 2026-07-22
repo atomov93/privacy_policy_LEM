@@ -18,6 +18,7 @@
     "show": "Taispeáin",
     "hide": "Folaigh",
     "copied": "Cóipeáladh!",
+    "pasted": "Greamaithe!",
     "done": "Déanta",
     "generate": "Gin",
     "saveKey": "Sábháil Eochair",
@@ -30,7 +31,8 @@
     "language": "Teanga",
     "languageSubtitle": "Roghnaigh teanga chomhéadan na haipe.",
     "selectLanguage": "Roghnaigh Teanga",
-    "toggleBiometricLock": "Scoránaigh glas bithmhéadrach"
+    "toggleBiometricLock": "Scoránaigh glas bithmhéadrach",
+    "biometricLockUnavailableSubtitle": "Socraigh glas scáileáin (Face ID, Touch ID, nó pasfhocal) chun é seo a chumasú."
   },
   "keys": {
     "createNewKey": "Cruthaigh Eochair Nua",

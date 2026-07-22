@@ -7,7 +7,7 @@ export function createAuthSession() {
   let authenticating = false;
 
   return {
-    /** Call when the app should lock (background / inactive). */
+    /** Call when the app should lock (true background only — not inactive). */
     lock(): number {
       generation += 1;
       return generation;
@@ -24,6 +24,9 @@ export function createAuthSession() {
     },
     isCurrent(token: number): boolean {
       return token === generation;
+    },
+    get isAuthenticating() {
+      return authenticating;
     },
     get generation() {
       return generation;

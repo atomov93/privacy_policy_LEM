@@ -18,6 +18,7 @@
     "show": "Показване",
     "hide": "Скриване",
     "copied": "Копирано!",
+    "pasted": "Поставено!",
     "done": "Готово",
     "generate": "Генериране",
     "saveKey": "Запазване на ключ",
@@ -30,7 +31,8 @@
     "language": "Език",
     "languageSubtitle": "Изберете езика на интерфейса на приложението.",
     "selectLanguage": "Избор на език",
-    "toggleBiometricLock": "Превключване на биометрично заключване"
+    "toggleBiometricLock": "Превключване на биометрично заключване",
+    "biometricLockUnavailableSubtitle": "Задайте заключване на екрана (Face ID, Touch ID или парола), за да включите това."
   },
   "keys": {
     "createNewKey": "Създаване на нов ключ",

@@ -29,6 +29,28 @@ export function namesMatch(a: string, b: string): boolean {
   return normalizeKeyName(a).toLowerCase() === normalizeKeyName(b).toLowerCase();
 }
 
+export function fingerprintsMatch(a: string, b: string): boolean {
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
+}
+
+/** Drop later entries that share a name or fingerprint with an earlier one. */
+export function dedupeKeys(keys: SavedKey[]): SavedKey[] {
+  const seenNames = new Set<string>();
+  const seenFingerprints = new Set<string>();
+  const result: SavedKey[] = [];
+  for (const key of keys) {
+    const nameKey = normalizeKeyName(key.name).toLowerCase();
+    const fingerprintKey = key.fingerprint.trim().toLowerCase();
+    if (seenNames.has(nameKey) || seenFingerprints.has(fingerprintKey)) {
+      continue;
+    }
+    seenNames.add(nameKey);
+    seenFingerprints.add(fingerprintKey);
+    result.push(key);
+  }
+  return result;
+}
+
 function normalizeStoredKey(raw: unknown): SavedKey | null {
   if (!raw || typeof raw !== 'object') {
     return null;
@@ -72,9 +94,11 @@ function parseKeysJson(raw: string): SavedKey[] {
   if (!Array.isArray(parsed)) {
     throw new KeyStorageError('Key database is corrupted.');
   }
-  return parsed
-    .map(normalizeStoredKey)
-    .filter((key): key is SavedKey => key !== null);
+  return dedupeKeys(
+    parsed
+      .map(normalizeStoredKey)
+      .filter((key): key is SavedKey => key !== null),
+  );
 }
 
 async function getOrCreateWrappingKey(): Promise<string> {
@@ -120,7 +144,18 @@ export async function loadKeys(): Promise<SavedKey[]> {
     try {
       const wrappingKey = await getOrCreateWrappingKey();
       const json = decryptWithRawKey(sealed, wrappingKey);
-      return parseKeysJson(json);
+      const keys = parseKeysJson(json);
+      // Persist if fingerprint/name duplicates were collapsed on read.
+      const rawParsed = JSON.parse(json) as unknown;
+      const rawCount = Array.isArray(rawParsed) ? rawParsed.length : keys.length;
+      if (keys.length !== rawCount) {
+        try {
+          await persistEncrypted(keys);
+        } catch {
+          // Still return the deduped in-memory list.
+        }
+      }
+      return keys;
     } catch (error) {
       if (error instanceof KeyStorageError) {
         throw error;
@@ -146,9 +181,11 @@ export async function loadKeys(): Promise<SavedKey[]> {
       await AsyncStorage.removeItem(LEGACY_STORAGE_KEY);
       return [];
     }
-    keys = parsed
-      .map(normalizeStoredKey)
-      .filter((key): key is SavedKey => key !== null);
+    keys = dedupeKeys(
+      parsed
+        .map(normalizeStoredKey)
+        .filter((key): key is SavedKey => key !== null),
+    );
   } catch {
     await AsyncStorage.removeItem(LEGACY_STORAGE_KEY);
     return [];
@@ -165,7 +202,7 @@ export async function loadKeys(): Promise<SavedKey[]> {
 
 export async function saveKeys(keys: SavedKey[]): Promise<void> {
   try {
-    await persistEncrypted(keys);
+    await persistEncrypted(dedupeKeys(keys));
   } catch (error) {
     if (error instanceof KeyStorageError) {
       throw error;
@@ -181,10 +218,37 @@ export async function findKeyByName(
   return keys.find(existing => namesMatch(existing.name, name));
 }
 
+export async function findKeyByFingerprint(
+  fingerprint: string,
+): Promise<SavedKey | undefined> {
+  const keys = await loadKeys();
+  return keys.find(existing =>
+    fingerprintsMatch(existing.fingerprint, fingerprint),
+  );
+}
+
+/** Existing key that collides on display name or secret fingerprint. */
+export async function findDuplicateKey(
+  name: string,
+  fingerprint: string,
+): Promise<SavedKey | undefined> {
+  const keys = await loadKeys();
+  return keys.find(
+    existing =>
+      namesMatch(existing.name, name) ||
+      fingerprintsMatch(existing.fingerprint, fingerprint),
+  );
+}
+
 export async function addKey(key: SavedKey): Promise<SavedKey[]> {
+  const fingerprint =
+    typeof key.fingerprint === 'string' && key.fingerprint.length > 0
+      ? key.fingerprint
+      : getFingerprint(key.secret);
   const normalized: SavedKey = {
     ...key,
     name: normalizeKeyName(key.name),
+    fingerprint,
   };
   if (
     !normalized.name ||
@@ -197,7 +261,9 @@ export async function addKey(key: SavedKey): Promise<SavedKey[]> {
 
   const keys = await loadKeys();
   const filtered = keys.filter(
-    existing => !namesMatch(existing.name, normalized.name),
+    existing =>
+      !namesMatch(existing.name, normalized.name) &&
+      !fingerprintsMatch(existing.fingerprint, normalized.fingerprint),
   );
   const updated = [normalized, ...filtered];
   await saveKeys(updated);

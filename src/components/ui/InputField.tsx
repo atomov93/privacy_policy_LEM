@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Pressable,
   Platform,
@@ -45,13 +45,37 @@ export function InputField({
   const {showToast} = useToast();
   const {t} = useTranslation();
   const [isSecretVisible, setIsSecretVisible] = useState(false);
+  const [actionFeedback, setActionFeedback] = useState<'copied' | 'pasted' | null>(
+    null,
+  );
+  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (feedbackTimer.current) {
+        clearTimeout(feedbackTimer.current);
+      }
+    };
+  }, []);
+
+  const flashAction = useCallback((kind: 'copied' | 'pasted') => {
+    setActionFeedback(kind);
+    if (feedbackTimer.current) {
+      clearTimeout(feedbackTimer.current);
+    }
+    feedbackTimer.current = setTimeout(() => setActionFeedback(null), 1800);
+  }, []);
 
   const handlePaste = useCallback(async () => {
     const text = await Clipboard.getString();
-    if (text && rest.onChangeText) {
-      rest.onChangeText(text);
+    if (!text || !rest.onChangeText) {
+      return;
     }
-  }, [rest]);
+    rest.onChangeText(text);
+    triggerLightHaptic();
+    showToast(t('common.pasted'));
+    flashAction('pasted');
+  }, [flashAction, rest, showToast, t]);
 
   const handleCopy = useCallback(() => {
     const text = typeof value === 'string' ? value : '';
@@ -61,7 +85,8 @@ export function InputField({
     void copySensitiveText(text);
     triggerLightHaptic();
     showToast(t('common.copied'));
-  }, [showToast, t, value]);
+    flashAction('copied');
+  }, [flashAction, showToast, t, value]);
 
   const handleShare = useCallback(async () => {
     const text = typeof value === 'string' ? value : '';
@@ -119,7 +144,9 @@ export function InputField({
                   {opacity: pressed ? 0.6 : 1},
                 ]}>
                 <Text style={[styles.actionText, {color: colors.securityTint}]}>
-                  {t('common.paste')}
+                  {actionFeedback === 'pasted'
+                    ? t('common.pasted')
+                    : t('common.paste')}
                 </Text>
               </Pressable>
             )}
@@ -133,7 +160,9 @@ export function InputField({
                   {opacity: pressed ? 0.6 : 1},
                 ]}>
                 <Text style={[styles.actionText, {color: colors.securityTint}]}>
-                  {t('common.copy')}
+                  {actionFeedback === 'copied'
+                    ? t('common.copied')
+                    : t('common.copy')}
                 </Text>
               </Pressable>
             )}

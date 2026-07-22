@@ -18,6 +18,7 @@
     "show": "Rodyti",
     "hide": "Slėpti",
     "copied": "Nukopijuota!",
+    "pasted": "Įklijuota!",
     "done": "Atlikta",
     "generate": "Generuoti",
     "saveKey": "Išsaugoti raktą",
@@ -30,7 +31,8 @@
     "language": "Kalba",
     "languageSubtitle": "Pasirinkite programos sąsajos kalbą.",
     "selectLanguage": "Pasirinkti kalbą",
-    "toggleBiometricLock": "Perjungti biometrinį užraktą"
+    "toggleBiometricLock": "Perjungti biometrinį užraktą",
+    "biometricLockUnavailableSubtitle": "Nustatykite ekrano užraktą (Face ID, Touch ID arba slaptažodį), kad įjungtumėte."
   },
   "keys": {
     "createNewKey": "Sukurti naują raktą",

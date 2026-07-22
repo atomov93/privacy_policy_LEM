@@ -18,6 +18,7 @@
     "show": "Mostra",
     "hide": "Nascondi",
     "copied": "Copiato!",
+    "pasted": "Incollato!",
     "done": "Fatto",
     "generate": "Genera",
     "saveKey": "Salva chiave",
@@ -30,7 +31,8 @@
     "language": "Lingua",
     "languageSubtitle": "Scegli la lingua dell'interfaccia dell'app.",
     "selectLanguage": "Seleziona lingua",
-    "toggleBiometricLock": "Attiva/disattiva blocco biometrico"
+    "toggleBiometricLock": "Attiva/disattiva blocco biometrico",
+    "biometricLockUnavailableSubtitle": "Imposta un blocco schermo (Face ID, Touch ID o codice) per abilitare questa opzione."
   },
   "keys": {
     "createNewKey": "Crea nuova chiave",

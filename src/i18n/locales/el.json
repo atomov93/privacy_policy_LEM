@@ -18,6 +18,7 @@
     "show": "Εμφάνιση",
     "hide": "Απόκρυψη",
     "copied": "Αντιγράφηκε!",
+    "pasted": "Επικολλήθηκε!",
     "done": "Τέλος",
     "generate": "Δημιουργία",
     "saveKey": "Αποθήκευση κλειδιού",
@@ -30,7 +31,8 @@
     "language": "Γλώσσα",
     "languageSubtitle": "Επιλέξτε τη γλώσσα της διεπαφής της εφαρμογής.",
     "selectLanguage": "Επιλογή γλώσσας",
-    "toggleBiometricLock": "Εναλλαγή βιομετρικού κλειδώματος"
+    "toggleBiometricLock": "Εναλλαγή βιομετρικού κλειδώματος",
+    "biometricLockUnavailableSubtitle": "Ορίστε κλείδωμα οθόνης (Face ID, Touch ID ή κωδικό) για να το ενεργοποιήσετε."
   },
   "keys": {
     "createNewKey": "Δημιουργία νέου κλειδιού",

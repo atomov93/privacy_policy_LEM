@@ -18,6 +18,7 @@
     "show": "Afficher",
     "hide": "Masquer",
     "copied": "Copié !",
+    "pasted": "Collé !",
     "done": "Terminé",
     "generate": "Générer",
     "saveKey": "Enregistrer la clé",
@@ -30,7 +31,8 @@
     "language": "Langue",
     "languageSubtitle": "Choisissez la langue de l'interface de l'application.",
     "selectLanguage": "Sélectionner la langue",
-    "toggleBiometricLock": "Activer/désactiver le verrouillage biométrique"
+    "toggleBiometricLock": "Activer/désactiver le verrouillage biométrique",
+    "biometricLockUnavailableSubtitle": "Définissez un verrouillage d’écran (Face ID, Touch ID ou code) pour activer cette option."
   },
   "keys": {
     "createNewKey": "Créer une nouvelle clé",

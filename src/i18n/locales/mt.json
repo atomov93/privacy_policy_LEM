@@ -18,6 +18,7 @@
     "show": "Uri",
     "hide": "Aħbi",
     "copied": "Ikkopjat!",
+    "pasted": "Ippejstjat!",
     "done": "Lest",
     "generate": "Iġġenera",
     "saveKey": "Issejvja Ċavetta",
@@ -30,7 +31,8 @@
     "language": "Lingwa",
     "languageSubtitle": "Agħżel il-lingwa tal-interface tal-app.",
     "selectLanguage": "Agħżel Lingwa",
-    "toggleBiometricLock": "Ibdel il-lock bijometriku"
+    "toggleBiometricLock": "Ibdel il-lock bijometriku",
+    "biometricLockUnavailableSubtitle": "Issettja lock tal-iskrin (Face ID, Touch ID jew passcode) biex tippermetti dan."
   },
   "keys": {
     "createNewKey": "Oħloq Ċavetta Ġdida",

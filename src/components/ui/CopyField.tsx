@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 
@@ -35,6 +35,16 @@ export function CopyField({
   const {colors} = useTheme();
   const {showToast} = useToast();
   const {t} = useTranslation();
+  const [justCopied, setJustCopied] = useState(false);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimer.current) {
+        clearTimeout(copiedTimer.current);
+      }
+    };
+  }, []);
 
   const handleCopy = useCallback(() => {
     if (!value) {
@@ -43,6 +53,12 @@ export function CopyField({
     void copySensitiveText(value);
     triggerLightHaptic();
     showToast(t('common.copied'));
+    // Inline label change works inside pageSheet modals where a toast Modal cannot.
+    setJustCopied(true);
+    if (copiedTimer.current) {
+      clearTimeout(copiedTimer.current);
+    }
+    copiedTimer.current = setTimeout(() => setJustCopied(false), 1800);
   }, [showToast, t, value]);
 
   const handleShare = useCallback(async () => {
@@ -96,7 +112,7 @@ export function CopyField({
               {opacity: pressed ? 0.6 : 1},
             ]}>
             <Text style={[styles.actionText, {color: colors.securityTint}]}>
-              {t('common.copy')}
+              {justCopied ? t('common.copied') : t('common.copy')}
             </Text>
           </Pressable>
           {showShare && (

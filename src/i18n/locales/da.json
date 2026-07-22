@@ -18,6 +18,7 @@
     "show": "Vis",
     "hide": "Skjul",
     "copied": "Kopieret!",
+    "pasted": "Indsat!",
     "done": "Færdig",
     "generate": "Generér",
     "saveKey": "Gem nøgle",
@@ -30,7 +31,8 @@
     "language": "Sprog",
     "languageSubtitle": "Vælg sproget for appens brugerflade.",
     "selectLanguage": "Vælg sprog",
-    "toggleBiometricLock": "Slå biometrisk lås til/fra"
+    "toggleBiometricLock": "Slå biometrisk lås til/fra",
+    "biometricLockUnavailableSubtitle": "Angiv en skærmlås (Face ID, Touch ID eller adgangskode) for at aktivere dette."
   },
   "keys": {
     "createNewKey": "Opret ny nøgle",

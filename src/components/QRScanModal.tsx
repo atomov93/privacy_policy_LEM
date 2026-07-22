@@ -19,6 +19,7 @@ import {useTranslation} from 'react-i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {ensureCameraPermission} from '../services/cameraPermission';
+import {getFingerprint} from '../services/cryptoService';
 import {
   decodeKeyQrPayload,
   isEncryptedQrPayload,
@@ -26,7 +27,11 @@ import {
   resetQrScanDebounce,
   shouldProcessQrScan,
 } from '../services/qrPayload';
-import {addKey, findKeyByName} from '../services/keyStorage';
+import {
+  addKey,
+  findDuplicateKey,
+  namesMatch,
+} from '../services/keyStorage';
 import {triggerLightHaptic} from '../services/haptics';
 import {MAX_KEY_NAME_LENGTH} from '../services/limits';
 import {SavedKey} from '../types';
@@ -202,11 +207,17 @@ export function QRScanModal({
       return;
     }
 
-    const existing = await findKeyByName(trimmedName);
+    const fingerprint = getFingerprint(pendingPayload.secret);
+    const existing = await findDuplicateKey(trimmedName, fingerprint);
     if (existing) {
       Alert.alert(
         t('keys.alertReplaceTitle'),
-        t('keys.alertReplaceMessage', {name: trimmedName}),
+        namesMatch(existing.name, trimmedName)
+          ? t('keys.alertReplaceMessage', {name: trimmedName})
+          : t('keys.alertReplaceFingerprintMessage', {
+              existingName: existing.name,
+              name: trimmedName,
+            }),
         [
           {text: t('common.cancel'), style: 'cancel'},
           {

@@ -13,6 +13,8 @@ export const MAX_DERIVATION_CACHE_ENTRIES = 8;
 /** Encrypted .lme key-transfer files. */
 export const LME_FILE_EXTENSION = 'lme';
 export const LME_MIME_TYPE = 'application/vnd.letsmessageencrypt.lme';
+/** iOS Uniform Type Identifier (must match Info.plist UTExportedTypeDeclarations). */
+export const LME_IOS_UTI = 'org.tts.letsmessageencrypt.lme';
 export const LME_MAGIC = 'LME1';
 export const LME_KDF_ITERATIONS = 200_000;
 export const LME_MIN_PASSPHRASE_LENGTH = 10;

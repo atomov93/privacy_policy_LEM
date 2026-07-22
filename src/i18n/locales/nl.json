@@ -18,6 +18,7 @@
     "show": "Tonen",
     "hide": "Verbergen",
     "copied": "Gekopieerd!",
+    "pasted": "Geplakt!",
     "done": "Klaar",
     "generate": "Genereren",
     "saveKey": "Sleutel opslaan",
@@ -30,7 +31,8 @@
     "language": "Taal",
     "languageSubtitle": "Kies de taal voor de app-interface.",
     "selectLanguage": "Taal selecteren",
-    "toggleBiometricLock": "Biometrische vergrendeling in-/uitschakelen"
+    "toggleBiometricLock": "Biometrische vergrendeling in-/uitschakelen",
+    "biometricLockUnavailableSubtitle": "Stel een schermvergrendeling in (Face ID, Touch ID of toegangscode) om dit in te schakelen."
   },
   "keys": {
     "createNewKey": "Nieuwe sleutel maken",

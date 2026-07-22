@@ -19,6 +19,7 @@ describe('biometric failures and sensor removal', () => {
   let enableBiometricLockWithVerification: typeof import('../src/services/biometrics').enableBiometricLockWithVerification;
   let getBiometricLockSettingLabel: typeof import('../src/services/biometrics').getBiometricLockSettingLabel;
   let getBiometricUnlockLabel: typeof import('../src/services/biometrics').getBiometricUnlockLabel;
+  let resolveAppLockState: typeof import('../src/services/biometrics').resolveAppLockState;
   const originalOs = Platform.OS;
 
   beforeEach(async () => {
@@ -43,6 +44,7 @@ describe('biometric failures and sensor removal', () => {
       biometrics.enableBiometricLockWithVerification;
     getBiometricLockSettingLabel = biometrics.getBiometricLockSettingLabel;
     getBiometricUnlockLabel = biometrics.getBiometricUnlockLabel;
+    resolveAppLockState = biometrics.resolveAppLockState;
   });
 
   afterAll(() => {
@@ -73,9 +75,31 @@ describe('biometric failures and sensor removal', () => {
     expect(mockSimplePrompt).not.toHaveBeenCalled();
   });
 
-  it('does not reveal a secret when authentication is unavailable', async () => {
+  it('allows secret reveal when no device authentication is available', async () => {
     mockIsSensorAvailable.mockResolvedValue({available: false});
-    await expect(authenticateToRevealSecret()).resolves.toBe(false);
+    await expect(authenticateToRevealSecret()).resolves.toBe(true);
+  });
+
+  it('disables persisted app lock when device auth is unavailable', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const {setBiometricLockEnabled} = require('../src/services/settingsStorage');
+    await setBiometricLockEnabled(true);
+    mockIsSensorAvailable.mockResolvedValue({available: false});
+    await expect(resolveAppLockState()).resolves.toEqual({
+      available: false,
+      enabled: false,
+    });
+  });
+
+  it('keeps app lock enabled when device auth is available', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const {setBiometricLockEnabled} = require('../src/services/settingsStorage');
+    await setBiometricLockEnabled(true);
+    mockIsSensorAvailable.mockResolvedValue({available: true});
+    await expect(resolveAppLockState()).resolves.toEqual({
+      available: true,
+      enabled: true,
+    });
   });
 
   it('requires a successful prompt before enabling the lock', async () => {

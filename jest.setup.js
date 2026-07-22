@@ -99,7 +99,9 @@ jest.mock('@react-native-documents/picker', () => ({
   pick: jest.fn(async () => []),
   keepLocalCopy: jest.fn(async () => []),
   isErrorWithCode: jest.fn(() => false),
-  types: {},
+  types: {
+    allFiles: 'public.item',
+  },
 }));
 
 const {initI18n} = require('./src/i18n');

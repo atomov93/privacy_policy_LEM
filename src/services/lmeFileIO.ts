@@ -1,9 +1,18 @@
 import {Platform} from 'react-native';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
-import {isErrorWithCode, keepLocalCopy, pick} from '@react-native-documents/picker';
+import {
+  isErrorWithCode,
+  keepLocalCopy,
+  pick,
+  types,
+} from '@react-native-documents/picker';
 
-import {LME_FILE_EXTENSION, LME_MIME_TYPE} from './limits';
+import {
+  LME_FILE_EXTENSION,
+  LME_IOS_UTI,
+  LME_MIME_TYPE,
+} from './limits';
 
 function cachePath(filename: string): string {
   const safe = filename.replace(/[^\w.\-]+/g, '_');
@@ -28,13 +37,18 @@ export async function shareLmeFile(
   filename: string,
 ): Promise<boolean> {
   try {
-    const url = path.startsWith('file://') ? path : `file://${path}`;
+    const absolute = path.startsWith('file://')
+      ? path.replace(/^file:\/\//, '')
+      : path;
+    // encodeURI keeps path separators while escaping spaces/special chars.
+    const url = `file://${encodeURI(absolute)}`;
     await Share.open({
       url,
-      type: LME_MIME_TYPE,
+      // iOS wants a UTI; Android wants a MIME type.
+      type: Platform.OS === 'ios' ? LME_IOS_UTI : LME_MIME_TYPE,
       filename,
       failOnCancel: false,
-      showAppsToView: true,
+      ...(Platform.OS === 'android' ? {showAppsToView: true} : {}),
     });
     return true;
   } catch {
@@ -59,16 +73,16 @@ export async function pickAndReadLmeFile(): Promise<string | null> {
     const [file] = await pick({
       allowMultiSelection: false,
       mode: 'import',
-      // Custom MIME + catch-all so providers that strip types still work.
-      type: [LME_MIME_TYPE, 'application/octet-stream', '*/*'],
+      // iOS requires UTIs (MIME strings grey out unknown extensions like .lme).
+      // Allow all items so Files.app can select shared .lme documents; content is
+      // validated after read via isLmeFileContents.
+      type:
+        Platform.OS === 'ios'
+          ? [types.allFiles, LME_IOS_UTI, 'public.data']
+          : [LME_MIME_TYPE, 'application/octet-stream', types.allFiles],
     });
     if (!file) {
       return null;
-    }
-
-    const name = (file.name ?? '').toLowerCase();
-    if (name && !name.endsWith(`.${LME_FILE_EXTENSION}`)) {
-      // Still allow if the content looks like LME after read.
     }
 
     if (file.uri.startsWith('content://') || Platform.OS === 'ios') {

@@ -18,6 +18,7 @@
     "show": "Rādīt",
     "hide": "Paslēpt",
     "copied": "Nokopēts!",
+    "pasted": "Ielīmēts!",
     "done": "Gatavs",
     "generate": "Ģenerēt",
     "saveKey": "Saglabāt atslēgu",
@@ -30,7 +31,8 @@
     "language": "Valoda",
     "languageSubtitle": "Izvēlieties lietotnes saskarnes valodu.",
     "selectLanguage": "Izvēlēties valodu",
-    "toggleBiometricLock": "Pārslēgt biometrisko bloķēšanu"
+    "toggleBiometricLock": "Pārslēgt biometrisko bloķēšanu",
+    "biometricLockUnavailableSubtitle": "Iestatiet ekrāna bloķēšanu (Face ID, Touch ID vai piekļuves kodu), lai to iespējotu."
   },
   "keys": {
     "createNewKey": "Izveidot jaunu atslēgu",

@@ -18,6 +18,7 @@
     "show": "Mostrar",
     "hide": "Ocultar",
     "copied": "Copiado!",
+    "pasted": "Colado!",
     "done": "Concluído",
     "generate": "Gerar",
     "saveKey": "Guardar chave",
@@ -30,7 +31,8 @@
     "language": "Idioma",
     "languageSubtitle": "Escolha o idioma da interface da app.",
     "selectLanguage": "Selecionar idioma",
-    "toggleBiometricLock": "Ativar/desativar bloqueio biométrico"
+    "toggleBiometricLock": "Ativar/desativar bloqueio biométrico",
+    "biometricLockUnavailableSubtitle": "Defina um bloqueio de ecrã (Face ID, Touch ID ou código) para ativar isto."
   },
   "keys": {
     "createNewKey": "Criar nova chave",

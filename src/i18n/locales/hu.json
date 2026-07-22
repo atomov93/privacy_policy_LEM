@@ -18,6 +18,7 @@
     "show": "Megjelenítés",
     "hide": "Elrejtés",
     "copied": "Másolva!",
+    "pasted": "Beillesztve!",
     "done": "Kész",
     "generate": "Generálás",
     "saveKey": "Kulcs mentése",
@@ -30,7 +31,8 @@
     "language": "Nyelv",
     "languageSubtitle": "Válassza ki az alkalmazás felületének nyelvét.",
     "selectLanguage": "Nyelv kiválasztása",
-    "toggleBiometricLock": "Biometrikus zárolás ki/bekapcsolása"
+    "toggleBiometricLock": "Biometrikus zárolás ki/bekapcsolása",
+    "biometricLockUnavailableSubtitle": "A bekapcsoláshoz állítson be képernyőzárat (Face ID, Touch ID vagy jelszó)."
   },
   "keys": {
     "createNewKey": "Új kulcs létrehozása",

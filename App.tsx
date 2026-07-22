@@ -21,16 +21,16 @@ import {EncryptDecryptTab} from './src/components/EncryptDecryptTab';
 import {LockScreen} from './src/components/LockScreen';
 import {ToastProvider, useContentLayout, EmojiIcon, useTheme} from './src/components/ui';
 import {initI18n} from './src/i18n';
-import {authenticateWithBiometrics} from './src/services/biometrics';
+import {
+  authenticateWithBiometrics,
+  resolveAppLockState,
+} from './src/services/biometrics';
 import {clearDerivationCache} from './src/services/cryptoService';
 import {createAuthSession} from './src/services/appLockSession';
 import {KeyStorageError, loadKeys} from './src/services/keyStorage';
 import {isLmeFileContents} from './src/services/lmeFile';
 import {isLikelyLmeUri, readUriAsUtf8} from './src/services/lmeFileIO';
-import {
-  getLanguage,
-  isBiometricLockEnabled,
-} from './src/services/settingsStorage';
+import {getLanguage} from './src/services/settingsStorage';
 import {SavedKey} from './src/types';
 
 type Tab = 'keys' | 'encrypt';
@@ -76,8 +76,8 @@ function AppContent() {
     }
 
     try {
-      const enabled = await isBiometricLockEnabled();
-      if (!enabled) {
+      const {enabled, available} = await resolveAppLockState();
+      if (!enabled || !available) {
         if (session.isCurrent(generation)) {
           setLocked(false);
         }
@@ -97,8 +97,8 @@ function AppContent() {
   handleUnlockRef.current = handleUnlock;
 
   const promptUnlockIfNeeded = useCallback(async () => {
-    const enabled = await isBiometricLockEnabled();
-    if (!enabled) {
+    const {enabled, available} = await resolveAppLockState();
+    if (!enabled || !available) {
       setLocked(false);
       return;
     }
@@ -134,19 +134,21 @@ function AppContent() {
       const previousState = appStateRef.current;
       appStateRef.current = nextState;
 
-      if (nextState === 'inactive' || nextState === 'background') {
-        isBiometricLockEnabled().then(enabled => {
-          if (enabled) {
+      // Lock only on true background. iOS Face ID / passcode sheets put the
+      // app in "inactive"; locking there re-opens the prompt in a loop.
+      if (nextState === 'background') {
+        if (authSessionRef.current.isAuthenticating) {
+          return;
+        }
+        resolveAppLockState().then(({enabled, available}) => {
+          if (enabled && available) {
             lockNow();
           }
         });
         return;
       }
 
-      if (
-        (previousState === 'background' || previousState === 'inactive') &&
-        nextState === 'active'
-      ) {
+      if (previousState === 'background' && nextState === 'active') {
         promptUnlockIfNeeded();
       }
     });
@@ -195,7 +197,8 @@ function AppContent() {
     <>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={colors.background}
+        backgroundColor="transparent"
+        translucent
       />
       <SafeAreaView
         style={[styles.safeArea, {backgroundColor: colors.background}]}

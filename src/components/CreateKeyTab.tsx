@@ -22,13 +22,18 @@ import {
   enableBiometricLockWithVerification,
   getBiometricLockSettingLabel,
   isBiometricAvailable,
+  resolveAppLockState,
 } from '../services/biometrics';
 import {triggerLightHaptic} from '../services/haptics';
-import {addKey, deleteKey, findKeyByName} from '../services/keyStorage';
+import {
+  addKey,
+  deleteKey,
+  findDuplicateKey,
+  namesMatch,
+} from '../services/keyStorage';
 import {MAX_KEY_NAME_LENGTH, MAX_SECRET_LENGTH} from '../services/limits';
 import {
   getLanguage,
-  isBiometricLockEnabled,
   setBiometricLockEnabled,
 } from '../services/settingsStorage';
 import {SavedKey} from '../types';
@@ -85,12 +90,16 @@ export function CreateKeyTab({
   const [lmeImportContents, setLmeImportContents] = useState<string | null>(
     null,
   );
-  const [biometricLockOn, setBiometricLockOn] = useState(true);
+  const [biometricLockOn, setBiometricLockOn] = useState(false);
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
 
   useEffect(() => {
-    isBiometricLockEnabled().then(setBiometricLockOn);
+    resolveAppLockState().then(({available, enabled}) => {
+      setBiometricAvailable(available);
+      setBiometricLockOn(enabled);
+    });
     getLanguage().then(lang => {
       if (lang) {
         setCurrentLanguage(lang);
@@ -162,11 +171,16 @@ export function CreateKeyTab({
       }
     };
 
-    const existing = await findKeyByName(trimmedName);
+    const existing = await findDuplicateKey(trimmedName, fingerprint);
     if (existing) {
       Alert.alert(
         t('keys.alertReplaceTitle'),
-        t('keys.alertReplaceMessage', {name: trimmedName}),
+        namesMatch(existing.name, trimmedName)
+          ? t('keys.alertReplaceMessage', {name: trimmedName})
+          : t('keys.alertReplaceFingerprintMessage', {
+              existingName: existing.name,
+              name: trimmedName,
+            }),
         [
           {text: t('common.cancel'), style: 'cancel'},
           {
@@ -380,24 +394,45 @@ export function CreateKeyTab({
             />
           </SectionRow>
           <SectionRow isLast>
-            <View style={styles.settingRow}>
+            <View
+              style={[
+                styles.settingRow,
+                !biometricAvailable && styles.settingRowDisabled,
+              ]}
+              accessibilityState={{disabled: !biometricAvailable}}>
               <View style={styles.settingText}>
-                <Text style={[styles.settingTitle, {color: colors.label}]}>
+                <Text
+                  style={[
+                    styles.settingTitle,
+                    {
+                      color: biometricAvailable
+                        ? colors.label
+                        : colors.tertiaryLabel,
+                    },
+                  ]}>
                   {getBiometricLockSettingLabel()}
                 </Text>
                 <Text
                   style={[
                     styles.settingSubtitle,
-                    {color: colors.secondaryLabel},
+                    {
+                      color: biometricAvailable
+                        ? colors.secondaryLabel
+                        : colors.tertiaryLabel,
+                    },
                   ]}>
-                  {t('settings.biometricLockSubtitle')}
+                  {biometricAvailable
+                    ? t('settings.biometricLockSubtitle')
+                    : t('settings.biometricLockUnavailableSubtitle')}
                 </Text>
               </View>
               <Switch
-                value={biometricLockOn}
+                value={biometricLockOn && biometricAvailable}
                 onValueChange={handleBiometricToggle}
+                disabled={!biometricAvailable}
                 trackColor={{false: colors.separator, true: colors.securityTint}}
                 accessibilityLabel={t('settings.toggleBiometricLock')}
+                accessibilityState={{disabled: !biometricAvailable}}
               />
             </View>
           </SectionRow>
@@ -537,6 +572,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  settingRowDisabled: {
+    opacity: 0.55,
   },
   settingText: {
     flex: 1,

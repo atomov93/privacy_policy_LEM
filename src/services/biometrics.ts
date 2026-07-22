@@ -2,7 +2,16 @@ import {Platform} from 'react-native';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
 import i18n from '../i18n';
+import {
+  isBiometricLockEnabled,
+  setBiometricLockEnabled,
+} from './settingsStorage';
 
+/**
+ * Android: allow PIN/pattern/password as device credentials.
+ * iOS: biometrics only — DeviceOwnerAuthentication reports "available" on
+ * Simulator even without a passcode, which traps the unlock UI in a passcode loop.
+ */
 const rnBiometrics = new ReactNativeBiometrics({
   allowDeviceCredentials: Platform.OS === 'android',
 });
@@ -14,6 +23,24 @@ export async function isBiometricAvailable(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/**
+ * Returns whether app lock can actually be enforced on this device.
+ * If the user previously enabled lock but the device has no screen lock /
+ * biometrics, the preference is turned off so the unlock UI cannot trap them.
+ */
+export async function resolveAppLockState(): Promise<{
+  available: boolean;
+  enabled: boolean;
+}> {
+  const available = await isBiometricAvailable();
+  let enabled = await isBiometricLockEnabled();
+  if (!available && enabled) {
+    await setBiometricLockEnabled(false);
+    enabled = false;
+  }
+  return {available, enabled};
 }
 
 export function getBiometricLockSettingLabel(): string {
@@ -70,7 +97,8 @@ export async function authenticateToRevealSecret(): Promise<boolean> {
   try {
     const available = await isBiometricAvailable();
     if (!available) {
-      return false;
+      // Nothing to authenticate with — do not block secret reveal forever.
+      return true;
     }
 
     const {success} = await rnBiometrics.simplePrompt({

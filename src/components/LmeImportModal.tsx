@@ -4,7 +4,11 @@ import {useTranslation} from 'react-i18next';
 
 import {generateSecureId, getFingerprint} from '../services/cryptoService';
 import {triggerLightHaptic} from '../services/haptics';
-import {addKey, findKeyByName} from '../services/keyStorage';
+import {
+  addKey,
+  findDuplicateKey,
+  namesMatch,
+} from '../services/keyStorage';
 import {LME_MIN_PASSPHRASE_LENGTH, MAX_KEY_NAME_LENGTH} from '../services/limits';
 import {decodeLmeFile, isLmeFileContents} from '../services/lmeFile';
 import {pickAndReadLmeFile} from '../services/lmeFileIO';
@@ -80,7 +84,7 @@ export function LmeImportModal({
     }
   }, [t]);
 
-  const handleUnlock = useCallback(() => {
+  const handleUnlock = useCallback(async () => {
     if (!rawContents) {
       return;
     }
@@ -93,7 +97,7 @@ export function LmeImportModal({
       );
       return;
     }
-    const decoded = decodeLmeFile(rawContents, passphrase);
+    const decoded = await decodeLmeFile(rawContents, passphrase);
     if (!decoded) {
       Alert.alert(t('lmeImport.unlockFailed'), t('lmeImport.unlockFailedMessage'));
       return;
@@ -138,11 +142,17 @@ export function LmeImportModal({
       Alert.alert(t('keys.alertMissingName'), t('keys.alertMissingNameMessage'));
       return;
     }
-    const existing = await findKeyByName(trimmedName);
+    const fingerprint = getFingerprint(pending.secret);
+    const existing = await findDuplicateKey(trimmedName, fingerprint);
     if (existing) {
       Alert.alert(
         t('keys.alertReplaceTitle'),
-        t('keys.alertReplaceMessage', {name: trimmedName}),
+        namesMatch(existing.name, trimmedName)
+          ? t('keys.alertReplaceMessage', {name: trimmedName})
+          : t('keys.alertReplaceFingerprintMessage', {
+              existingName: existing.name,
+              name: trimmedName,
+            }),
         [
           {text: t('common.cancel'), style: 'cancel'},
           {

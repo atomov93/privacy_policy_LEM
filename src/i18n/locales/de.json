@@ -18,6 +18,7 @@
     "show": "Anzeigen",
     "hide": "Ausblenden",
     "copied": "Kopiert!",
+    "pasted": "Eingefügt!",
     "done": "Fertig",
     "generate": "Generieren",
     "saveKey": "Schlüssel speichern",
@@ -30,7 +31,8 @@
     "language": "Sprache",
     "languageSubtitle": "Wählen Sie die Sprache der App-Oberfläche.",
     "selectLanguage": "Sprache auswählen",
-    "toggleBiometricLock": "Biometrische Sperre umschalten"
+    "toggleBiometricLock": "Biometrische Sperre umschalten",
+    "biometricLockUnavailableSubtitle": "Legen Sie eine Bildschirmsperre (Face ID, Touch ID oder Code) fest, um dies zu aktivieren."
   },
   "keys": {
     "createNewKey": "Neuen Schlüssel erstellen",

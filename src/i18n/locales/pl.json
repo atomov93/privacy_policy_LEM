@@ -18,6 +18,7 @@
     "show": "Pokaż",
     "hide": "Ukryj",
     "copied": "Skopiowano!",
+    "pasted": "Wklejono!",
     "done": "Gotowe",
     "generate": "Generuj",
     "saveKey": "Zapisz klucz",
@@ -30,7 +31,8 @@
     "language": "Język",
     "languageSubtitle": "Wybierz język interfejsu aplikacji.",
     "selectLanguage": "Wybierz język",
-    "toggleBiometricLock": "Przełącz blokadę biometryczną"
+    "toggleBiometricLock": "Przełącz blokadę biometryczną",
+    "biometricLockUnavailableSubtitle": "Ustaw blokadę ekranu (Face ID, Touch ID lub kod), aby to włączyć."
   },
   "keys": {
     "createNewKey": "Utwórz nowy klucz",

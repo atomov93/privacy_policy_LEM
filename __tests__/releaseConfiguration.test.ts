@@ -32,8 +32,15 @@ describe('release configuration and signing safeguards', () => {
   });
 
   it('enables release minification', () => {
-    expect(read('android/app/build.gradle')).toMatch(
-      /enableProguardInReleaseBuilds\s*=\s*true/,
+    const gradle = read('android/app/build.gradle');
+    expect(gradle).toMatch(/enableProguardInReleaseBuilds\s*=\s*true/);
+    expect(gradle).toMatch(/shrinkResources\s+enableProguardInReleaseBuilds/);
+    expect(gradle).toMatch(/proguard-android-optimize\.txt/);
+  });
+
+  it('enables Android edge-to-edge display', () => {
+    expect(read('android/gradle.properties')).toMatch(
+      /edgeToEdgeEnabled\s*=\s*true/,
     );
   });
 
@@ -83,6 +90,9 @@ describe('release configuration and signing safeguards', () => {
     const plist = read('ios/LetsMessageEncrypt/Info.plist');
     expect(plist).toMatch(/org\.tts\.letsmessageencrypt\.lme/);
     expect(plist).toMatch(/<string>lme<\/string>/);
+    expect(plist).toMatch(
+      /<key>LSSupportsOpeningDocumentsInPlace<\/key>\s*<true\/>/,
+    );
     const manifest = read('android/app/src/main/AndroidManifest.xml');
     expect(manifest).toMatch(/application\/vnd\.letsmessageencrypt\.lme/);
     expect(manifest).toMatch(/pathPattern="\.\*\\\\\.lme"/);

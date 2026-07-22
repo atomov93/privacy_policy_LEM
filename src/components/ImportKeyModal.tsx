@@ -20,7 +20,11 @@ import {
   getFingerprint,
 } from '../services/cryptoService';
 import {triggerLightHaptic} from '../services/haptics';
-import {addKey, findKeyByName} from '../services/keyStorage';
+import {
+  addKey,
+  findDuplicateKey,
+  namesMatch,
+} from '../services/keyStorage';
 import {MAX_KEY_NAME_LENGTH, MAX_SECRET_LENGTH} from '../services/limits';
 import {SavedKey} from '../types';
 import {Button, InputField, useTheme} from './ui';
@@ -134,11 +138,16 @@ export function ImportKeyModal({
       }
     };
 
-    const existing = await findKeyByName(trimmedName);
+    const existing = await findDuplicateKey(trimmedName, newKey.fingerprint);
     if (existing) {
       Alert.alert(
         t('keys.alertReplaceTitle'),
-        t('keys.alertReplaceMessage', {name: trimmedName}),
+        namesMatch(existing.name, trimmedName)
+          ? t('keys.alertReplaceMessage', {name: trimmedName})
+          : t('keys.alertReplaceFingerprintMessage', {
+              existingName: existing.name,
+              name: trimmedName,
+            }),
         [
           {text: t('common.cancel'), style: 'cancel'},
           {

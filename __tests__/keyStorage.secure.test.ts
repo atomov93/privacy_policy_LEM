@@ -53,8 +53,8 @@ describe('encrypted key storage', () => {
   });
 
   it('deletes keys through encrypted persistence', async () => {
-    const a = savedKey({id: 'a', name: 'A'});
-    const b = savedKey({id: 'b', name: 'B'});
+    const a = savedKey({id: 'a', name: 'A', secret: 'secret-a'});
+    const b = savedKey({id: 'b', name: 'B', secret: 'secret-b'});
     await saveKeys([a, b]);
     await expect(deleteKey('a')).resolves.toEqual([b]);
     await expect(loadKeys()).resolves.toEqual([b]);

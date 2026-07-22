@@ -35,7 +35,7 @@ export function LmeShareModal({keyItem, visible, onClose}: LmeShareModalProps) {
     let cancelled = false;
     (async () => {
       try {
-        const encoded = encodeLmeFile(keyItem);
+        const encoded = await encodeLmeFile(keyItem);
         const path = await writeLmeTempFile(encoded.contents, encoded.filename);
         if (cancelled) {
           return;

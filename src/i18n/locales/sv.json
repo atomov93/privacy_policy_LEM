@@ -18,6 +18,7 @@
     "show": "Visa",
     "hide": "Dölj",
     "copied": "Kopierat!",
+    "pasted": "Klistrat!",
     "done": "Klar",
     "generate": "Generera",
     "saveKey": "Spara nyckel",
@@ -30,7 +31,8 @@
     "language": "Språk",
     "languageSubtitle": "Välj språk för appens gränssnitt.",
     "selectLanguage": "Välj språk",
-    "toggleBiometricLock": "Växla biometriskt lås"
+    "toggleBiometricLock": "Växla biometriskt lås",
+    "biometricLockUnavailableSubtitle": "Ställ in en skärmlåsning (Face ID, Touch ID eller lösenkod) för att aktivera detta."
   },
   "keys": {
     "createNewKey": "Skapa ny nyckel",

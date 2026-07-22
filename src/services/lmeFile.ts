@@ -39,17 +39,82 @@ export type EncodedLmeFile = {
   expiresAt: number;
 };
 
-function deriveLmeKeyMaterial(passphrase: string, saltHex: string): string {
+type Pbkdf2Callback = (
+  err: Error | null,
+  derivedKey?: {toString: (enc: string) => string},
+) => void;
+
+let quickPbkdf2:
+  | ((
+      password: string,
+      salt: string | Uint8Array,
+      iterations: number,
+      keylen: number,
+      digest: string,
+      callback: Pbkdf2Callback,
+    ) => void)
+  | null = null;
+
+try {
+  quickPbkdf2 = require('react-native-quick-crypto').pbkdf2;
+} catch {
+  quickPbkdf2 = null;
+}
+
+function hexToBytes(hex: string): Uint8Array {
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < bytes.length; i += 1) {
+    bytes[i] = Number.parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  }
+  return bytes;
+}
+
+function deriveLmeKeyMaterialSync(
+  passphrase: string,
+  saltHex: string,
+  iterations: number,
+): string {
   const derived = CryptoJS.PBKDF2(
     passphrase,
     CryptoJS.enc.Hex.parse(saltHex),
     {
       keySize: 64 / 4,
-      iterations: LME_KDF_ITERATIONS,
+      iterations,
       hasher: CryptoJS.algo.SHA256,
     },
   );
   return derived.toString(CryptoJS.enc.Hex);
+}
+
+/**
+ * Derive 64-byte LME key material. Prefer native async PBKDF2 so the UI
+ * thread is not blocked for hundreds of thousands of iterations.
+ */
+async function deriveLmeKeyMaterial(
+  passphrase: string,
+  saltHex: string,
+  iterations: number = LME_KDF_ITERATIONS,
+): Promise<string> {
+  if (!quickPbkdf2) {
+    return deriveLmeKeyMaterialSync(passphrase, saltHex, iterations);
+  }
+
+  return new Promise((resolve, reject) => {
+    quickPbkdf2!(
+      passphrase,
+      hexToBytes(saltHex),
+      iterations,
+      64,
+      'sha256',
+      (err, key) => {
+        if (err || !key) {
+          reject(err ?? new Error('PBKDF2 failed'));
+          return;
+        }
+        resolve(key.toString('hex'));
+      },
+    );
+  });
 }
 
 export function generateLmePassphrase(): string {
@@ -76,10 +141,10 @@ export function isLmeFileContents(raw: string): boolean {
  * Encode a key into an authenticated .lme document.
  * The file is useless without the separate transfer passphrase.
  */
-export function encodeLmeFile(
+export async function encodeLmeFile(
   key: Pick<SavedKey, 'name' | 'secret'>,
   options: {passphrase?: string; ttlMs?: number} = {},
-): EncodedLmeFile {
+): Promise<EncodedLmeFile> {
   const name = key.name.trim();
   const secret = key.secret.trim();
   const passphrase = (options.passphrase ?? generateLmePassphrase()).trim();
@@ -100,7 +165,7 @@ export function encodeLmeFile(
   }
 
   const salt = generateWrappingKeyHex().slice(0, 64);
-  const rawKey = deriveLmeKeyMaterial(passphrase, salt);
+  const rawKey = await deriveLmeKeyMaterial(passphrase, salt);
   const expiresAt = Date.now() + (options.ttlMs ?? LME_DEFAULT_TTL_MS);
   const inner = JSON.stringify({
     name,
@@ -129,10 +194,10 @@ export function encodeLmeFile(
   };
 }
 
-export function decodeLmeFile(
+export async function decodeLmeFile(
   raw: string,
   passphrase: string,
-): LmeDecodedKey | null {
+): Promise<LmeDecodedKey | null> {
   if (!raw || raw.length > LME_MAX_FILE_BYTES) {
     return null;
   }
@@ -168,7 +233,11 @@ export function decodeLmeFile(
       return null;
     }
 
-    const rawKey = deriveLmeKeyMaterial(trimmedPass, parsed.salt);
+    const rawKey = await deriveLmeKeyMaterial(
+      trimmedPass,
+      parsed.salt,
+      parsed.iters,
+    );
     const inner = decryptWithRawKey(`db1:${parsed.data}`, rawKey);
     const payload = JSON.parse(inner) as {
       name?: unknown;

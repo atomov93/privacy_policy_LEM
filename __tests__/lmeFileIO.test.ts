@@ -14,7 +14,6 @@ import {
   shareLmeFile,
   writeLmeTempFile,
 } from '../src/services/lmeFileIO';
-import {LME_MIME_TYPE} from '../src/services/limits';
 
 const writeFile = RNFS.writeFile as unknown as jest.Mock;
 const readFile = RNFS.readFile as unknown as jest.Mock;
@@ -63,7 +62,6 @@ describe('lmeFileIO', () => {
     expect(shareOpen).toHaveBeenCalledWith(
       expect.objectContaining({
         url: 'file:///tmp/key.lme',
-        type: LME_MIME_TYPE,
         filename: 'key.lme',
         failOnCancel: false,
       }),

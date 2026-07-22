@@ -128,7 +128,8 @@ export function LockScreen({visible, onUnlock}: LockScreenProps) {
         ]}>
         <StatusBar
           barStyle={isDark ? 'light-content' : 'dark-content'}
-          backgroundColor={colors.background}
+          backgroundColor="transparent"
+          translucent
         />
         <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
           <Animated.View

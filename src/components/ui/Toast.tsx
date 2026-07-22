@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {Animated, StyleSheet, Text} from 'react-native';
+import {Animated, Modal, StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {useTheme} from './theme';
@@ -30,6 +30,7 @@ export function ToastProvider({children}: {children: React.ReactNode}) {
         clearTimeout(hideTimer.current);
       }
       setMessage(text);
+      opacity.setValue(0);
       Animated.timing(opacity, {
         toValue: 1,
         duration: 200,
@@ -61,23 +62,36 @@ export function ToastProvider({children}: {children: React.ReactNode}) {
   return (
     <ToastContext.Provider value={{showToast}}>
       {children}
-      {message && (
-        <Animated.View
-          style={[
-            styles.toast,
-            {
-              bottom: insets.bottom + 72,
-              backgroundColor: colors.label,
-              opacity,
-            },
-          ]}
-          accessibilityLiveRegion="polite"
-          accessibilityRole="alert">
-          <Text style={[styles.toastText, {color: colors.groupedBackground}]}>
-            {message}
-          </Text>
-        </Animated.View>
-      )}
+      {/* Modal so the toast appears above other RN Modals (copy/paste sheets). */}
+      <Modal
+        transparent
+        visible={message != null}
+        animationType="none"
+        statusBarTranslucent
+        presentationStyle="overFullScreen"
+        onRequestClose={() => {}}>
+        <View style={styles.overlay} pointerEvents="box-none">
+          {message ? (
+            <Animated.View
+              pointerEvents="none"
+              style={[
+                styles.toast,
+                {
+                  bottom: insets.bottom + 72,
+                  backgroundColor: colors.label,
+                  opacity,
+                },
+              ]}
+              accessibilityLiveRegion="polite"
+              accessibilityRole="alert">
+              <Text
+                style={[styles.toastText, {color: colors.groupedBackground}]}>
+                {message}
+              </Text>
+            </Animated.View>
+          ) : null}
+        </View>
+      </Modal>
     </ToastContext.Provider>
   );
 }
@@ -91,6 +105,9 @@ export function useToast() {
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+  },
   toast: {
     position: 'absolute',
     alignSelf: 'center',
@@ -102,7 +119,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
-    zIndex: 999,
   },
   toastText: {
     fontSize: 15,

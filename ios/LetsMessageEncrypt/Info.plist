@@ -35,6 +35,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Scan QR codes to import shared encryption keys.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access your photo library when saving or sharing QR codes used to transfer encryption keys.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Unlock LetsMessageEncrypt with Face ID or Touch ID.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -59,6 +61,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>

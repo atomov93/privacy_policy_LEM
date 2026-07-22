@@ -18,6 +18,7 @@
     "show": "Show",
     "hide": "Hide",
     "copied": "Copied!",
+    "pasted": "Pasted!",
     "done": "Done",
     "generate": "Generate",
     "saveKey": "Save Key",
@@ -34,7 +35,8 @@
     "biometricUnavailableTitle": "Authentication unavailable",
     "biometricUnavailableMessage": "Enable Face ID, Touch ID, or a device screen lock before turning this on.",
     "biometricVerifyFailedTitle": "Could not enable lock",
-    "biometricVerifyFailedMessage": "Authenticate successfully once before enabling the lock."
+    "biometricVerifyFailedMessage": "Authenticate successfully once before enabling the lock.",
+    "biometricLockUnavailableSubtitle": "Set a device screen lock (Face ID, Touch ID, or passcode) to enable this."
   },
   "keys": {
     "createKeyCard": "Create key",
@@ -77,6 +79,7 @@
     "alertKeySavedMessage": "\"{{name}}\" is ready. Share the fingerprint (or the secret) with the other device.",
     "alertReplaceTitle": "Replace existing key?",
     "alertReplaceMessage": "A key named \"{{name}}\" already exists. Saving will replace it.",
+    "alertReplaceFingerprintMessage": "This secret is already saved as \"{{existingName}}\". Saving as \"{{name}}\" will replace that key.",
     "replace": "Replace",
     "alertSaveFailed": "Could not save",
     "alertSaveFailedMessage": "Secure storage failed. Try again.",

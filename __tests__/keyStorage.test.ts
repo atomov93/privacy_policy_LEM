@@ -123,4 +123,45 @@ describe('duplicate-key replacement', () => {
       expect.objectContaining({id: 'new', name: 'Alice'}),
     ]);
   });
+
+  it('replaces an existing key when the fingerprint matches under a new name', async () => {
+    const secret = 'shared-secret-value';
+    const original = savedKey({
+      id: 'old',
+      name: 'Alice',
+      secret,
+      fingerprint: getFingerprint(secret),
+    });
+    const other = savedKey({id: 'other', name: 'Carol', secret: 'other-secret'});
+    await storage.setItem(LEGACY_STORAGE_KEY, JSON.stringify([original, other]));
+    await loadKeys();
+
+    const renamed = savedKey({
+      id: 'new',
+      name: 'Alice Renamed',
+      secret,
+      fingerprint: getFingerprint(secret),
+    });
+    const result = await addKey(renamed);
+    expect(result).toEqual([renamed, other]);
+    expect(result.find(k => k.name === 'Alice')).toBeUndefined();
+  });
+
+  it('collapses fingerprint duplicates already present in storage on load', async () => {
+    const secret = 'dup-secret';
+    const first = savedKey({
+      id: 'a',
+      name: 'First',
+      secret,
+      fingerprint: getFingerprint(secret),
+    });
+    const second = savedKey({
+      id: 'b',
+      name: 'Second',
+      secret,
+      fingerprint: getFingerprint(secret),
+    });
+    await storage.setItem(LEGACY_STORAGE_KEY, JSON.stringify([first, second]));
+    await expect(loadKeys()).resolves.toEqual([first]);
+  });
 });
