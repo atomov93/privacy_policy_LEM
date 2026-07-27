@@ -7,7 +7,21 @@
 
 ## Message ciphertext
 
-### v3 (current encrypt output)
+### v4 (current encrypt output)
+
+```
+v4: Base64( salt[16] || iv[16] || ciphertext || hmac[32] )
+```
+
+- Master KDF (once per secret, cached): PBKDF2-HMAC-SHA256(secret, `"lets-encrypt-app:v4"`, iterations=100000, dkLen=64)
+- Per-message keys: HKDF-SHA256(ikm=master, salt=message_salt, info=`"lets-encrypt-app:v4:msg"`, length=64)
+- Split derived key: encKey = first 32 bytes, macKey = last 32 bytes
+- AES-256-CBC PKCS7 with random IV
+- HMAC-SHA256(macKey, salt || iv || ciphertext), compared in constant time
+
+This keeps the same password-stretching strength as v3 while avoiding 100 000 PBKDF2 iterations on every encrypt/decrypt.
+
+### v3 (decrypt compatibility)
 
 ```
 v3: Base64( salt[16] || iv[16] || ciphertext || hmac[32] )

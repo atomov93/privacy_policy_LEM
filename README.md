@@ -6,7 +6,7 @@ A React Native CLI app for encrypting and decrypting messages between devices us
 
 - **Create / import keys** — name + passphrase, with optional auto-generated secrets
 - **SHA-256 fingerprint** — displayed for each key so you can verify pre-shared setup
-- **Authenticated encryption** — PBKDF2-SHA256, AES-256-CBC, random IV/salt, HMAC-SHA256 (`v3:` ciphertext)
+- **Authenticated encryption** — PBKDF2-SHA256 master key + HKDF per message, AES-256-CBC, random IV/salt, HMAC-SHA256 (`v4:` ciphertext; still decrypts `v3:`/`v2:`)
 - **Secure local storage** — key database encrypted with a Keychain/Keystore-backed wrapping key
 - **PIN-protected QR transfer** — secrets are never encoded as plaintext in QR codes
 - **Encrypted `.lme` key files** — share keys remotely; passphrase required separately
@@ -68,8 +68,8 @@ npm start
 ### 3. Encrypt / decrypt
 
 1. Open the **Encrypt** tab and select the key.
-2. Encrypt produces `v3:` authenticated ciphertext.
-3. Decrypt accepts `v3:` and older `v2:` ciphertext. Unauthenticated legacy MD5/AES-CBC is **off by default** and requires an explicit “Legacy decrypt (insecure)” toggle.
+2. Encrypt produces `v4:` authenticated ciphertext.
+3. Decrypt accepts `v4:`, older `v3:`/`v2:` ciphertext. Unauthenticated legacy MD5/AES-CBC is **off by default** and requires an explicit “Legacy decrypt (insecure)” toggle.
 
 ## Cryptography details
 
@@ -78,11 +78,12 @@ See [docs/CRYPTO.md](docs/CRYPTO.md) for the full format specification.
 | Step | Method |
 |------|--------|
 | Fingerprint | `SHA-256(secret)` → 64-char hex |
-| Message KDF (v3) | PBKDF2-SHA256, 100 000 iterations, **per-message random salt** |
+| Master KDF (v4) | PBKDF2-SHA256, 100 000 iterations, fixed salt (cached per secret) |
+| Message KDF (v4) | HKDF-SHA256 over master + per-message salt |
 | Encryption | AES-256-CBC + PKCS7, random IV |
 | Integrity | HMAC-SHA256 over `salt \|\| IV \|\| ciphertext` |
-| Output | `v3:` + Base64 payload |
-| Compatibility | Decrypts `v2:` (fixed app salt). Legacy MD5/CBC only with explicit opt-in |
+| Output | `v4:` + Base64 payload |
+| Compatibility | Decrypts `v3:` (per-message PBKDF2) and `v2:` (fixed app salt). Legacy MD5/CBC only with explicit opt-in |
 
 > **Note:** Older documentation that described MD5-derived AES-128-CBC as the current scheme is obsolete. That algorithm remains available only as an explicitly labeled insecure compatibility mode.
 

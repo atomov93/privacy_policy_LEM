@@ -10,7 +10,7 @@ import {
   getFingerprint,
   warmKeyDerivation,
   V2_PREFIX,
-  V3_PREFIX,
+  V4_PREFIX,
 } from '../src/services/cryptoService';
 
 function encryptLegacyMessage(plaintext: string, secret: string): string {
@@ -46,10 +46,10 @@ describe('cryptoService', () => {
     ).toBe(false);
   });
 
-  it('encrypts and decrypts v3 messages symmetrically', async () => {
+  it('encrypts and decrypts v4 messages symmetrically', async () => {
     const message = 'Hello from device A!';
     const encrypted = await encryptMessage(message, secret);
-    expect(encrypted.startsWith(V3_PREFIX)).toBe(true);
+    expect(encrypted.startsWith(V4_PREFIX)).toBe(true);
     expect(encrypted).not.toBe(message);
     expect(await decryptMessage(encrypted, secret)).toBe(message);
   });
@@ -58,6 +58,34 @@ describe('cryptoService', () => {
     const a = await encryptMessage('same', secret);
     const b = await encryptMessage('same', secret);
     expect(a).not.toBe(b);
+  });
+
+  it('reuses cached master derivation across messages', async () => {
+    const pbkdf2 = jest.spyOn(CryptoJS, 'PBKDF2');
+    await warmKeyDerivation(secret);
+    const afterWarm = pbkdf2.mock.calls.length;
+    expect(afterWarm).toBeGreaterThan(0);
+
+    await encryptMessage('first', secret);
+    await encryptMessage('second', secret);
+    await encryptMessage('third', secret);
+    // Per-message work must not re-run PBKDF2 once the master is warm.
+    expect(pbkdf2.mock.calls.length).toBe(afterWarm);
+    pbkdf2.mockRestore();
+  });
+
+  it('keeps warmed encrypt/decrypt under a tight budget', async () => {
+    await warmKeyDerivation(secret);
+    const samples: number[] = [];
+    for (let i = 0; i < 5; i += 1) {
+      const started = Date.now();
+      const encrypted = await encryptMessage(`bench-${i}`, secret);
+      await decryptMessage(encrypted, secret);
+      samples.push(Date.now() - started);
+    }
+    const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
+    // After warm-up, round-trip must be interactive (not 100k PBKDF2).
+    expect(avg).toBeLessThan(100);
   });
 
   it('still decrypts authenticated v2 ciphertext', async () => {

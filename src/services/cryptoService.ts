@@ -5,8 +5,13 @@ import {MAX_DERIVATION_CACHE_ENTRIES} from './limits';
 const PBKDF2_ITERATIONS_V2 = 100_000;
 const PBKDF2_SALT_V2 = 'lets-encrypt-app:v2';
 const PBKDF2_ITERATIONS_V3 = 100_000;
+/** One-time password stretching for v4; per-message keys use HKDF. */
+const PBKDF2_ITERATIONS_V4 = 100_000;
+const PBKDF2_SALT_V4 = 'lets-encrypt-app:v4';
+const HKDF_INFO_V4 = 'lets-encrypt-app:v4:msg';
 export const V2_PREFIX = 'v2:';
 export const V3_PREFIX = 'v3:';
+export const V4_PREFIX = 'v4:';
 const IV_BYTES = 16;
 const SALT_BYTES = 16;
 const HMAC_BYTES = 32;
@@ -24,12 +29,14 @@ type Pbkdf2Callback = (
 ) => void;
 
 const derivationCache = new Map<string, DerivedKeys>();
+const masterKeyCache = new Map<string, CryptoJS.lib.WordArray>();
 const inflightDerivations = new Map<string, Promise<DerivedKeys>>();
+const inflightMasters = new Map<string, Promise<CryptoJS.lib.WordArray>>();
 
 let quickPbkdf2:
   | ((
       password: string,
-      salt: string,
+      salt: string | Uint8Array,
       iterations: number,
       keylen: number,
       digest: string,
@@ -37,10 +44,23 @@ let quickPbkdf2:
     ) => void)
   | null = null;
 
+let quickHkdfSync:
+  | ((
+      digest: string,
+      key: string | Uint8Array,
+      salt: string | Uint8Array,
+      info: string | Uint8Array,
+      keylen: number,
+    ) => Uint8Array | {toString: (enc: string) => string})
+  | null = null;
+
 try {
-  quickPbkdf2 = require('react-native-quick-crypto').pbkdf2;
+  const quickCrypto = require('react-native-quick-crypto');
+  quickPbkdf2 = quickCrypto.pbkdf2;
+  quickHkdfSync = quickCrypto.hkdfSync;
 } catch {
   quickPbkdf2 = null;
+  quickHkdfSync = null;
 }
 
 export function getFingerprint(secret: string): string {
@@ -124,29 +144,47 @@ function deriveKeysWithCryptoJs(
   return keysFromPbkdf2Hex(derived.toString(CryptoJS.enc.Hex));
 }
 
-function deriveV2KeysNative(secret: string): Promise<DerivedKeys> {
+function masterFromPbkdf2Hex(hex: string): CryptoJS.lib.WordArray {
+  return CryptoJS.enc.Hex.parse(hex);
+}
+
+function pbkdf2Native(
+  secret: string,
+  salt: string | Uint8Array,
+  iterations: number,
+  keylen: number,
+): Promise<string> {
   if (!quickPbkdf2) {
-    return Promise.resolve(
-      deriveKeysWithCryptoJs(secret, PBKDF2_SALT_V2, PBKDF2_ITERATIONS_V2),
-    );
+    const saltWa =
+      typeof salt === 'string'
+        ? CryptoJS.enc.Utf8.parse(salt)
+        : uint8ArrayToWordArray(salt);
+    const derived = CryptoJS.PBKDF2(secret, saltWa, {
+      keySize: keylen / 4,
+      iterations,
+      hasher: CryptoJS.algo.SHA256,
+    });
+    return Promise.resolve(derived.toString(CryptoJS.enc.Hex));
   }
 
   return new Promise((resolve, reject) => {
-    quickPbkdf2!(
-      secret,
-      PBKDF2_SALT_V2,
-      PBKDF2_ITERATIONS_V2,
-      64,
-      'sha256',
-      (err, key) => {
-        if (err || !key) {
-          reject(err ?? new Error('PBKDF2 failed'));
-          return;
-        }
-        resolve(keysFromPbkdf2Hex(key.toString('hex')));
-      },
-    );
+    quickPbkdf2!(secret, salt, iterations, keylen, 'sha256', (err, key) => {
+      if (err || !key) {
+        reject(err ?? new Error('PBKDF2 failed'));
+        return;
+      }
+      resolve(key.toString('hex'));
+    });
   });
+}
+
+function deriveV2KeysNative(secret: string): Promise<DerivedKeys> {
+  return pbkdf2Native(
+    secret,
+    PBKDF2_SALT_V2,
+    PBKDF2_ITERATIONS_V2,
+    64,
+  ).then(keysFromPbkdf2Hex);
 }
 
 function cacheKey(secret: string, version: string, saltId: string): string {
@@ -162,6 +200,20 @@ function rememberDerived(key: string, keys: DerivedKeys): DerivedKeys {
   }
   derivationCache.set(key, keys);
   return keys;
+}
+
+function rememberMaster(
+  key: string,
+  master: CryptoJS.lib.WordArray,
+): CryptoJS.lib.WordArray {
+  if (masterKeyCache.size >= MAX_DERIVATION_CACHE_ENTRIES) {
+    const oldest = masterKeyCache.keys().next().value;
+    if (oldest !== undefined) {
+      masterKeyCache.delete(oldest);
+    }
+  }
+  masterKeyCache.set(key, master);
+  return master;
 }
 
 async function deriveV2Keys(secret: string): Promise<DerivedKeys> {
@@ -208,16 +260,16 @@ async function deriveV3Keys(
     return inflight;
   }
 
-  const promise = Promise.resolve(
-    deriveKeysWithCryptoJs(
-      secret,
-      uint8ArrayToWordArray(saltBytes),
-      PBKDF2_ITERATIONS_V3,
-    ),
+  // Prefer native PBKDF2 — CryptoJS at 100k iters blocks the JS thread hard.
+  const promise = pbkdf2Native(
+    secret,
+    saltBytes,
+    PBKDF2_ITERATIONS_V3,
+    64,
   )
-    .then(keys => {
+    .then(hex => {
       inflightDerivations.delete(key);
-      return rememberDerived(key, keys);
+      return rememberDerived(key, keysFromPbkdf2Hex(hex));
     })
     .catch(error => {
       inflightDerivations.delete(key);
@@ -228,17 +280,121 @@ async function deriveV3Keys(
   return promise;
 }
 
+/** RFC 5869 HKDF-SHA256 (extract + expand) using CryptoJS. */
+function hkdfSha256CryptoJs(
+  ikm: CryptoJS.lib.WordArray,
+  salt: CryptoJS.lib.WordArray,
+  info: CryptoJS.lib.WordArray,
+  length: number,
+): CryptoJS.lib.WordArray {
+  const prk = CryptoJS.HmacSHA256(ikm, salt);
+  const hashLen = 32;
+  const n = Math.ceil(length / hashLen);
+  let okm = CryptoJS.lib.WordArray.create();
+  let previous = CryptoJS.lib.WordArray.create();
+  for (let i = 1; i <= n; i += 1) {
+    const block = CryptoJS.HmacSHA256(
+      previous.concat(info).concat(CryptoJS.lib.WordArray.create([i << 24], 1)),
+      prk,
+    );
+    okm = okm.concat(block);
+    previous = block;
+  }
+  okm.sigBytes = length;
+  okm.clamp();
+  return okm;
+}
+
+function hkdfToKeys(
+  master: CryptoJS.lib.WordArray,
+  saltBytes: Uint8Array,
+): DerivedKeys {
+  const saltWa = uint8ArrayToWordArray(saltBytes);
+  const infoWa = CryptoJS.enc.Utf8.parse(HKDF_INFO_V4);
+
+  if (quickHkdfSync) {
+    try {
+      const masterBytes = wordArrayToUint8Array(master);
+      const derived = quickHkdfSync(
+        'sha256',
+        masterBytes,
+        saltBytes,
+        HKDF_INFO_V4,
+        64,
+      );
+      const hex =
+        typeof (derived as {toString?: (enc: string) => string}).toString ===
+        'function'
+          ? (derived as {toString: (enc: string) => string}).toString('hex')
+          : Array.from(derived as Uint8Array, b =>
+              b.toString(16).padStart(2, '0'),
+            ).join('');
+      return keysFromPbkdf2Hex(hex);
+    } catch {
+      // Fall through to CryptoJS HKDF.
+    }
+  }
+
+  const okm = hkdfSha256CryptoJs(master, saltWa, infoWa, 64);
+  return keysFromPbkdf2Hex(okm.toString(CryptoJS.enc.Hex));
+}
+
+async function deriveV4Master(secret: string): Promise<CryptoJS.lib.WordArray> {
+  const key = cacheKey(secret, 'v4-master', PBKDF2_SALT_V4);
+  const cached = masterKeyCache.get(key);
+  if (cached) {
+    return cached;
+  }
+
+  const inflight = inflightMasters.get(key);
+  if (inflight) {
+    return inflight;
+  }
+
+  const promise = pbkdf2Native(
+    secret,
+    PBKDF2_SALT_V4,
+    PBKDF2_ITERATIONS_V4,
+    64,
+  )
+    .then(hex => {
+      inflightMasters.delete(key);
+      return rememberMaster(key, masterFromPbkdf2Hex(hex));
+    })
+    .catch(error => {
+      inflightMasters.delete(key);
+      throw error;
+    });
+
+  inflightMasters.set(key, promise);
+  return promise;
+}
+
+async function deriveV4Keys(
+  secret: string,
+  saltBytes: Uint8Array,
+): Promise<DerivedKeys> {
+  const master = await deriveV4Master(secret);
+  return hkdfToKeys(master, saltBytes);
+}
+
+/**
+ * Warm the cacheable KDF paths for the selected secret so the first
+ * encrypt/decrypt is not blocked on 100k PBKDF2 iterations.
+ */
 export async function warmKeyDerivation(secret: string): Promise<void> {
   const trimmed = secret.trim();
   if (!trimmed) {
     return;
   }
-  await deriveV2Keys(trimmed);
+  await Promise.all([deriveV4Master(trimmed), deriveV2Keys(trimmed)]);
 }
 
 export function clearDerivationCache(): void {
   derivationCache.clear();
+  masterKeyCache.clear();
   inflightDerivations.clear();
+  inflightMasters.clear();
 }
 
 function deriveLegacyKey(secret: string): CryptoJS.lib.WordArray {
@@ -279,13 +435,13 @@ function timingSafeEqual(a: Uint8Array, b: Uint8Array): boolean {
 const DECRYPT_FAILED =
   'Decryption failed. Check the ciphertext and selected key.';
 
-/** Encrypt with v3 (per-message salt + PBKDF2-SHA256 + AES-256-CBC + HMAC). */
-export async function encryptMessage(
+function sealAuthenticated(
   plaintext: string,
-  secret: string,
-): Promise<string> {
-  const salt = getSecureRandomBytes(SALT_BYTES);
-  const {encKey, macKey} = await deriveV3Keys(secret, salt);
+  salt: Uint8Array,
+  encKey: CryptoJS.lib.WordArray,
+  macKey: CryptoJS.lib.WordArray,
+  prefix: string,
+): string {
   const iv = uint8ArrayToWordArray(getSecureRandomBytes(IV_BYTES));
   const encrypted = CryptoJS.AES.encrypt(plaintext, encKey, {
     iv,
@@ -299,12 +455,13 @@ export async function encryptMessage(
     .concat(iv)
     .concat(ciphertext)
     .concat(mac);
-  return `${V3_PREFIX}${CryptoJS.enc.Base64.stringify(payload)}`;
+  return `${prefix}${CryptoJS.enc.Base64.stringify(payload)}`;
 }
 
-async function decryptV3Message(
+async function openAuthenticated(
   ciphertextBase64: string,
   secret: string,
+  derive: (secret: string, salt: Uint8Array) => Promise<DerivedKeys>,
 ): Promise<string> {
   const bytes = wordArrayToUint8Array(
     CryptoJS.enc.Base64.parse(ciphertextBase64),
@@ -322,7 +479,7 @@ async function decryptV3Message(
     bytes.slice(SALT_BYTES + IV_BYTES, bytes.length - HMAC_BYTES),
   );
 
-  const {encKey, macKey} = await deriveV3Keys(secret, salt);
+  const {encKey, macKey} = await derive(secret, salt);
   const expectedMac = CryptoJS.HmacSHA256(
     uint8ArrayToWordArray(salt).concat(iv).concat(ciphertext),
     macKey,
@@ -344,6 +501,34 @@ async function decryptV3Message(
   });
   // HMAC already authenticated the payload; empty plaintext is valid.
   return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+/**
+ * Encrypt with v4: one cached PBKDF2 master + per-message HKDF, then
+ * AES-256-CBC + HMAC-SHA256. Same security goals as v3 without paying
+ * 100k PBKDF2 iterations on every message.
+ */
+export async function encryptMessage(
+  plaintext: string,
+  secret: string,
+): Promise<string> {
+  const salt = getSecureRandomBytes(SALT_BYTES);
+  const {encKey, macKey} = await deriveV4Keys(secret, salt);
+  return sealAuthenticated(plaintext, salt, encKey, macKey, V4_PREFIX);
+}
+
+async function decryptV4Message(
+  ciphertextBase64: string,
+  secret: string,
+): Promise<string> {
+  return openAuthenticated(ciphertextBase64, secret, deriveV4Keys);
+}
+
+async function decryptV3Message(
+  ciphertextBase64: string,
+  secret: string,
+): Promise<string> {
+  return openAuthenticated(ciphertextBase64, secret, deriveV3Keys);
 }
 
 async function decryptV2Message(
@@ -409,7 +594,7 @@ export function decryptLegacyMessage(
 }
 
 export type DecryptOptions = {
-  /** When true, attempt unauthenticated MD5/AES-CBC for non-v2/v3 ciphertext. */
+  /** When true, attempt unauthenticated MD5/AES-CBC for non-v2/v3/v4 ciphertext. */
   allowLegacy?: boolean;
 };
 
@@ -419,6 +604,9 @@ export async function decryptMessage(
   options: DecryptOptions = {},
 ): Promise<string> {
   const trimmed = ciphertext.trim();
+  if (trimmed.startsWith(V4_PREFIX)) {
+    return decryptV4Message(trimmed.slice(V4_PREFIX.length), secret);
+  }
   if (trimmed.startsWith(V3_PREFIX)) {
     return decryptV3Message(trimmed.slice(V3_PREFIX.length), secret);
   }
