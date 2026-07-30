@@ -10,4 +10,10 @@ export {QrIcon} from './QrIcon';
 export {Section, SectionRow} from './Section';
 export {SheetHeader} from './SheetHeader';
 export {ToastProvider, useToast} from './Toast';
+export {
+  BODY_MAX_FONT_MULTIPLIER,
+  CHROME_MAX_FONT_MULTIPLIER,
+  useAccessibilityPrefs,
+  useReducedMotion,
+} from './accessibility';
 export {MIN_TOUCH_TARGET, useContentLayout, useSheetInsets, useTheme} from './theme';

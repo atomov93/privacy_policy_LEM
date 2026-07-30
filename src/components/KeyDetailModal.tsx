@@ -127,7 +127,8 @@ export function KeyDetailModal({
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+      accessibilityViewIsModal>
       <View style={[styles.container, {backgroundColor: colors.background}]}>
         <SheetHeader
           title={keyItem.name}

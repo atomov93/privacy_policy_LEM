@@ -7,7 +7,8 @@
     "keys": "Chaves",
     "encrypt": "Encriptar",
     "keysA11y": "Separador Chaves",
-    "encryptA11y": "Separador Encriptar"
+    "encryptA11y": "Separador Encriptar",
+    "tabListA11y": "Separadores principais"
   },
   "common": {
     "cancel": "Cancelar",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Escolha o idioma da interface da app.",
     "selectLanguage": "Selecionar idioma",
     "toggleBiometricLock": "Ativar/desativar bloqueio biométrico",
-    "biometricLockUnavailableSubtitle": "Defina um bloqueio de ecrã (Face ID, Touch ID ou código) para ativar isto."
+    "biometricLockUnavailableSubtitle": "Defina um bloqueio de ecrã (Face ID, Touch ID ou código) para ativar isto.",
+    "showTutorial": "Mostrar o tutorial novamente",
+    "showTutorialSubtitle": "Repetir o guia da primeira abertura.",
+    "showTutorialA11y": "Mostrar o tutorial novamente",
+    "accessibilityNote": "O tamanho do texto e Reduzir movimento seguem as definições do dispositivo."
   },
   "keys": {
     "createNewKey": "Criar nova chave",
@@ -48,7 +53,7 @@
     "enterManually": "Introduzir manualmente",
     "lastSavedFingerprint": "Última impressão digital guardada",
     "savedKeys": "Chaves guardadas",
-    "noKeysYet": "Ainda não há chaves. Crie uma acima ou junte-se a uma chave existente.",
+    "noKeysYet": "Ainda sem chaves. Use Criar chave ou Juntar-se acima para começar.",
     "generateSecretA11y": "Gerar frase-passe secreta",
     "saveKeyA11y": "Guardar chave",
     "scanQrA11y": "Ler código QR para importar chave",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Chave guardada",
     "alertKeySavedMessage": "\"{{name}}\" está pronta. Partilhe a impressão digital (ou o segredo) com o outro dispositivo.",
     "createKeyCard": "Criar chave",
-    "createKeyCardSubtitle": "Gerar um novo segredo partilhado",
+    "createKeyCardSubtitle": "Comece um novo segredo partilhado",
     "joinKeyCard": "Juntar-se",
     "joinKeyCardSubtitle": "Importar de outro dispositivo",
     "createKeyCardA11y": "Criar uma nova chave",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Verificar impressão digital"
   },
   "encrypt": {
-    "noKeysYet": "Ainda não há chaves",
-    "noKeysYetMessage": "Vá ao separador Chaves para criar ou importar uma chave partilhada antes de encriptar ou desencriptar mensagens.",
+    "noKeysYet": "Adicione primeiro uma chave",
+    "noKeysYetMessage": "Vá ao separador Chaves para criar ou juntar-se a uma chave partilhada e depois volte aqui.",
     "key": "Chave",
     "fingerprint": "Impressão digital",
     "hide": "Ocultar",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Saída do texto encriptado",
     "useForDecryption": "Usar saída encriptada",
     "useForDecryptionA11y": "Preencher o campo de desencriptação com a saída encriptada acima",
-    "decryptedOutputA11y": "Saída da mensagem desencriptada"
+    "decryptedOutputA11y": "Saída da mensagem desencriptada",
+    "encryptSuccessA11y": "Mensagem cifrada com sucesso",
+    "decryptSuccessA11y": "Mensagem decifrada com sucesso"
   },
   "lock": {
     "locked": "Bloqueado",
@@ -237,12 +244,43 @@
     "pasteInto": "Colar em {{field}}",
     "hideSecret": "Ocultar segredo",
     "showSecret": "Mostrar segredo",
-    "concealedField": "{{label}} oculto, copie para aceder ao valor completo"
+    "concealedField": "{{label}} oculto, copie para aceder ao valor completo",
+    "decorativeIcon": "Ícone decorativo",
+    "selected": "Selecionado",
+    "loading": "A carregar"
   },
   "camera": {
     "title": "Acesso à câmara",
     "message": "O LetsMessageEncrypt precisa da sua câmara para ler códigos QR.",
     "allow": "Permitir",
     "deny": "Recusar"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Crie ou junte-se a uma chave partilhada para começar",
+    "guidanceKeysReady": "Faça a gestão das chaves e depois cifre no separador Cifrar",
+    "guidanceEncryptEmpty": "Adicione primeiro uma chave no separador Chaves",
+    "guidanceEncryptReady": "Escolha uma chave e depois cifre ou decifre",
+    "helpA11y": "Mostrar tutorial",
+    "helpHint": "Abre novamente o guia"
+  },
+  "tutorial": {
+    "skip": "Saltar",
+    "next": "Seguinte",
+    "back": "Voltar",
+    "getStarted": "Começar",
+    "stepOf": "Passo {{current}} de {{total}}",
+    "welcomeTitle": "Cifrem mensagens em conjunto",
+    "welcomeBody": "Esta aplicação usa um segredo partilhado em ambos os dispositivos. Crie ou junte-se a uma chave uma vez e depois cifre e decifre mensagens em privado.",
+    "keysTitle": "Criar ou juntar-se a uma chave",
+    "keysBody": "Crie um novo segredo partilhado ou junte-se a partir de outro dispositivo com QR, introdução manual ou ficheiro .lme cifrado.",
+    "encryptTitle": "Cifrar e decifrar",
+    "encryptBody": "No separador Cifrar, escolha a chave, escreva uma mensagem e cifre-a. Cole o texto cifrado no outro dispositivo para decifrar.",
+    "verifyTitle": "Verifique e depois bloqueie",
+    "verifyBody": "Compare as impressões digitais para que ambos os dispositivos partilhem o mesmo segredo. Ative o bloqueio biométrico para proteger as chaves neste dispositivo.",
+    "skipA11y": "Saltar tutorial",
+    "nextA11y": "Passo seguinte",
+    "backA11y": "Passo anterior",
+    "getStartedA11y": "Concluir tutorial e começar",
+    "closeA11y": "Fechar tutorial"
   }
 }

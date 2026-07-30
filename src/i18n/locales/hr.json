@@ -7,7 +7,8 @@
     "keys": "Ključevi",
     "encrypt": "Šifriranje",
     "keysA11y": "Kartica Ključevi",
-    "encryptA11y": "Kartica Šifriranje"
+    "encryptA11y": "Kartica Šifriranje",
+    "tabListA11y": "Glavne kartice"
   },
   "common": {
     "cancel": "Odustani",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Odaberite jezik sučelja aplikacije.",
     "selectLanguage": "Odaberi jezik",
     "toggleBiometricLock": "Uključi/isključi biometrijsko zaključavanje",
-    "biometricLockUnavailableSubtitle": "Postavite zaključavanje zaslona (Face ID, Touch ID ili lozinku) da biste ovo omogućili."
+    "biometricLockUnavailableSubtitle": "Postavite zaključavanje zaslona (Face ID, Touch ID ili lozinku) da biste ovo omogućili.",
+    "showTutorial": "Prikaži vodič ponovno",
+    "showTutorialSubtitle": "Ponovno pokreni vodič za prvo otvaranje.",
+    "showTutorialA11y": "Prikaži vodič ponovno",
+    "accessibilityNote": "Veličina teksta i Smanji pokret prate postavke uređaja."
   },
   "keys": {
     "createNewKey": "Stvori novi ključ",
@@ -48,7 +53,7 @@
     "enterManually": "Unesi ručno",
     "lastSavedFingerprint": "Zadnji spremljeni otisak",
     "savedKeys": "Spremljeni ključevi",
-    "noKeysYet": "Još nema ključeva. Stvorite jedan gore ili se pridružite postojećem ključu.",
+    "noKeysYet": "Još nema ključeva. Koristite Stvori ključ ili Pridruži se gore.",
     "generateSecretA11y": "Generiraj tajnu lozinku",
     "saveKeyA11y": "Spremi ključ",
     "scanQrA11y": "Skeniraj QR kod za uvoz ključa",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Ključ spremljen",
     "alertKeySavedMessage": "\"{{name}}\" je spreman. Podijelite otisak prsta (ili tajnu) s drugim uređajem.",
     "createKeyCard": "Stvori ključ",
-    "createKeyCardSubtitle": "Generiraj novu zajedničku tajnu",
+    "createKeyCardSubtitle": "Započnite novu dijeljenu tajnu",
     "joinKeyCard": "Pridruži se",
     "joinKeyCardSubtitle": "Uvezi s drugog uređaja",
     "createKeyCardA11y": "Stvori novi ključ",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Provjeri otisak"
   },
   "encrypt": {
-    "noKeysYet": "Još nema ključeva",
-    "noKeysYetMessage": "Idite na karticu Ključevi kako biste stvorili ili uvezli dijeljeni ključ prije šifriranja ili dešifriranja poruka.",
+    "noKeysYet": "Prvo dodajte ključ",
+    "noKeysYetMessage": "Idite na karticu Ključevi da stvorite ili se pridružite dijeljenom ključu, zatim se vratite ovdje.",
     "key": "Ključ",
     "fingerprint": "Otisak prsta",
     "hide": "Sakrij",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Izlaz šifriranog teksta",
     "useForDecryption": "Koristi šifrirani izlaz",
     "useForDecryptionA11y": "Ispuni polje za dešifriranje šifriranim izlazom iznad",
-    "decryptedOutputA11y": "Izlaz dešifrirane poruke"
+    "decryptedOutputA11y": "Izlaz dešifrirane poruke",
+    "encryptSuccessA11y": "Poruka uspješno šifrirana",
+    "decryptSuccessA11y": "Poruka uspješno dešifrirana"
   },
   "lock": {
     "locked": "Zaključano",
@@ -237,12 +244,43 @@
     "pasteInto": "Zalijepi u {{field}}",
     "hideSecret": "Sakrij tajnu",
     "showSecret": "Prikaži tajnu",
-    "concealedField": "Skriveno {{label}}, kopiraj za puni pristup"
+    "concealedField": "Skriveno {{label}}, kopiraj za puni pristup",
+    "decorativeIcon": "Dekorativna ikona",
+    "selected": "Odabrano",
+    "loading": "Učitavanje"
   },
   "camera": {
     "title": "Pristup kameri",
     "message": "LetsMessageEncrypt treba vašu kameru za skeniranje QR kodova.",
     "allow": "Dopusti",
     "deny": "Odbij"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Stvorite ili se pridružite dijeljenom ključu za početak",
+    "guidanceKeysReady": "Upravljajte ključevima, zatim šifrirajte na kartici Šifriraj",
+    "guidanceEncryptEmpty": "Prvo dodajte ključ na kartici Ključevi",
+    "guidanceEncryptReady": "Odaberite ključ, zatim šifrirajte ili dešifrirajte",
+    "helpA11y": "Prikaži vodič",
+    "helpHint": "Ponovno otvara vodič"
+  },
+  "tutorial": {
+    "skip": "Preskoči",
+    "next": "Dalje",
+    "back": "Natrag",
+    "getStarted": "Započni",
+    "stepOf": "Korak {{current}} od {{total}}",
+    "welcomeTitle": "Šifrirajte poruke zajedno",
+    "welcomeBody": "Ova aplikacija koristi dijeljenu tajnu na oba uređaja. Jednom stvorite ili se pridružite ključu, zatim privatno šifrirajte i dešifrirajte poruke.",
+    "keysTitle": "Stvorite ili se pridružite ključu",
+    "keysBody": "Stvorite novu dijeljenu tajnu ili se pridružite s drugog uređaja putem QR-a, ručnog unosa ili šifrirane .lme datoteke.",
+    "encryptTitle": "Šifriranje i dešifriranje",
+    "encryptBody": "Na kartici Šifriraj odaberite ključ, upišite poruku i šifrirajte je. Zalijepite šifrotekst na drugi uređaj za dešifriranje.",
+    "verifyTitle": "Provjerite, zatim zaključajte",
+    "verifyBody": "Usporedite otiske kako bi oba uređaja dijelila istu tajnu. Uključite biometrijsko zaključavanje da ključevi ostanu privatni na ovom uređaju.",
+    "skipA11y": "Preskoči vodič",
+    "nextA11y": "Sljedeći korak",
+    "backA11y": "Prethodni korak",
+    "getStartedA11y": "Završi vodič i započni",
+    "closeA11y": "Zatvori vodič"
   }
 }

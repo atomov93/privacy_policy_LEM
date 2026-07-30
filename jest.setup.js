@@ -104,6 +104,8 @@ jest.mock('@react-native-documents/picker', () => ({
   },
 }));
 
+jest.mock('lottie-react-native', () => 'LottieView');
+
 const {initI18n} = require('./src/i18n');
 
 beforeAll(async () => {

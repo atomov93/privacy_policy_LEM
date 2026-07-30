@@ -5,21 +5,27 @@ import {
   AppStateStatus,
   Keyboard,
   Linking,
-  Platform,
   Pressable,
   StatusBar,
   StyleSheet,
   Text,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
+import {AppHeader} from './src/components/AppHeader';
 import {CreateKeyTab} from './src/components/CreateKeyTab';
 import {EncryptDecryptTab} from './src/components/EncryptDecryptTab';
 import {LockScreen} from './src/components/LockScreen';
-import {ToastProvider, useContentLayout, EmojiIcon, useTheme} from './src/components/ui';
+import {OnboardingTutorial} from './src/components/OnboardingTutorial';
+import {
+  ToastProvider,
+  useContentLayout,
+  EmojiIcon,
+  useTheme,
+  CHROME_MAX_FONT_MULTIPLIER,
+} from './src/components/ui';
 import {initI18n} from './src/i18n';
 import {
   authenticateWithBiometrics,
@@ -30,7 +36,11 @@ import {createAuthSession} from './src/services/appLockSession';
 import {KeyStorageError, loadKeys} from './src/services/keyStorage';
 import {isLmeFileContents} from './src/services/lmeFile';
 import {isLikelyLmeUri, readUriAsUtf8} from './src/services/lmeFileIO';
-import {getLanguage} from './src/services/settingsStorage';
+import {
+  getLanguage,
+  hasSeenTutorial,
+  setHasSeenTutorial,
+} from './src/services/settingsStorage';
 import {SavedKey} from './src/types';
 
 type Tab = 'keys' | 'encrypt';
@@ -45,6 +55,8 @@ function AppContent() {
   const [storageError, setStorageError] = useState<string | null>(null);
   const [i18nReady, setI18nReady] = useState(i18n.isInitialized);
   const [locked, setLocked] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [tutorialChecked, setTutorialChecked] = useState(false);
   const [pendingLmeContents, setPendingLmeContents] = useState<string | null>(
     null,
   );
@@ -130,6 +142,20 @@ function AppContent() {
   }, [i18nReady, promptUnlockIfNeeded, t]);
 
   useEffect(() => {
+    if (!i18nReady || locked || tutorialChecked) {
+      return;
+    }
+
+    hasSeenTutorial()
+      .then(seen => {
+        if (!seen) {
+          setShowTutorial(true);
+        }
+      })
+      .finally(() => setTutorialChecked(true));
+  }, [i18nReady, locked, tutorialChecked]);
+
+  useEffect(() => {
     const subscription = AppState.addEventListener('change', nextState => {
       const previousState = appStateRef.current;
       appStateRef.current = nextState;
@@ -160,6 +186,15 @@ function AppContent() {
     setKeys(updated);
   }, []);
 
+  const completeTutorial = useCallback(async () => {
+    setShowTutorial(false);
+    await setHasSeenTutorial(true);
+  }, []);
+
+  const openTutorial = useCallback(() => {
+    setShowTutorial(true);
+  }, []);
+
   const ingestLmeUri = useCallback(async (uri: string | null) => {
     if (!uri || !isLikelyLmeUri(uri)) {
       return;
@@ -188,7 +223,11 @@ function AppContent() {
   if (!i18nReady) {
     return (
       <View style={[styles.root, styles.loading, {backgroundColor: colors.background}]}>
-        <ActivityIndicator size="large" color={colors.securityTint} />
+        <ActivityIndicator
+          size="large"
+          color={colors.securityTint}
+          accessibilityLabel={t('a11y.loading')}
+        />
       </View>
     );
   }
@@ -203,29 +242,35 @@ function AppContent() {
       <SafeAreaView
         style={[styles.safeArea, {backgroundColor: colors.background}]}
         edges={['top', 'left', 'right']}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View style={[styles.header, contentStyle]}>
-            <Text
-              style={[styles.title, {color: colors.label}]}
-              accessibilityRole="header">
-              {t('app.title')}
-            </Text>
-            <Text style={[styles.subtitle, {color: colors.secondaryLabel}]}>
-              {t('app.subtitle')}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <View
+          style={contentStyle}
+          accessible={false}
+          onStartShouldSetResponder={() => {
+            Keyboard.dismiss();
+            return false;
+          }}>
+          <AppHeader
+            activeTab={activeTab}
+            keyCount={keys.length}
+            onHelpPress={openTutorial}
+          />
+        </View>
 
         <View style={[styles.content, contentStyle]}>
           {loading ? (
             <View style={styles.loading}>
-              <ActivityIndicator size="large" color={colors.securityTint} />
+              <ActivityIndicator
+                size="large"
+                color={colors.securityTint}
+                accessibilityLabel={t('a11y.loading')}
+              />
             </View>
           ) : storageError ? (
             <View style={styles.loading}>
               <Text
-                style={[styles.subtitle, {color: colors.secondaryLabel}]}
-                accessibilityRole="alert">
+                style={[styles.errorText, {color: colors.secondaryLabel}]}
+                accessibilityRole="alert"
+                maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}>
                 {storageError}
               </Text>
             </View>
@@ -250,7 +295,10 @@ function AppContent() {
               borderTopColor: colors.separator,
             },
           ]}>
-          <View style={styles.tabBar}>
+          <View
+            style={styles.tabBar}
+            accessibilityRole="tablist"
+            accessibilityLabel={t('tabs.tabListA11y')}>
             <Pressable
               style={styles.tab}
               onPress={() => setActiveTab('keys')}
@@ -262,8 +310,10 @@ function AppContent() {
                 style={[
                   styles.tabText,
                   {color: colors.secondaryLabel},
+                  activeTab === 'keys' && styles.tabTextSelected,
                   activeTab === 'keys' && {color: colors.securityTint},
-                ]}>
+                ]}
+                maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}>
                 {t('tabs.keys')}
               </Text>
             </Pressable>
@@ -278,8 +328,10 @@ function AppContent() {
                 style={[
                   styles.tabText,
                   {color: colors.secondaryLabel},
+                  activeTab === 'encrypt' && styles.tabTextSelected,
                   activeTab === 'encrypt' && {color: colors.securityTint},
-                ]}>
+                ]}
+                maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}>
                 {t('tabs.encrypt')}
               </Text>
             </Pressable>
@@ -288,6 +340,10 @@ function AppContent() {
       </SafeAreaView>
 
       <LockScreen visible={locked} onUnlock={handleUnlock} />
+      <OnboardingTutorial
+        visible={showTutorial && !locked}
+        onComplete={completeTutorial}
+      />
     </>
   );
 }
@@ -311,24 +367,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  header: {
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'ios' ? 4 : 12,
-    paddingBottom: 8,
-  },
-  title: {
-    fontSize: 34,
-    fontWeight: '700',
-    letterSpacing: 0.37,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 15,
-    marginTop: 4,
-    lineHeight: 20,
-    textAlign: 'center',
-  },
   content: {
     flex: 1,
   },
@@ -336,6 +374,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  errorText: {
+    fontSize: 15,
+    lineHeight: 20,
+    textAlign: 'center',
   },
   tabBarContainer: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -358,6 +402,9 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 10,
     fontWeight: '500',
+  },
+  tabTextSelected: {
+    fontWeight: '700',
   },
 });
 

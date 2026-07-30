@@ -1,6 +1,7 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
+import {BODY_MAX_FONT_MULTIPLIER, useReducedMotion} from './accessibility';
 import {EmojiIcon} from './EmojiIcon';
 import {MIN_TOUCH_TARGET, useTheme} from './theme';
 
@@ -12,6 +13,7 @@ interface ActionCardProps {
   subtitle: string;
   onPress: () => void;
   accessibilityLabel: string;
+  accessibilityHint?: string;
   selected?: boolean;
 }
 
@@ -24,15 +26,18 @@ export function ActionCard({
   selected,
   onPress,
   accessibilityLabel,
+  accessibilityHint,
 }: ActionCardProps) {
   const {colors} = useTheme();
+  const reduceMotion = useReducedMotion();
   const isSelectable = selected !== undefined;
 
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
+      accessibilityLabel={`${accessibilityLabel}. ${subtitle}`}
+      accessibilityHint={accessibilityHint}
       accessibilityState={isSelectable ? {selected} : undefined}
       style={({pressed}) => [
         styles.card,
@@ -43,10 +48,10 @@ export function ActionCard({
               : colors.groupedBackground,
           borderColor:
             isSelectable && selected ? colors.securityTint : colors.cardBorder,
-          opacity: pressed ? 0.85 : 1,
+          opacity: pressed && !reduceMotion ? 0.85 : 1,
         },
       ]}>
-      <View style={styles.iconSlot}>
+      <View style={styles.iconSlot} accessibilityElementsHidden>
         {iconNode ??
           (icon ? (
             <EmojiIcon
@@ -63,10 +68,15 @@ export function ActionCard({
             color:
               isSelectable && selected ? colors.securityTint : colors.label,
           },
-        ]}>
+        ]}
+        maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}
+        importantForAccessibility="no">
         {title}
       </Text>
-      <Text style={[styles.subtitle, {color: colors.secondaryLabel}]}>
+      <Text
+        style={[styles.subtitle, {color: colors.secondaryLabel}]}
+        maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}
+        importantForAccessibility="no">
         {subtitle}
       </Text>
     </Pressable>

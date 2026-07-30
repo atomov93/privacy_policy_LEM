@@ -7,7 +7,8 @@
     "keys": "Sleutels",
     "encrypt": "Versleutelen",
     "keysA11y": "Tabblad Sleutels",
-    "encryptA11y": "Tabblad Versleutelen"
+    "encryptA11y": "Tabblad Versleutelen",
+    "tabListA11y": "Hoofdtabbladen"
   },
   "common": {
     "cancel": "Annuleren",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Kies de taal voor de app-interface.",
     "selectLanguage": "Taal selecteren",
     "toggleBiometricLock": "Biometrische vergrendeling in-/uitschakelen",
-    "biometricLockUnavailableSubtitle": "Stel een schermvergrendeling in (Face ID, Touch ID of toegangscode) om dit in te schakelen."
+    "biometricLockUnavailableSubtitle": "Stel een schermvergrendeling in (Face ID, Touch ID of toegangscode) om dit in te schakelen.",
+    "showTutorial": "Tutorial opnieuw tonen",
+    "showTutorialSubtitle": "Speel de gids bij eerste gebruik opnieuw af.",
+    "showTutorialA11y": "Tutorial opnieuw tonen",
+    "accessibilityNote": "Tekstgrootte en Beweging verminderen volgen je apparaatinstellingen."
   },
   "keys": {
     "createNewKey": "Nieuwe sleutel maken",
@@ -48,7 +53,7 @@
     "enterManually": "Handmatig invoeren",
     "lastSavedFingerprint": "Laatst opgeslagen vingerafdruk",
     "savedKeys": "Opgeslagen sleutels",
-    "noKeysYet": "Nog geen sleutels. Maak er hierboven een of join een bestaande sleutel.",
+    "noKeysYet": "Nog geen sleutels. Gebruik hierboven Sleutel maken of Joinen om te beginnen.",
     "generateSecretA11y": "Geheim wachtwoord genereren",
     "saveKeyA11y": "Sleutel opslaan",
     "scanQrA11y": "QR-code scannen om sleutel te importeren",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Sleutel opgeslagen",
     "alertKeySavedMessage": "\"{{name}}\" is klaar. Deel de vingerafdruk (of het geheim) met het andere apparaat.",
     "createKeyCard": "Sleutel maken",
-    "createKeyCardSubtitle": "Genereer een nieuw gedeeld geheim",
+    "createKeyCardSubtitle": "Start een nieuw gedeeld geheim",
     "joinKeyCard": "Deelnemen",
     "joinKeyCardSubtitle": "Importeren vanaf ander apparaat",
     "createKeyCardA11y": "Maak een nieuwe sleutel",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Vingerafdruk verifiëren"
   },
   "encrypt": {
-    "noKeysYet": "Nog geen sleutels",
-    "noKeysYetMessage": "Ga naar het tabblad Sleutels om een gedeelde sleutel te maken of te importeren voordat je berichten versleutelt of ontsleutelt.",
+    "noKeysYet": "Voeg eerst een sleutel toe",
+    "noKeysYetMessage": "Ga naar het tabblad Sleutels om een gedeelde sleutel te maken of te joinen, en kom daarna hier terug.",
     "key": "Sleutel",
     "fingerprint": "Vingerafdruk",
     "hide": "Verbergen",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Uitvoer van versleutelde tekst",
     "useForDecryption": "Gebruik versleutelde uitvoer",
     "useForDecryptionA11y": "Vul het ontsleutelingsveld in met de versleutelde uitvoer hierboven",
-    "decryptedOutputA11y": "Uitvoer van ontsleuteld bericht"
+    "decryptedOutputA11y": "Uitvoer van ontsleuteld bericht",
+    "encryptSuccessA11y": "Bericht succesvol versleuteld",
+    "decryptSuccessA11y": "Bericht succesvol ontsleuteld"
   },
   "lock": {
     "locked": "Vergrendeld",
@@ -237,12 +244,43 @@
     "pasteInto": "Plakken in {{field}}",
     "hideSecret": "Geheim verbergen",
     "showSecret": "Geheim tonen",
-    "concealedField": "Verborgen {{label}}, kopieer voor volledige waarde"
+    "concealedField": "Verborgen {{label}}, kopieer voor volledige waarde",
+    "decorativeIcon": "Decoratief pictogram",
+    "selected": "Geselecteerd",
+    "loading": "Laden"
   },
   "camera": {
     "title": "Cameratoegang",
     "message": "LetsMessageEncrypt heeft je camera nodig om QR-codes te scannen.",
     "allow": "Toestaan",
     "deny": "Weigeren"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Maak of join een gedeelde sleutel om te beginnen",
+    "guidanceKeysReady": "Beheer sleutels en versleutel daarna op het tabblad Versleutelen",
+    "guidanceEncryptEmpty": "Voeg eerst een sleutel toe op het tabblad Sleutels",
+    "guidanceEncryptReady": "Kies een sleutel en versleutel of ontsleutel",
+    "helpA11y": "Tutorial tonen",
+    "helpHint": "Opent de gids opnieuw"
+  },
+  "tutorial": {
+    "skip": "Overslaan",
+    "next": "Volgende",
+    "back": "Terug",
+    "getStarted": "Aan de slag",
+    "stepOf": "Stap {{current}} van {{total}}",
+    "welcomeTitle": "Versleutel berichten samen",
+    "welcomeBody": "Deze app gebruikt een gedeeld geheim op beide apparaten. Maak of join één keer een sleutel en versleutel en ontsleutel daarna privé berichten.",
+    "keysTitle": "Sleutel maken of joinen",
+    "keysBody": "Maak een nieuw gedeeld geheim, of join vanaf een ander apparaat via QR, handmatige invoer of een versleuteld .lme-bestand.",
+    "encryptTitle": "Versleutelen en ontsleutelen",
+    "encryptBody": "Kies op het tabblad Versleutelen je sleutel, typ een bericht en versleutel het. Plak de cijfertekst op het andere apparaat om te ontsleutelen.",
+    "verifyTitle": "Controleer, vergrendel daarna",
+    "verifyBody": "Vergelijk vingerafdrukken zodat beide apparaten hetzelfde geheim delen. Zet biometrische vergrendeling aan om sleutels op dit apparaat privé te houden.",
+    "skipA11y": "Tutorial overslaan",
+    "nextA11y": "Volgende stap",
+    "backA11y": "Vorige stap",
+    "getStartedA11y": "Tutorial afronden en starten",
+    "closeA11y": "Tutorial sluiten"
   }
 }

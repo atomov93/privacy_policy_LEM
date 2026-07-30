@@ -7,7 +7,8 @@
     "keys": "Chei",
     "encrypt": "Criptare",
     "keysA11y": "Filă Chei",
-    "encryptA11y": "Filă Criptare"
+    "encryptA11y": "Filă Criptare",
+    "tabListA11y": "File principale"
   },
   "common": {
     "cancel": "Anulare",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Alegeți limba interfeței aplicației.",
     "selectLanguage": "Selectare limbă",
     "toggleBiometricLock": "Comutare blocare biometrică",
-    "biometricLockUnavailableSubtitle": "Setați un blocaj de ecran (Face ID, Touch ID sau cod) pentru a activa această opțiune."
+    "biometricLockUnavailableSubtitle": "Setați un blocaj de ecran (Face ID, Touch ID sau cod) pentru a activa această opțiune.",
+    "showTutorial": "Afișați din nou tutorialul",
+    "showTutorialSubtitle": "Redați din nou ghidul la prima deschidere.",
+    "showTutorialA11y": "Afișați din nou tutorialul",
+    "accessibilityNote": "Dimensiunea textului și Reduceți mișcarea urmează setările dispozitivului."
   },
   "keys": {
     "createNewKey": "Creare cheie nouă",
@@ -48,7 +53,7 @@
     "enterManually": "Introducere manuală",
     "lastSavedFingerprint": "Ultima amprentă salvată",
     "savedKeys": "Chei salvate",
-    "noKeysYet": "Nu există încă chei. Creați una mai sus sau alăturați-vă unei chei existente.",
+    "noKeysYet": "Încă nu există chei. Folosiți Creați cheie sau Alăturați-vă mai sus.",
     "generateSecretA11y": "Generare parolă secretă",
     "saveKeyA11y": "Salvare cheie",
     "scanQrA11y": "Scanare cod QR pentru import cheie",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Cheie salvată",
     "alertKeySavedMessage": "\"{{name}}\" este gata. Partajați amprenta (sau secretul) cu celălalt dispozitiv.",
     "createKeyCard": "Creează cheie",
-    "createKeyCardSubtitle": "Generează un nou secret partajat",
+    "createKeyCardSubtitle": "Începeți un secret partajat nou",
     "joinKeyCard": "Alătură-te",
     "joinKeyCardSubtitle": "Importă de pe alt dispozitiv",
     "createKeyCardA11y": "Creează o cheie nouă",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Verifică amprenta"
   },
   "encrypt": {
-    "noKeysYet": "Nu există încă chei",
-    "noKeysYetMessage": "Mergeți la fila Chei pentru a crea sau importa o cheie partajată înainte de a cripta sau decripta mesaje.",
+    "noKeysYet": "Adăugați mai întâi o cheie",
+    "noKeysYetMessage": "Mergeți la fila Chei pentru a crea sau a vă alătura unei chei partajate, apoi reveniți aici.",
     "key": "Cheie",
     "fingerprint": "Amprentă",
     "hide": "Ascundere",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Ieșire text criptat",
     "useForDecryption": "Folosește ieșirea criptată",
     "useForDecryptionA11y": "Completează câmpul de decriptare cu ieșirea criptată de mai sus",
-    "decryptedOutputA11y": "Ieșire mesaj decriptat"
+    "decryptedOutputA11y": "Ieșire mesaj decriptat",
+    "encryptSuccessA11y": "Mesaj criptat cu succes",
+    "decryptSuccessA11y": "Mesaj decriptat cu succes"
   },
   "lock": {
     "locked": "Blocat",
@@ -237,12 +244,43 @@
     "pasteInto": "Lipire în {{field}}",
     "hideSecret": "Ascundere secret",
     "showSecret": "Afișare secret",
-    "concealedField": "{{label}} ascuns, copiați pentru valoarea completă"
+    "concealedField": "{{label}} ascuns, copiați pentru valoarea completă",
+    "decorativeIcon": "Pictogramă decorativă",
+    "selected": "Selectat",
+    "loading": "Se încarcă"
   },
   "camera": {
     "title": "Acces cameră",
     "message": "LetsMessageEncrypt are nevoie de camera dvs. pentru a scana coduri QR.",
     "allow": "Permite",
     "deny": "Refuză"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Creați sau alăturați-vă unei chei partajate pentru a începe",
+    "guidanceKeysReady": "Gestionați cheile, apoi criptați în fila Criptare",
+    "guidanceEncryptEmpty": "Adăugați mai întâi o cheie în fila Chei",
+    "guidanceEncryptReady": "Alegeți o cheie, apoi criptați sau decriptați",
+    "helpA11y": "Afișați tutorialul",
+    "helpHint": "Deschide din nou ghidul"
+  },
+  "tutorial": {
+    "skip": "Omite",
+    "next": "Înainte",
+    "back": "Înapoi",
+    "getStarted": "Începe",
+    "stepOf": "Pasul {{current}} din {{total}}",
+    "welcomeTitle": "Criptați mesaje împreună",
+    "welcomeBody": "Această aplicație folosește un secret partajat pe ambele dispozitive. Creați sau alăturați-vă unei chei o dată, apoi criptați și decriptați mesaje în privat.",
+    "keysTitle": "Creați sau alăturați-vă unei chei",
+    "keysBody": "Creați un secret partajat nou sau alăturați-vă de pe alt dispozitiv prin QR, introducere manuală sau fișier .lme criptat.",
+    "encryptTitle": "Criptare și decriptare",
+    "encryptBody": "În fila Criptare alegeți cheia, scrieți un mesaj și criptați-l. Lipiți textul cifrat pe celălalt dispozitiv pentru decriptare.",
+    "verifyTitle": "Verificați, apoi blocați",
+    "verifyBody": "Comparați amprentele ca ambele dispozitive să partajeze același secret. Activați blocarea biometrică pentru a proteja cheile pe acest dispozitiv.",
+    "skipA11y": "Omiteți tutorialul",
+    "nextA11y": "Pasul următor",
+    "backA11y": "Pasul anterior",
+    "getStartedA11y": "Finalizați tutorialul și începeți",
+    "closeA11y": "Închideți tutorialul"
   }
 }

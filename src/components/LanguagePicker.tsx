@@ -67,7 +67,8 @@ export function LanguagePicker({
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+      accessibilityViewIsModal>
       <View style={[styles.container, {backgroundColor: colors.background}]}>
         <SheetHeader
           title={t('settings.selectLanguage')}

@@ -7,7 +7,8 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import {MIN_TOUCH_TARGET, useTheme} from './theme';
+import {BODY_MAX_FONT_MULTIPLIER, useReducedMotion} from './accessibility';
+import {useTheme} from './theme';
 
 type ButtonVariant = 'primary' | 'secondary' | 'destructive';
 
@@ -33,6 +34,7 @@ export function Button({
   flex,
 }: ButtonProps) {
   const {colors} = useTheme();
+  const reduceMotion = useReducedMotion();
   const isDisabled = disabled || loading;
 
   const backgroundColor =
@@ -57,7 +59,11 @@ export function Button({
         flex && styles.flex,
         {
           backgroundColor,
-          opacity: isDisabled ? 0.4 : pressed ? 0.75 : 1,
+          opacity: isDisabled
+            ? 0.4
+            : pressed && !reduceMotion
+              ? 0.75
+              : 1,
         },
         style,
       ]}>
@@ -67,7 +73,14 @@ export function Button({
           accessibilityLabel={title}
         />
       ) : (
-        <Text style={[styles.text, {color: textColor}]}>{title}</Text>
+        <Text
+          style={[styles.text, {color: textColor}]}
+          maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}
+          numberOfLines={2}
+          adjustsFontSizeToFit
+          minimumFontScale={0.82}>
+          {title}
+        </Text>
       )}
     </Pressable>
   );
@@ -75,17 +88,21 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: MIN_TOUCH_TARGET,
+    minHeight: 52,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
   flex: {
     flex: 1,
+    alignSelf: 'stretch',
   },
   text: {
     fontSize: 17,
     fontWeight: '600',
+    textAlign: 'center',
+    lineHeight: 22,
   },
 });

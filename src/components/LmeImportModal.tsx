@@ -183,7 +183,8 @@ export function LmeImportModal({
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={handleClose}>
+      onRequestClose={handleClose}
+      accessibilityViewIsModal>
       <View style={[styles.container, {backgroundColor: colors.background}]}>
         <Text style={[styles.title, {color: colors.label}]}>
           {t('lmeImport.title')}

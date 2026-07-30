@@ -2,8 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   getLanguage,
+  hasSeenTutorial,
   isBiometricLockEnabled,
+  resetTutorial,
   setBiometricLockEnabled,
+  setHasSeenTutorial,
   setLanguage,
 } from '../src/services/settingsStorage';
 
@@ -30,5 +33,16 @@ describe('settingsStorage', () => {
     await expect(getLanguage()).resolves.toBeNull();
     await setLanguage('de');
     await expect(getLanguage()).resolves.toBe('de');
+  });
+
+  it('defaults tutorial as unseen when unset', async () => {
+    await expect(hasSeenTutorial()).resolves.toBe(false);
+  });
+
+  it('persists and resets tutorial seen flag', async () => {
+    await setHasSeenTutorial(true);
+    await expect(hasSeenTutorial()).resolves.toBe(true);
+    await resetTutorial();
+    await expect(hasSeenTutorial()).resolves.toBe(false);
   });
 });

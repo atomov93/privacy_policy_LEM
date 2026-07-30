@@ -14,6 +14,7 @@ import {useTranslation} from 'react-i18next';
 import {copySensitiveText} from '../../services/clipboard';
 import {triggerLightHaptic} from '../../services/haptics';
 import {shareText} from '../../services/share';
+import {BODY_MAX_FONT_MULTIPLIER, CHROME_MAX_FONT_MULTIPLIER} from './accessibility';
 import {MIN_TOUCH_TARGET, useTheme} from './theme';
 import {useToast} from './Toast';
 
@@ -107,7 +108,10 @@ export function InputField({
   return (
     <View style={[styles.wrapper, containerStyle]}>
       {label && (
-        <Text style={[styles.label, {color: colors.secondaryLabel}]}>
+        <Text
+          style={[styles.label, {color: colors.secondaryLabel}]}
+          maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}
+          accessibilityElementsHidden>
           {label}
         </Text>
       )}
@@ -121,6 +125,8 @@ export function InputField({
           value={value}
           secureTextEntry={isSecure}
           placeholderTextColor={placeholderTextColor ?? colors.tertiaryLabel}
+          accessibilityLabel={rest.accessibilityLabel ?? label}
+          maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}
           style={[
             styles.input,
             monospace && styles.monospace,

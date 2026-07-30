@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   Alert,
+  AccessibilityInfo,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -115,6 +116,7 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
       const result = await encryptMessage(plaintext, selectedKey.secret);
       setEncryptedOutput(result);
       triggerLightHaptic();
+      AccessibilityInfo.announceForAccessibility(t('encrypt.encryptSuccessA11y'));
     } catch {
       Alert.alert(
         t('encrypt.alertEncryptionFailed'),
@@ -151,6 +153,7 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
       });
       setDecryptedOutput(result);
       triggerLightHaptic();
+      AccessibilityInfo.announceForAccessibility(t('encrypt.decryptSuccessA11y'));
     } catch {
       Alert.alert(
         t('encrypt.alertDecryptionFailed'),
@@ -321,6 +324,7 @@ export function EncryptDecryptTab({keys}: EncryptDecryptTabProps) {
                     setDecryptedOutput('');
                   }
                 }}
+                showPaste
                 multiline
                 monospace
                 autoCapitalize="none"

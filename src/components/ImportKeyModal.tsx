@@ -182,6 +182,7 @@ export function ImportKeyModal({
       animationType="slide"
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
+      accessibilityViewIsModal
       onShow={resetForm}>
       <KeyboardAvoidingView
         style={[styles.flex, {backgroundColor: colors.background}]}

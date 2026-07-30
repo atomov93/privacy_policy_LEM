@@ -7,7 +7,8 @@
     "keys": "Avaimet",
     "encrypt": "Salaa",
     "keysA11y": "Avaimet-välilehti",
-    "encryptA11y": "Salaa-välilehti"
+    "encryptA11y": "Salaa-välilehti",
+    "tabListA11y": "Päävälilehdet"
   },
   "common": {
     "cancel": "Peruuta",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Valitse sovelluksen käyttöliittymän kieli.",
     "selectLanguage": "Valitse kieli",
     "toggleBiometricLock": "Biometrinen lukitus päälle/pois",
-    "biometricLockUnavailableSubtitle": "Ota käyttöön asettamalla näytön lukitus (Face ID, Touch ID tai pääsykoodi)."
+    "biometricLockUnavailableSubtitle": "Ota käyttöön asettamalla näytön lukitus (Face ID, Touch ID tai pääsykoodi).",
+    "showTutorial": "Näytä opastus uudelleen",
+    "showTutorialSubtitle": "Toista ensimmäisen käynnistyksen ohje.",
+    "showTutorialA11y": "Näytä opastus uudelleen",
+    "accessibilityNote": "Tekstikoko ja Liikkeen vähentäminen noudattavat laitteen asetuksia."
   },
   "keys": {
     "createNewKey": "Luo uusi avain",
@@ -48,7 +53,7 @@
     "enterManually": "Syötä manuaalisesti",
     "lastSavedFingerprint": "Viimeksi tallennettu sormenjälki",
     "savedKeys": "Tallennetut avaimet",
-    "noKeysYet": "Ei avaimia vielä. Luo yksi yllä tai liity olemassa olevaan avaimeen.",
+    "noKeysYet": "Ei vielä avaimia. Käytä yllä Luo avain tai Liity.",
     "generateSecretA11y": "Luo salainen salasana",
     "saveKeyA11y": "Tallenna avain",
     "scanQrA11y": "Skannaa QR-koodi avaimen tuontia varten",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Avain tallennettu",
     "alertKeySavedMessage": "\"{{name}}\" on valmis. Jaa sormenjälki (tai salaisuus) toisen laitteen kanssa.",
     "createKeyCard": "Luo avain",
-    "createKeyCardSubtitle": "Luo uusi jaettu salaisuus",
+    "createKeyCardSubtitle": "Aloita uusi jaettu salaisuus",
     "joinKeyCard": "Liity",
     "joinKeyCardSubtitle": "Tuo toisesta laitteesta",
     "createKeyCardA11y": "Luo uusi avain",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Vahvista sormenjälki"
   },
   "encrypt": {
-    "noKeysYet": "Ei avaimia vielä",
-    "noKeysYetMessage": "Siirry Avaimet-välilehdelle luodaksesi tai tuodaksesi jaetun avaimen ennen viestien salaamista tai purkamista.",
+    "noKeysYet": "Lisää ensin avain",
+    "noKeysYetMessage": "Siirry Avaimet-välilehdelle luodaksesi tai liittyäksesi jaettuun avaimeen ja palaa sitten tänne.",
     "key": "Avain",
     "fingerprint": "Sormenjälki",
     "hide": "Piilota",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Salatun tekstin tuloste",
     "useForDecryption": "Käytä salattua tulostetta",
     "useForDecryptionA11y": "Täytä purkukenttä yllä olevalla salatulla tulosteella",
-    "decryptedOutputA11y": "Puretun viestin tuloste"
+    "decryptedOutputA11y": "Puretun viestin tuloste",
+    "encryptSuccessA11y": "Viesti salattu",
+    "decryptSuccessA11y": "Viestin salaus purettu"
   },
   "lock": {
     "locked": "Lukittu",
@@ -237,12 +244,43 @@
     "pasteInto": "Liitä kohteeseen {{field}}",
     "hideSecret": "Piilota salaisuus",
     "showSecret": "Näytä salaisuus",
-    "concealedField": "Piilotettu {{label}}, kopioi saadaksesi koko arvon"
+    "concealedField": "Piilotettu {{label}}, kopioi saadaksesi koko arvon",
+    "decorativeIcon": "Koristeellinen kuvake",
+    "selected": "Valittu",
+    "loading": "Ladataan"
   },
   "camera": {
     "title": "Kameran käyttöoikeus",
     "message": "LetsMessageEncrypt tarvitsee kameran QR-koodien skannausta varten.",
     "allow": "Salli",
     "deny": "Estä"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Luo tai liity jaettuun avaimeen aloittaaksesi",
+    "guidanceKeysReady": "Hallitse avaimia ja salaa sitten Salaa-välilehdellä",
+    "guidanceEncryptEmpty": "Lisää ensin avain Avaimet-välilehdellä",
+    "guidanceEncryptReady": "Valitse avain ja salaa tai pura salaus",
+    "helpA11y": "Näytä opastus",
+    "helpHint": "Avaa ohjeen uudelleen"
+  },
+  "tutorial": {
+    "skip": "Ohita",
+    "next": "Seuraava",
+    "back": "Takaisin",
+    "getStarted": "Aloita",
+    "stepOf": "Vaihe {{current}} / {{total}}",
+    "welcomeTitle": "Salaa viestejä yhdessä",
+    "welcomeBody": "Tämä sovellus käyttää jaettua salaisuutta molemmissa laitteissa. Luo tai liity avaimeen kerran ja salaa sekä pura viestejä yksityisesti.",
+    "keysTitle": "Luo tai liity avaimeen",
+    "keysBody": "Luo uusi jaettu salaisuus tai liity toisesta laitteesta QR-koodilla, manuaalisesti tai salatulla .lme-tiedostolla.",
+    "encryptTitle": "Salaa ja pura",
+    "encryptBody": "Salaa-välilehdellä valitse avain, kirjoita viesti ja salaa se. Liitä salateksti toiseen laitteeseen purkaaksesi.",
+    "verifyTitle": "Vahvista ja lukitse",
+    "verifyBody": "Vertaa sormenjälkiä, jotta molemmat laitteet jakavat saman salaisuuden. Ota biometrinen lukitus käyttöön suojataksesi avaimet tällä laitteella.",
+    "skipA11y": "Ohita opastus",
+    "nextA11y": "Seuraava vaihe",
+    "backA11y": "Edellinen vaihe",
+    "getStartedA11y": "Viimeistele opastus ja aloita",
+    "closeA11y": "Sulje opastus"
   }
 }

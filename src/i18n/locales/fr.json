@@ -7,7 +7,8 @@
     "keys": "Clés",
     "encrypt": "Chiffrer",
     "keysA11y": "Onglet Clés",
-    "encryptA11y": "Onglet Chiffrer"
+    "encryptA11y": "Onglet Chiffrer",
+    "tabListA11y": "Onglets principaux"
   },
   "common": {
     "cancel": "Annuler",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Choisissez la langue de l'interface de l'application.",
     "selectLanguage": "Sélectionner la langue",
     "toggleBiometricLock": "Activer/désactiver le verrouillage biométrique",
-    "biometricLockUnavailableSubtitle": "Définissez un verrouillage d’écran (Face ID, Touch ID ou code) pour activer cette option."
+    "biometricLockUnavailableSubtitle": "Définissez un verrouillage d’écran (Face ID, Touch ID ou code) pour activer cette option.",
+    "showTutorial": "Afficher le tutoriel à nouveau",
+    "showTutorialSubtitle": "Rejouer le guide de première utilisation.",
+    "showTutorialA11y": "Afficher le tutoriel à nouveau",
+    "accessibilityNote": "La taille du texte et Réduire les animations suivent les réglages de l’appareil."
   },
   "keys": {
     "createNewKey": "Créer une nouvelle clé",
@@ -48,7 +53,7 @@
     "enterManually": "Saisir manuellement",
     "lastSavedFingerprint": "Dernière empreinte enregistrée",
     "savedKeys": "Clés enregistrées",
-    "noKeysYet": "Aucune clé pour l'instant. Créez-en une ci-dessus ou rejoignez une clé existante.",
+    "noKeysYet": "Pas encore de clés. Utilisez Créer une clé ou Rejoindre ci-dessus.",
     "generateSecretA11y": "Générer une phrase secrète",
     "saveKeyA11y": "Enregistrer la clé",
     "scanQrA11y": "Scanner un code QR pour importer une clé",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Clé enregistrée",
     "alertKeySavedMessage": "\"{{name}}\" est prête. Partagez l'empreinte (ou le secret) avec l'autre appareil.",
     "createKeyCard": "Créer une clé",
-    "createKeyCardSubtitle": "Générer un nouveau secret partagé",
+    "createKeyCardSubtitle": "Démarrer un nouveau secret partagé",
     "joinKeyCard": "Rejoindre",
     "joinKeyCardSubtitle": "Importer depuis un autre appareil",
     "createKeyCardA11y": "Créer une nouvelle clé",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Vérifier l'empreinte"
   },
   "encrypt": {
-    "noKeysYet": "Aucune clé pour l'instant",
-    "noKeysYetMessage": "Allez dans l'onglet Clés pour créer ou importer une clé partagée avant de chiffrer ou déchiffrer des messages.",
+    "noKeysYet": "Ajoutez d’abord une clé",
+    "noKeysYetMessage": "Allez dans l’onglet Clés pour créer ou rejoindre une clé partagée, puis revenez ici pour chiffrer ou déchiffrer.",
     "key": "Clé",
     "fingerprint": "Empreinte",
     "hide": "Masquer",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Sortie du texte chiffré",
     "useForDecryption": "Utiliser la sortie chiffrée",
     "useForDecryptionA11y": "Remplir le champ de déchiffrement avec la sortie chiffrée ci-dessus",
-    "decryptedOutputA11y": "Sortie du message déchiffré"
+    "decryptedOutputA11y": "Sortie du message déchiffré",
+    "encryptSuccessA11y": "Message chiffré avec succès",
+    "decryptSuccessA11y": "Message déchiffré avec succès"
   },
   "lock": {
     "locked": "Verrouillé",
@@ -237,12 +244,43 @@
     "pasteInto": "Coller dans {{field}}",
     "hideSecret": "Masquer le secret",
     "showSecret": "Afficher le secret",
-    "concealedField": "{{label}} masqué, copiez pour accéder à la valeur complète"
+    "concealedField": "{{label}} masqué, copiez pour accéder à la valeur complète",
+    "decorativeIcon": "Icône décorative",
+    "selected": "Sélectionné",
+    "loading": "Chargement"
   },
   "camera": {
     "title": "Accès à la caméra",
     "message": "LetsMessageEncrypt a besoin de votre caméra pour scanner les codes QR.",
     "allow": "Autoriser",
     "deny": "Refuser"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Créez ou rejoignez une clé partagée pour commencer",
+    "guidanceKeysReady": "Gérez les clés, puis chiffrez dans l’onglet Chiffrer",
+    "guidanceEncryptEmpty": "Ajoutez d’abord une clé dans l’onglet Clés",
+    "guidanceEncryptReady": "Choisissez une clé, puis chiffrez ou déchiffrez",
+    "helpA11y": "Afficher le tutoriel",
+    "helpHint": "Rouvre le guide"
+  },
+  "tutorial": {
+    "skip": "Passer",
+    "next": "Suivant",
+    "back": "Retour",
+    "getStarted": "Commencer",
+    "stepOf": "Étape {{current}} sur {{total}}",
+    "welcomeTitle": "Chiffrez des messages ensemble",
+    "welcomeBody": "Cette appli utilise un secret partagé sur les deux appareils. Créez ou rejoignez une clé une fois, puis chiffrez et déchiffrez des messages en privé.",
+    "keysTitle": "Créer ou rejoindre une clé",
+    "keysBody": "Créez un nouveau secret partagé, ou rejoignez-en un depuis un autre appareil via QR, saisie manuelle ou fichier .lme chiffré.",
+    "encryptTitle": "Chiffrer et déchiffrer",
+    "encryptBody": "Dans l’onglet Chiffrer, choisissez votre clé, saisissez un message et chiffrez-le. Collez le texte chiffré sur l’autre appareil pour déchiffrer.",
+    "verifyTitle": "Vérifiez, puis verrouillez",
+    "verifyBody": "Comparez les empreintes pour que les deux appareils partagent le même secret. Activez le verrouillage biométrique pour protéger les clés sur cet appareil.",
+    "skipA11y": "Passer le tutoriel",
+    "nextA11y": "Étape suivante",
+    "backA11y": "Étape précédente",
+    "getStartedA11y": "Terminer le tutoriel et commencer",
+    "closeA11y": "Fermer le tutoriel"
   }
 }

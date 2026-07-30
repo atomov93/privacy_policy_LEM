@@ -7,7 +7,8 @@
     "keys": "Chiavi",
     "encrypt": "Cifra",
     "keysA11y": "Scheda Chiavi",
-    "encryptA11y": "Scheda Cifra"
+    "encryptA11y": "Scheda Cifra",
+    "tabListA11y": "Schede principali"
   },
   "common": {
     "cancel": "Annulla",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Scegli la lingua dell'interfaccia dell'app.",
     "selectLanguage": "Seleziona lingua",
     "toggleBiometricLock": "Attiva/disattiva blocco biometrico",
-    "biometricLockUnavailableSubtitle": "Imposta un blocco schermo (Face ID, Touch ID o codice) per abilitare questa opzione."
+    "biometricLockUnavailableSubtitle": "Imposta un blocco schermo (Face ID, Touch ID o codice) per abilitare questa opzione.",
+    "showTutorial": "Mostra di nuovo il tutorial",
+    "showTutorialSubtitle": "Ripeti la guida al primo avvio.",
+    "showTutorialA11y": "Mostra di nuovo il tutorial",
+    "accessibilityNote": "Dimensione testo e Riduci movimento seguono le impostazioni del dispositivo."
   },
   "keys": {
     "createNewKey": "Crea nuova chiave",
@@ -48,7 +53,7 @@
     "enterManually": "Inserisci manualmente",
     "lastSavedFingerprint": "Ultima impronta salvata",
     "savedKeys": "Chiavi salvate",
-    "noKeysYet": "Nessuna chiave ancora. Creane una sopra o unisciti a una chiave esistente.",
+    "noKeysYet": "Ancora nessuna chiave. Usa Crea chiave o Unisciti sopra per iniziare.",
     "generateSecretA11y": "Genera passphrase segreta",
     "saveKeyA11y": "Salva chiave",
     "scanQrA11y": "Scansiona codice QR per importare chiave",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Chiave salvata",
     "alertKeySavedMessage": "\"{{name}}\" è pronta. Condividi l'impronta digitale (o il segreto) con l'altro dispositivo.",
     "createKeyCard": "Crea chiave",
-    "createKeyCardSubtitle": "Genera un nuovo segreto condiviso",
+    "createKeyCardSubtitle": "Avvia un nuovo segreto condiviso",
     "joinKeyCard": "Unisciti",
     "joinKeyCardSubtitle": "Importa da un altro dispositivo",
     "createKeyCardA11y": "Crea una nuova chiave",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Verifica impronta"
   },
   "encrypt": {
-    "noKeysYet": "Nessuna chiave ancora",
-    "noKeysYetMessage": "Vai alla scheda Chiavi per creare o importare una chiave condivisa prima di cifrare o decifrare messaggi.",
+    "noKeysYet": "Aggiungi prima una chiave",
+    "noKeysYetMessage": "Vai alla scheda Chiavi per creare o unirti a una chiave condivisa, poi torna qui per cifrare o decifrare.",
     "key": "Chiave",
     "fingerprint": "Impronta digitale",
     "hide": "Nascondi",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Output del testo cifrato",
     "useForDecryption": "Usa output cifrato",
     "useForDecryptionA11y": "Compila il campo decifratura con l'output cifrato sopra",
-    "decryptedOutputA11y": "Output del messaggio decifrato"
+    "decryptedOutputA11y": "Output del messaggio decifrato",
+    "encryptSuccessA11y": "Messaggio cifrato correttamente",
+    "decryptSuccessA11y": "Messaggio decifrato correttamente"
   },
   "lock": {
     "locked": "Bloccato",
@@ -237,12 +244,43 @@
     "pasteInto": "Incolla in {{field}}",
     "hideSecret": "Nascondi segreto",
     "showSecret": "Mostra segreto",
-    "concealedField": "{{label}} nascosto, copia per accedere al valore completo"
+    "concealedField": "{{label}} nascosto, copia per accedere al valore completo",
+    "decorativeIcon": "Icona decorativa",
+    "selected": "Selezionato",
+    "loading": "Caricamento"
   },
   "camera": {
     "title": "Accesso fotocamera",
     "message": "LetsMessageEncrypt ha bisogno della fotocamera per scansionare codici QR.",
     "allow": "Consenti",
     "deny": "Nega"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Crea o unisciti a una chiave condivisa per iniziare",
+    "guidanceKeysReady": "Gestisci le chiavi, poi cifra nella scheda Cifra",
+    "guidanceEncryptEmpty": "Aggiungi prima una chiave nella scheda Chiavi",
+    "guidanceEncryptReady": "Scegli una chiave, poi cifra o decifra",
+    "helpA11y": "Mostra tutorial",
+    "helpHint": "Riapre la guida"
+  },
+  "tutorial": {
+    "skip": "Salta",
+    "next": "Avanti",
+    "back": "Indietro",
+    "getStarted": "Inizia",
+    "stepOf": "Passo {{current}} di {{total}}",
+    "welcomeTitle": "Cifrate i messaggi insieme",
+    "welcomeBody": "Questa app usa un segreto condiviso su entrambi i dispositivi. Crea o unisciti a una chiave una volta, poi cifra e decifra i messaggi in privato.",
+    "keysTitle": "Crea o unisciti a una chiave",
+    "keysBody": "Crea un nuovo segreto condiviso, oppure unisciti da un altro dispositivo con QR, inserimento manuale o file .lme cifrato.",
+    "encryptTitle": "Cifrare e decifrare",
+    "encryptBody": "Nella scheda Cifra scegli la chiave, digita un messaggio e cifralo. Incolla il testo cifrato sull’altro dispositivo per decifrare.",
+    "verifyTitle": "Verifica, poi blocca",
+    "verifyBody": "Confronta le impronte così entrambi i dispositivi condividono lo stesso segreto. Attiva il blocco biometrico per proteggere le chiavi su questo dispositivo.",
+    "skipA11y": "Salta tutorial",
+    "nextA11y": "Passo successivo",
+    "backA11y": "Passo precedente",
+    "getStartedA11y": "Termina tutorial e inizia",
+    "closeA11y": "Chiudi tutorial"
   }
 }

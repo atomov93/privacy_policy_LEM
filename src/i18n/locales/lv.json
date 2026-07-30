@@ -7,7 +7,8 @@
     "keys": "Atslēgas",
     "encrypt": "Šifrēt",
     "keysA11y": "Cilne Atslēgas",
-    "encryptA11y": "Cilne Šifrēt"
+    "encryptA11y": "Cilne Šifrēt",
+    "tabListA11y": "Galvenās cilnes"
   },
   "common": {
     "cancel": "Atcelt",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Izvēlieties lietotnes saskarnes valodu.",
     "selectLanguage": "Izvēlēties valodu",
     "toggleBiometricLock": "Pārslēgt biometrisko bloķēšanu",
-    "biometricLockUnavailableSubtitle": "Iestatiet ekrāna bloķēšanu (Face ID, Touch ID vai piekļuves kodu), lai to iespējotu."
+    "biometricLockUnavailableSubtitle": "Iestatiet ekrāna bloķēšanu (Face ID, Touch ID vai piekļuves kodu), lai to iespējotu.",
+    "showTutorial": "Rādīt pamācību vēlreiz",
+    "showTutorialSubtitle": "Atkārtot pirmās atvēršanas ceļvedi.",
+    "showTutorialA11y": "Rādīt pamācību vēlreiz",
+    "accessibilityNote": "Teksta lielums un Samazināt kustību seko ierīces iestatījumiem."
   },
   "keys": {
     "createNewKey": "Izveidot jaunu atslēgu",
@@ -48,7 +53,7 @@
     "enterManually": "Ievadīt manuāli",
     "lastSavedFingerprint": "Pēdējais saglabātais pirksta nospiedums",
     "savedKeys": "Saglabātās atslēgas",
-    "noKeysYet": "Vēl nav atslēgu. Izveidojiet vienu augstāk vai pievienojieties esošai atslēgai.",
+    "noKeysYet": "Vēl nav atslēgu. Lai sāktu, izmantojiet Izveidot atslēgu vai Pievienoties augšā.",
     "generateSecretA11y": "Ģenerēt slepeno paroli",
     "saveKeyA11y": "Saglabāt atslēgu",
     "scanQrA11y": "Skenēt QR kodu atslēgas importēšanai",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Atslēga saglabāta",
     "alertKeySavedMessage": "\"{{name}}\" ir gatavs. Kopīgojiet pirkstu nospiedumu (vai noslēpumu) ar otru ierīci.",
     "createKeyCard": "Izveidot atslēgu",
-    "createKeyCardSubtitle": "Ģenerēt jaunu koplietoto noslēpumu",
+    "createKeyCardSubtitle": "Sāciet jaunu koplietotu noslēpumu",
     "joinKeyCard": "Pievienoties",
     "joinKeyCardSubtitle": "Importēt no citas ierīces",
     "createKeyCardA11y": "Izveidot jaunu atslēgu",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Pārbaudi pirksta nospiedumu"
   },
   "encrypt": {
-    "noKeysYet": "Vēl nav atslēgu",
-    "noKeysYetMessage": "Dodieties uz cilni Atslēgas, lai izveidotu vai importētu koplietotu atslēgu pirms ziņojumu šifrēšanas vai atšifrēšanas.",
+    "noKeysYet": "Vispirms pievienojiet atslēgu",
+    "noKeysYetMessage": "Dodieties uz cilni Atslēgas, lai izveidotu vai pievienotos koplietotai atslēgai, pēc tam atgriezieties šeit.",
     "key": "Atslēga",
     "fingerprint": "Pirkstu nospiedums",
     "hide": "Paslēpt",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Šifrētā teksta izvade",
     "useForDecryption": "Izmantot šifrēto izvadi",
     "useForDecryptionA11y": "Aizpildīt atšifrēšanas lauku ar šifrēto izvadi augstāk",
-    "decryptedOutputA11y": "Atšifrētā ziņojuma izvade"
+    "decryptedOutputA11y": "Atšifrētā ziņojuma izvade",
+    "encryptSuccessA11y": "Ziņa veiksmīgi šifrēta",
+    "decryptSuccessA11y": "Ziņa veiksmīgi atšifrēta"
   },
   "lock": {
     "locked": "Bloķēts",
@@ -237,12 +244,43 @@
     "pasteInto": "Ielīmēt {{field}}",
     "hideSecret": "Paslēpt noslēpumu",
     "showSecret": "Rādīt noslēpumu",
-    "concealedField": "Paslēpts {{label}}, kopējiet pilnai vērtībai"
+    "concealedField": "Paslēpts {{label}}, kopējiet pilnai vērtībai",
+    "decorativeIcon": "Dekoratīva ikona",
+    "selected": "Atlasīts",
+    "loading": "Ielādē"
   },
   "camera": {
     "title": "Kameras piekļuve",
     "message": "LetsMessageEncrypt nepieciešama jūsu kamera QR kodu skenēšanai.",
     "allow": "Atļaut",
     "deny": "Noraidīt"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Lai sāktu, izveidojiet vai pievienojieties koplietotai atslēgai",
+    "guidanceKeysReady": "Pārvaldiet atslēgas, pēc tam šifrējiet cilnē Šifrēt",
+    "guidanceEncryptEmpty": "Vispirms pievienojiet atslēgu cilnē Atslēgas",
+    "guidanceEncryptReady": "Izvēlieties atslēgu, pēc tam šifrējiet vai atšifrējiet",
+    "helpA11y": "Rādīt pamācību",
+    "helpHint": "Atkal atver ceļvedi"
+  },
+  "tutorial": {
+    "skip": "Izlaist",
+    "next": "Tālāk",
+    "back": "Atpakaļ",
+    "getStarted": "Sākt",
+    "stepOf": "{{current}}. solis no {{total}}",
+    "welcomeTitle": "Šifrējiet ziņas kopā",
+    "welcomeBody": "Šī lietotne izmanto koplietotu noslēpumu abās ierīcēs. Vienreiz izveidojiet vai pievienojieties atslēgai, pēc tam privāti šifrējiet un atšifrējiet ziņas.",
+    "keysTitle": "Izveidot vai pievienoties atslēgai",
+    "keysBody": "Izveidojiet jaunu koplietotu noslēpumu vai pievienojieties no citas ierīces ar QR, manuālu ievadi vai šifrētu .lme failu.",
+    "encryptTitle": "Šifrēšana un atšifrēšana",
+    "encryptBody": "Cilnē Šifrēt izvēlieties atslēgu, ierakstiet ziņu un šifrējiet to. Ielīmējiet šifra tekstu otrā ierīcē, lai atšifrētu.",
+    "verifyTitle": "Pārbaudiet, pēc tam bloķējiet",
+    "verifyBody": "Salīdziniet pirkstu nospiedumus, lai abas ierīces dalītos ar to pašu noslēpumu. Ieslēdziet biometrisko bloķēšanu, lai aizsargātu atslēgas šajā ierīcē.",
+    "skipA11y": "Izlaist pamācību",
+    "nextA11y": "Nākamais solis",
+    "backA11y": "Iepriekšējais solis",
+    "getStartedA11y": "Pabeigt pamācību un sākt",
+    "closeA11y": "Aizvērt pamācību"
   }
 }

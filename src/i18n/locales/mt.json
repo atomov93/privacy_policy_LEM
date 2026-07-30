@@ -7,7 +7,8 @@
     "keys": "Ċwievet",
     "encrypt": "Iċċifra",
     "keysA11y": "Tab Ċwievet",
-    "encryptA11y": "Tab Iċċifra"
+    "encryptA11y": "Tab Iċċifra",
+    "tabListA11y": "Tabs prinċipali"
   },
   "common": {
     "cancel": "Ikkanċella",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Agħżel il-lingwa tal-interface tal-app.",
     "selectLanguage": "Agħżel Lingwa",
     "toggleBiometricLock": "Ibdel il-lock bijometriku",
-    "biometricLockUnavailableSubtitle": "Issettja lock tal-iskrin (Face ID, Touch ID jew passcode) biex tippermetti dan."
+    "biometricLockUnavailableSubtitle": "Issettja lock tal-iskrin (Face ID, Touch ID jew passcode) biex tippermetti dan.",
+    "showTutorial": "Uri t-tutorial mill-ġdid",
+    "showTutorialSubtitle": "Erġa’ daqq il-gwida tal-ewwel ftuħ.",
+    "showTutorialA11y": "Uri t-tutorial mill-ġdid",
+    "accessibilityNote": "Id-daqs tat-test u Naqqas il-Moviment isegwu s-settings tal-apparat."
   },
   "keys": {
     "createNewKey": "Oħloq Ċavetta Ġdida",
@@ -48,7 +53,7 @@
     "enterManually": "Daħħal Manwalment",
     "lastSavedFingerprint": "L-aħħar fingerprint salvat",
     "savedKeys": "Ċwievet Salvati",
-    "noKeysYet": "Għad m'hemmx ċwievet. Oħloq waħda hawn fuq jew ingħaqad ma' ċavetta eżistenti.",
+    "noKeysYet": "Għad m’hemmx ċwievet. Uża Oħloq ċavetta jew Ingħaqad hawn fuq.",
     "generateSecretA11y": "Iġġenera passphrase sigrieta",
     "saveKeyA11y": "Issejvja ċavetta",
     "scanQrA11y": "Skannja kodiċi QR biex timporta ċavetta",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Ċavetta salvata",
     "alertKeySavedMessage": "\"{{name}}\" huwa lesti. Aqsam il-fingerprint (jew is-secret) mal-apparat l-ieħor.",
     "createKeyCard": "Oħloq ċavetta",
-    "createKeyCardSubtitle": "Ġenera sigrieta kondiviża ġdida",
+    "createKeyCardSubtitle": "Ibda sigriet kondiviż ġdid",
     "joinKeyCard": "Ingħaqad",
     "joinKeyCardSubtitle": "Importa minn apparat ieħor",
     "createKeyCardA11y": "Oħloq ċavetta ġdida",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Ivverifika l-fingerprint"
   },
   "encrypt": {
-    "noKeysYet": "Għad M'hemmx Ċwievet",
-    "noKeysYetMessage": "Mur fit-tab Ċwievet biex toħloq jew timporta ċavetta maqsuma qabel ma tiċċifra jew tiddeċifra messaġġi.",
+    "noKeysYet": "L-ewwel żid ċavetta",
+    "noKeysYetMessage": "Mur fit-tab Keys biex toħloq jew tingħaqad ma’ ċavetta kondiviża, imbagħad erġa’ lura hawn.",
     "key": "Ċavetta",
     "fingerprint": "Fingerprint",
     "hide": "Aħbi",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Output tat-test kriptat",
     "useForDecryption": "Uża l-output kriptat",
     "useForDecryptionA11y": "Imla l-qasam tad-dekriptazzjoni bl-output kriptat hawn fuq",
-    "decryptedOutputA11y": "Output tal-messaġġ dekriptat"
+    "decryptedOutputA11y": "Output tal-messaġġ dekriptat",
+    "encryptSuccessA11y": "Messaġġ ikkriptat b’suċċess",
+    "decryptSuccessA11y": "Messaġġ iddikriptat b’suċċess"
   },
   "lock": {
     "locked": "Illukkjat",
@@ -237,12 +244,43 @@
     "pasteInto": "Waħħal f'{{field}}",
     "hideSecret": "Aħbi secret",
     "showSecret": "Uri secret",
-    "concealedField": "{{label}} moħbi, kopja biex tikseb il-valur sħiħ"
+    "concealedField": "{{label}} moħbi, kopja biex tikseb il-valur sħiħ",
+    "decorativeIcon": "Ikona dekorattiva",
+    "selected": "Magħżul",
+    "loading": "Qed jitgħabba"
   },
   "camera": {
     "title": "Aċċess għall-kamera",
     "message": "LetsMessageEncrypt jeħtieġ il-kamera tiegħek biex tiskannja kodiċi QR.",
     "allow": "Ippermetti",
     "deny": "Irrifjuta"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Oħloq jew ingħaqad ma’ ċavetta kondiviża biex tibda",
+    "guidanceKeysReady": "Immaniġġja ċ-ċwievet, imbagħad ikripta fit-tab Encrypt",
+    "guidanceEncryptEmpty": "L-ewwel żid ċavetta fit-tab Keys",
+    "guidanceEncryptReady": "Agħżel ċavetta, imbagħad ikripta jew iddikripta",
+    "helpA11y": "Uri t-tutorial",
+    "helpHint": "Jerġa’ jiftaħ il-gwida"
+  },
+  "tutorial": {
+    "skip": "Aqbeż",
+    "next": "Li jmiss",
+    "back": "Lura",
+    "getStarted": "Ibda",
+    "stepOf": "Pass {{current}} minn {{total}}",
+    "welcomeTitle": "Ikkriptaw messaġġi flimkien",
+    "welcomeBody": "Din l-app tuża sigriet kondiviż fuq iż-żewġ apparati. Oħloq jew ingħaqad ma’ ċavetta darba, imbagħad ikripta u ddekripta messaġġi b’mod privat.",
+    "keysTitle": "Oħloq jew ingħaqad ma’ ċavetta",
+    "keysBody": "Oħloq sigriet kondiviż ġdid, jew ingħaqad minn apparat ieħor b’QR, daħħal manwali, jew fajl .lme ikkriptat.",
+    "encryptTitle": "Ikripta u ddekripta",
+    "encryptBody": "Fit-tab Encrypt, agħżel iċ-ċavetta tiegħek, ikteb messaġġ, u ikriptah. Waħħal it-test ikkriptat fuq l-apparat l-ieħor biex tiddikripta.",
+    "verifyTitle": "Ivverifika, imbagħad issakkar",
+    "verifyBody": "Qabbel il-marki tas-swaba’ biex iż-żewġ apparati jaqsmu l-istess sigriet. Ixgħel is-sakkar bijometriku biex iżżomm iċ-ċwievet privati fuq dan l-apparat.",
+    "skipA11y": "Aqbeż it-tutorial",
+    "nextA11y": "Il-pass li jmiss",
+    "backA11y": "Il-pass ta’ qabel",
+    "getStartedA11y": "Temm it-tutorial u ibda",
+    "closeA11y": "Agħlaq it-tutorial"
   }
 }

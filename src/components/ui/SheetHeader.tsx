@@ -1,6 +1,10 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
+import {
+  BODY_MAX_FONT_MULTIPLIER,
+  CHROME_MAX_FONT_MULTIPLIER,
+} from './accessibility';
 import {MIN_TOUCH_TARGET, useSheetInsets, useTheme} from './theme';
 
 interface SheetHeaderProps {
@@ -31,7 +35,9 @@ export function SheetHeader({
             styles.actionButton,
             {opacity: pressed ? 0.6 : 1},
           ]}>
-          <Text style={[styles.actionText, {color: colors.securityTint}]}>
+          <Text
+            style={[styles.actionText, {color: colors.securityTint}]}
+            maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}>
             {actionLabel}
           </Text>
         </Pressable>
@@ -39,7 +45,8 @@ export function SheetHeader({
       <Text
         style={[styles.title, {color: colors.label}]}
         accessibilityRole="header"
-        numberOfLines={2}>
+        numberOfLines={2}
+        maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}>
         {title}
       </Text>
     </View>

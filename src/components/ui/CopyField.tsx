@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {copySensitiveText} from '../../services/clipboard';
 import {triggerLightHaptic} from '../../services/haptics';
 import {shareText} from '../../services/share';
+import {BODY_MAX_FONT_MULTIPLIER, CHROME_MAX_FONT_MULTIPLIER} from './accessibility';
 import {MIN_TOUCH_TARGET, useTheme} from './theme';
 import {useToast} from './Toast';
 
@@ -75,7 +76,10 @@ export function CopyField({
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, {color: colors.secondaryLabel}]}>
+      <Text
+        style={[styles.label, {color: colors.secondaryLabel}]}
+        maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}
+        accessibilityElementsHidden>
         {label}
       </Text>
       <View
@@ -91,6 +95,7 @@ export function CopyField({
             concealed && styles.concealed,
           ]}
           selectable={!concealed}
+          maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}
           accessibilityLabel={
             concealed
               ? t('a11y.concealedField', {label: label.toLowerCase()})
@@ -111,7 +116,9 @@ export function CopyField({
               styles.actionButton,
               {opacity: pressed ? 0.6 : 1},
             ]}>
-            <Text style={[styles.actionText, {color: colors.securityTint}]}>
+            <Text
+              style={[styles.actionText, {color: colors.securityTint}]}
+              maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}>
               {justCopied ? t('common.copied') : t('common.copy')}
             </Text>
           </Pressable>
@@ -126,7 +133,9 @@ export function CopyField({
                 styles.actionButton,
                 {opacity: pressed ? 0.6 : 1},
               ]}>
-              <Text style={[styles.actionText, {color: colors.securityTint}]}>
+              <Text
+                style={[styles.actionText, {color: colors.securityTint}]}
+                maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}>
                 {t('common.share')}
               </Text>
             </Pressable>

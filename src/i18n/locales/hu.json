@@ -7,7 +7,8 @@
     "keys": "Kulcsok",
     "encrypt": "Titkosítás",
     "keysA11y": "Kulcsok lap",
-    "encryptA11y": "Titkosítás lap"
+    "encryptA11y": "Titkosítás lap",
+    "tabListA11y": "Fő lapok"
   },
   "common": {
     "cancel": "Mégse",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Válassza ki az alkalmazás felületének nyelvét.",
     "selectLanguage": "Nyelv kiválasztása",
     "toggleBiometricLock": "Biometrikus zárolás ki/bekapcsolása",
-    "biometricLockUnavailableSubtitle": "A bekapcsoláshoz állítson be képernyőzárat (Face ID, Touch ID vagy jelszó)."
+    "biometricLockUnavailableSubtitle": "A bekapcsoláshoz állítson be képernyőzárat (Face ID, Touch ID vagy jelszó).",
+    "showTutorial": "Oktató megjelenítése újra",
+    "showTutorialSubtitle": "Az első indítás útmutatójának újrajátszása.",
+    "showTutorialA11y": "Oktató megjelenítése újra",
+    "accessibilityNote": "A szövegméret és a Mozgás csökkentése az eszköz beállításait követi."
   },
   "keys": {
     "createNewKey": "Új kulcs létrehozása",
@@ -48,7 +53,7 @@
     "enterManually": "Manuális megadás",
     "lastSavedFingerprint": "Utoljára mentett ujjlenyomat",
     "savedKeys": "Mentett kulcsok",
-    "noKeysYet": "Még nincsenek kulcsok. Hozzon létre egyet fent, vagy csatlakozzon egy meglévő kulcshoz.",
+    "noKeysYet": "Még nincsenek kulcsok. Használja fent a Kulcs létrehozása vagy Csatlakozás lehetőséget.",
     "generateSecretA11y": "Titkos jelszó generálása",
     "saveKeyA11y": "Kulcs mentése",
     "scanQrA11y": "QR-kód beolvasása kulcs importálásához",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Kulcs mentve",
     "alertKeySavedMessage": "A \"{{name}}\" készen áll. Ossza meg az ujjlenyomatot (vagy a titkot) a másik eszközzel.",
     "createKeyCard": "Kulcs létrehozása",
-    "createKeyCardSubtitle": "Új megosztott titok generálása",
+    "createKeyCardSubtitle": "Új megosztott titok indítása",
     "joinKeyCard": "Csatlakozás",
     "joinKeyCardSubtitle": "Importálás másik eszközről",
     "createKeyCardA11y": "Új kulcs létrehozása",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Ujjlenyomat ellenőrzése"
   },
   "encrypt": {
-    "noKeysYet": "Még nincsenek kulcsok",
-    "noKeysYetMessage": "Lépjen a Kulcsok lapra, hogy létrehozzon vagy importáljon megosztott kulcsot üzenetek titkosítása vagy visszafejtése előtt.",
+    "noKeysYet": "Először adjon hozzá kulcsot",
+    "noKeysYetMessage": "Menjen a Kulcsok lapra megosztott kulcs létrehozásához vagy csatlakozáshoz, majd térjen vissza ide.",
     "key": "Kulcs",
     "fingerprint": "Ujjlenyomat",
     "hide": "Elrejtés",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Titkosított szöveg kimenet",
     "useForDecryption": "Titkosított kimenet használata",
     "useForDecryptionA11y": "A visszafejtési mező kitöltése a fenti titkosított kimenettel",
-    "decryptedOutputA11y": "Visszafejtett üzenet kimenet"
+    "decryptedOutputA11y": "Visszafejtett üzenet kimenet",
+    "encryptSuccessA11y": "Üzenet sikeresen titkosítva",
+    "decryptSuccessA11y": "Üzenet sikeresen visszafejtve"
   },
   "lock": {
     "locked": "Zárolva",
@@ -237,12 +244,43 @@
     "pasteInto": "Beillesztés ide: {{field}}",
     "hideSecret": "Titok elrejtése",
     "showSecret": "Titok megjelenítése",
-    "concealedField": "Rejtett {{label}}, másolja a teljes értékhez"
+    "concealedField": "Rejtett {{label}}, másolja a teljes értékhez",
+    "decorativeIcon": "Díszítő ikon",
+    "selected": "Kiválasztva",
+    "loading": "Betöltés"
   },
   "camera": {
     "title": "Kamera-hozzáférés",
     "message": "A LetsMessageEncryptnek szüksége van a kamerára QR-kódok beolvasásához.",
     "allow": "Engedélyezés",
     "deny": "Elutasítás"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Hozzon létre vagy csatlakozzon megosztott kulcshoz a kezdéshez",
+    "guidanceKeysReady": "Kezelje a kulcsokat, majd titkosítson a Titkosítás lapon",
+    "guidanceEncryptEmpty": "Először adjon hozzá kulcsot a Kulcsok lapon",
+    "guidanceEncryptReady": "Válasszon kulcsot, majd titkosítson vagy fejtsen vissza",
+    "helpA11y": "Oktató megjelenítése",
+    "helpHint": "Újra megnyitja az útmutatót"
+  },
+  "tutorial": {
+    "skip": "Kihagyás",
+    "next": "Tovább",
+    "back": "Vissza",
+    "getStarted": "Kezdés",
+    "stepOf": "{{current}}. lépés / {{total}}",
+    "welcomeTitle": "Titkosítsanak üzeneteket együtt",
+    "welcomeBody": "Ez az alkalmazás megosztott titkot használ mindkét eszközön. Hozzon létre vagy csatlakozzon kulcshoz egyszer, majd titkosítson és fejtsen vissza üzeneteket magánúton.",
+    "keysTitle": "Kulcs létrehozása vagy csatlakozás",
+    "keysBody": "Hozzon létre új megosztott titkot, vagy csatlakozzon másik eszközről QR-rel, kézi bevitellel vagy titkosított .lme fájllal.",
+    "encryptTitle": "Titkosítás és visszafejtés",
+    "encryptBody": "A Titkosítás lapon válassza ki a kulcsot, írjon üzenetet, és titkosítsa. Illessze be a titkosított szöveget a másik eszközön a visszafejtéshez.",
+    "verifyTitle": "Ellenőrizzen, majd zárjon",
+    "verifyBody": "Hasonlítsa össze az ujjlenyomatokat, hogy mindkét eszköz ugyanazt a titkot ossza meg. Kapcsolja be a biometrikus zárat a kulcsok védelméhez ezen az eszközön.",
+    "skipA11y": "Oktató kihagyása",
+    "nextA11y": "Következő lépés",
+    "backA11y": "Előző lépés",
+    "getStartedA11y": "Oktató befejezése és kezdés",
+    "closeA11y": "Oktató bezárása"
   }
 }

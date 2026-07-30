@@ -1,6 +1,8 @@
 import {Platform, StatusBar, useColorScheme, useWindowDimensions} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import {useAccessibilityPrefs} from './accessibility';
+
 function getSheetTopInset(top: number): number {
   if (top > 0) {
     return top;
@@ -53,14 +55,42 @@ export const darkColors = {
   outputBackground: 'rgba(10, 132, 255, 0.15)',
 };
 
+/** Higher-contrast secondary/tertiary labels for bold text / high contrast modes. */
+const lightHighContrast = {
+  secondaryLabel: '#1C1C1E',
+  tertiaryLabel: 'rgba(60, 60, 67, 0.85)',
+  separator: '#8E8E93',
+  cardBorder: '#8E8E93',
+};
+
+const darkHighContrast = {
+  secondaryLabel: '#F2F2F7',
+  tertiaryLabel: 'rgba(235, 235, 245, 0.85)',
+  separator: '#98989D',
+  cardBorder: '#98989D',
+};
+
 export type ThemeColors = typeof lightColors;
 
 export function useTheme() {
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
+  const {boldTextEnabled, highTextContrastEnabled} = useAccessibilityPrefs();
+  const base = isDark ? darkColors : lightColors;
+  const boostContrast = boldTextEnabled || highTextContrastEnabled;
+
+  const colors: ThemeColors = boostContrast
+    ? {
+        ...base,
+        ...(isDark ? darkHighContrast : lightHighContrast),
+      }
+    : base;
+
   return {
     isDark,
-    colors: isDark ? darkColors : lightColors,
+    colors,
+    boldTextEnabled,
+    highTextContrastEnabled,
   };
 }
 

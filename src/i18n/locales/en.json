@@ -3,11 +3,40 @@
     "title": "LetsMessageEncrypt",
     "subtitle": "Secure pre-shared key messaging"
   },
+  "header": {
+    "guidanceKeysEmpty": "Create or join a shared key to start",
+    "guidanceKeysReady": "Manage keys, then encrypt on the Encrypt tab",
+    "guidanceEncryptEmpty": "Add a key first on the Keys tab",
+    "guidanceEncryptReady": "Pick a key, then encrypt or decrypt",
+    "helpA11y": "Show tutorial",
+    "helpHint": "Opens the how-to guide again"
+  },
+  "tutorial": {
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
+    "getStarted": "Get started",
+    "stepOf": "Step {{current}} of {{total}}",
+    "welcomeTitle": "Encrypt messages together",
+    "welcomeBody": "This app uses a shared secret on both devices. Create or join a key once, then encrypt and decrypt messages privately.",
+    "keysTitle": "Create or join a key",
+    "keysBody": "Create a new shared secret, or join one from another device with QR, manual entry, or an encrypted .lme file.",
+    "encryptTitle": "Encrypt and decrypt",
+    "encryptBody": "On the Encrypt tab, pick your key, type a message, and encrypt it. Paste ciphertext on the other device to decrypt.",
+    "verifyTitle": "Verify, then lock",
+    "verifyBody": "Compare fingerprints so both devices share the same secret. Turn on biometric lock to keep keys private on this device.",
+    "skipA11y": "Skip tutorial",
+    "nextA11y": "Next step",
+    "backA11y": "Previous step",
+    "getStartedA11y": "Finish tutorial and get started",
+    "closeA11y": "Close tutorial"
+  },
   "tabs": {
     "keys": "Keys",
     "encrypt": "Encrypt",
     "keysA11y": "Keys tab",
-    "encryptA11y": "Encrypt tab"
+    "encryptA11y": "Encrypt tab",
+    "tabListA11y": "Main tabs"
   },
   "common": {
     "cancel": "Cancel",
@@ -36,11 +65,15 @@
     "biometricUnavailableMessage": "Enable Face ID, Touch ID, or a device screen lock before turning this on.",
     "biometricVerifyFailedTitle": "Could not enable lock",
     "biometricVerifyFailedMessage": "Authenticate successfully once before enabling the lock.",
-    "biometricLockUnavailableSubtitle": "Set a device screen lock (Face ID, Touch ID, or passcode) to enable this."
+    "biometricLockUnavailableSubtitle": "Set a device screen lock (Face ID, Touch ID, or passcode) to enable this.",
+    "showTutorial": "Show tutorial again",
+    "showTutorialSubtitle": "Replay the first-run how-to guide.",
+    "showTutorialA11y": "Show tutorial again",
+    "accessibilityNote": "Text size and Reduce Motion follow your device settings."
   },
   "keys": {
     "createKeyCard": "Create key",
-    "createKeyCardSubtitle": "Generate a new shared secret",
+    "createKeyCardSubtitle": "Start a new shared secret",
     "joinKeyCard": "Join key",
     "joinKeyCardSubtitle": "Import from another device",
     "createKeyCardA11y": "Create a new key",
@@ -61,7 +94,7 @@
     "lastSavedFingerprint": "Last saved fingerprint",
     "lastSavedFingerprintFooter": "Share this fingerprint with the other device to verify the secret.",
     "savedKeys": "Saved keys",
-    "noKeysYet": "No keys yet. Create one above or join an existing key.",
+    "noKeysYet": "No keys yet. Use Create key or Join key above to get started.",
     "generateSecretA11y": "Generate secret passphrase",
     "saveKeyA11y": "Save key",
     "scanQrA11y": "Scan QR code to import key",
@@ -86,8 +119,8 @@
     "storageLoadFailed": "Could not load encrypted keys from secure storage."
   },
   "encrypt": {
-    "noKeysYet": "No keys yet",
-    "noKeysYetMessage": "Go to the Keys tab to create or import a shared key before encrypting or decrypting messages.",
+    "noKeysYet": "Add a key first",
+    "noKeysYetMessage": "Go to the Keys tab to create or join a shared key, then come back here to encrypt or decrypt.",
     "key": "Key",
     "fingerprint": "Fingerprint",
     "hide": "Hide",
@@ -112,6 +145,8 @@
     "decryptedOutputA11y": "Decrypted message output",
     "encryptA11y": "Encrypt message",
     "decryptA11y": "Decrypt ciphertext",
+    "encryptSuccessA11y": "Message encrypted successfully",
+    "decryptSuccessA11y": "Message decrypted successfully",
     "copyFingerprintA11y": "Copy fingerprint of selected key",
     "hideFingerprintA11y": "Hide fingerprint",
     "showFingerprintA11y": "Show fingerprint",
@@ -307,7 +342,10 @@
     "pasteInto": "Paste into {{field}}",
     "hideSecret": "Hide secret",
     "showSecret": "Show secret",
-    "concealedField": "Concealed {{label}}, copy to access full value"
+    "concealedField": "Concealed {{label}}, copy to access full value",
+    "decorativeIcon": "Decorative icon",
+    "selected": "Selected",
+    "loading": "Loading"
   },
   "camera": {
     "title": "Camera access",

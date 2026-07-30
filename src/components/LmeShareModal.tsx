@@ -84,7 +84,8 @@ export function LmeShareModal({keyItem, visible, onClose}: LmeShareModalProps) {
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={handleClose}>
+      onRequestClose={handleClose}
+      accessibilityViewIsModal>
       <View style={[styles.container, {backgroundColor: colors.background}]}>
         <Text style={[styles.title, {color: colors.label}]}>
           {t('lmeShare.title')}

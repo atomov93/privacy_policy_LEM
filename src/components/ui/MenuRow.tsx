@@ -1,6 +1,7 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
+import {BODY_MAX_FONT_MULTIPLIER, useReducedMotion} from './accessibility';
 import {EmojiIcon} from './EmojiIcon';
 import {MIN_TOUCH_TARGET, useTheme} from './theme';
 
@@ -30,11 +31,12 @@ export function MenuRow({
   accessibilityHint,
 }: MenuRowProps) {
   const {colors} = useTheme();
+  const reduceMotion = useReducedMotion();
 
   const titleColor = destructive ? colors.destructive : colors.label;
   const content = (
     <>
-      <View style={styles.iconSlot}>
+      <View style={styles.iconSlot} accessibilityElementsHidden>
         {iconNode ??
           (icon ? (
             <EmojiIcon
@@ -45,9 +47,17 @@ export function MenuRow({
           ) : null)}
       </View>
       <View style={styles.textBlock}>
-        <Text style={[styles.title, {color: titleColor}]}>{title}</Text>
+        <Text
+          style={[styles.title, {color: titleColor}]}
+          maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}
+          importantForAccessibility="no">
+          {title}
+        </Text>
         {subtitle && (
-          <Text style={[styles.subtitle, {color: colors.secondaryLabel}]}>
+          <Text
+            style={[styles.subtitle, {color: colors.secondaryLabel}]}
+            maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}
+            importantForAccessibility="no">
             {subtitle}
           </Text>
         )}
@@ -70,9 +80,14 @@ export function MenuRow({
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
+      accessibilityLabel={
+        subtitle ? `${accessibilityLabel}. ${subtitle}` : accessibilityLabel
+      }
       accessibilityHint={accessibilityHint}
-      style={({pressed}) => [styles.row, {opacity: pressed ? 0.65 : 1}]}>
+      style={({pressed}) => [
+        styles.row,
+        {opacity: pressed && !reduceMotion ? 0.65 : 1},
+      ]}>
       {content}
     </Pressable>
   );

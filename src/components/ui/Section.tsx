@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 
+import {BODY_MAX_FONT_MULTIPLIER, CHROME_MAX_FONT_MULTIPLIER} from './accessibility';
 import {useTheme} from './theme';
 
 interface SectionProps {
@@ -25,7 +26,8 @@ export function Section({
       {title && (
         <Text
           style={[styles.header, {color: colors.secondaryLabel}]}
-          accessibilityRole="header">
+          accessibilityRole="header"
+          maxFontSizeMultiplier={CHROME_MAX_FONT_MULTIPLIER}>
           {uppercaseTitle ? title.toUpperCase() : title}
         </Text>
       )}
@@ -37,7 +39,9 @@ export function Section({
         {children}
       </View>
       {footer && (
-        <Text style={[styles.footer, {color: colors.tertiaryLabel}]}>
+        <Text
+          style={[styles.footer, {color: colors.tertiaryLabel}]}
+          maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}>
           {footer}
         </Text>
       )}

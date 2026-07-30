@@ -7,7 +7,8 @@
     "keys": "Schlüssel",
     "encrypt": "Verschlüsseln",
     "keysA11y": "Registerkarte Schlüssel",
-    "encryptA11y": "Registerkarte Verschlüsseln"
+    "encryptA11y": "Registerkarte Verschlüsseln",
+    "tabListA11y": "Hauptregisterkarten"
   },
   "common": {
     "cancel": "Abbrechen",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Wählen Sie die Sprache der App-Oberfläche.",
     "selectLanguage": "Sprache auswählen",
     "toggleBiometricLock": "Biometrische Sperre umschalten",
-    "biometricLockUnavailableSubtitle": "Legen Sie eine Bildschirmsperre (Face ID, Touch ID oder Code) fest, um dies zu aktivieren."
+    "biometricLockUnavailableSubtitle": "Legen Sie eine Bildschirmsperre (Face ID, Touch ID oder Code) fest, um dies zu aktivieren.",
+    "showTutorial": "Tutorial erneut anzeigen",
+    "showTutorialSubtitle": "Die Erstanleitung erneut abspielen.",
+    "showTutorialA11y": "Tutorial erneut anzeigen",
+    "accessibilityNote": "Textgröße und Bewegungsreduktion folgen Ihren Geräteeinstellungen."
   },
   "keys": {
     "createNewKey": "Neuen Schlüssel erstellen",
@@ -48,7 +53,7 @@
     "enterManually": "Manuell eingeben",
     "lastSavedFingerprint": "Zuletzt gespeicherter Fingerabdruck",
     "savedKeys": "Gespeicherte Schlüssel",
-    "noKeysYet": "Noch keine Schlüssel. Erstellen Sie oben einen oder treten Sie einem bestehenden Schlüssel bei.",
+    "noKeysYet": "Noch keine Schlüssel. Nutzen Sie oben Schlüssel erstellen oder Beitreten.",
     "generateSecretA11y": "Geheime Passphrase generieren",
     "saveKeyA11y": "Schlüssel speichern",
     "scanQrA11y": "QR-Code scannen, um Schlüssel zu importieren",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Schlüssel gespeichert",
     "alertKeySavedMessage": "\"{{name}}\" ist bereit. Teilen Sie den Fingerabdruck (oder das Geheimnis) mit dem anderen Gerät.",
     "createKeyCard": "Schlüssel erstellen",
-    "createKeyCardSubtitle": "Neues gemeinsames Geheimnis generieren",
+    "createKeyCardSubtitle": "Neues gemeinsames Geheimnis starten",
     "joinKeyCard": "Beitreten",
     "joinKeyCardSubtitle": "Von anderem Gerät importieren",
     "createKeyCardA11y": "Neuen Schlüssel erstellen",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Fingerabdruck prüfen"
   },
   "encrypt": {
-    "noKeysYet": "Noch keine Schlüssel",
-    "noKeysYetMessage": "Gehen Sie zur Registerkarte Schlüssel, um einen gemeinsamen Schlüssel zu erstellen oder zu importieren, bevor Sie Nachrichten verschlüsseln oder entschlüsseln.",
+    "noKeysYet": "Zuerst einen Schlüssel hinzufügen",
+    "noKeysYetMessage": "Gehen Sie zum Tab Schlüssel, um einen gemeinsamen Schlüssel zu erstellen oder zu übernehmen, und kehren Sie dann hierher zurück.",
     "key": "Schlüssel",
     "fingerprint": "Fingerabdruck",
     "hide": "Ausblenden",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Verschlüsselter Chiffretext-Ausgabe",
     "useForDecryption": "Verschlüsselte Ausgabe verwenden",
     "useForDecryptionA11y": "Entschlüsselungsfeld mit der verschlüsselten Ausgabe oben ausfüllen",
-    "decryptedOutputA11y": "Entschlüsselte Nachricht-Ausgabe"
+    "decryptedOutputA11y": "Entschlüsselte Nachricht-Ausgabe",
+    "encryptSuccessA11y": "Nachricht erfolgreich verschlüsselt",
+    "decryptSuccessA11y": "Nachricht erfolgreich entschlüsselt"
   },
   "lock": {
     "locked": "Gesperrt",
@@ -237,12 +244,43 @@
     "pasteInto": "In {{field}} einfügen",
     "hideSecret": "Geheimnis ausblenden",
     "showSecret": "Geheimnis anzeigen",
-    "concealedField": "Verborgenes {{label}}, kopieren für den vollständigen Wert"
+    "concealedField": "Verborgenes {{label}}, kopieren für den vollständigen Wert",
+    "decorativeIcon": "Dekoratives Symbol",
+    "selected": "Ausgewählt",
+    "loading": "Wird geladen"
   },
   "camera": {
     "title": "Kamerazugriff",
     "message": "LetsMessageEncrypt benötigt Ihre Kamera zum Scannen von QR-Codes.",
     "allow": "Erlauben",
     "deny": "Ablehnen"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Erstellen oder übernehmen Sie einen gemeinsamen Schlüssel zum Starten",
+    "guidanceKeysReady": "Verwalten Sie Schlüssel und verschlüsseln Sie dann im Tab Verschlüsseln",
+    "guidanceEncryptEmpty": "Fügen Sie zuerst einen Schlüssel im Tab Schlüssel hinzu",
+    "guidanceEncryptReady": "Schlüssel wählen, dann verschlüsseln oder entschlüsseln",
+    "helpA11y": "Tutorial anzeigen",
+    "helpHint": "Öffnet die Anleitung erneut"
+  },
+  "tutorial": {
+    "skip": "Überspringen",
+    "next": "Weiter",
+    "back": "Zurück",
+    "getStarted": "Loslegen",
+    "stepOf": "Schritt {{current}} von {{total}}",
+    "welcomeTitle": "Nachrichten gemeinsam verschlüsseln",
+    "welcomeBody": "Diese App nutzt ein gemeinsames Geheimnis auf beiden Geräten. Erstellen oder übernehmen Sie einmal einen Schlüssel und verschlüsseln und entschlüsseln Sie danach privat Nachrichten.",
+    "keysTitle": "Schlüssel erstellen oder übernehmen",
+    "keysBody": "Erstellen Sie ein neues gemeinsames Geheimnis oder übernehmen Sie eines von einem anderen Gerät per QR, manuell oder als verschlüsselte .lme-Datei.",
+    "encryptTitle": "Verschlüsseln und entschlüsseln",
+    "encryptBody": "Wählen Sie im Tab Verschlüsseln Ihren Schlüssel, geben Sie eine Nachricht ein und verschlüsseln Sie sie. Fügen Sie den Geheimtext auf dem anderen Gerät ein, um zu entschlüsseln.",
+    "verifyTitle": "Prüfen, dann sperren",
+    "verifyBody": "Vergleichen Sie Fingerabdrücke, damit beide Geräte dasselbe Geheimnis teilen. Aktivieren Sie die biometrische Sperre, um Schlüssel auf diesem Gerät zu schützen.",
+    "skipA11y": "Tutorial überspringen",
+    "nextA11y": "Nächster Schritt",
+    "backA11y": "Vorheriger Schritt",
+    "getStartedA11y": "Tutorial beenden und starten",
+    "closeA11y": "Tutorial schließen"
   }
 }

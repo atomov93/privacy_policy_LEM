@@ -7,7 +7,8 @@
     "keys": "Kľúče",
     "encrypt": "Šifrovanie",
     "keysA11y": "Karta Kľúče",
-    "encryptA11y": "Karta Šifrovanie"
+    "encryptA11y": "Karta Šifrovanie",
+    "tabListA11y": "Hlavné karty"
   },
   "common": {
     "cancel": "Zrušiť",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Vyberte jazyk rozhrania aplikácie.",
     "selectLanguage": "Vybrať jazyk",
     "toggleBiometricLock": "Prepnúť biometrické zamknutie",
-    "biometricLockUnavailableSubtitle": "Na zapnutie nastavte zámok obrazovky (Face ID, Touch ID alebo heslo)."
+    "biometricLockUnavailableSubtitle": "Na zapnutie nastavte zámok obrazovky (Face ID, Touch ID alebo heslo).",
+    "showTutorial": "Zobraziť tutoriál znova",
+    "showTutorialSubtitle": "Znova prehrať úvodný návod.",
+    "showTutorialA11y": "Zobraziť tutoriál znova",
+    "accessibilityNote": "Veľkosť textu a Obmedziť pohyb sa riadia nastaveniami zariadenia."
   },
   "keys": {
     "createNewKey": "Vytvoriť nový kľúč",
@@ -48,7 +53,7 @@
     "enterManually": "Zadať manuálne",
     "lastSavedFingerprint": "Naposledy uložený odtlačok",
     "savedKeys": "Uložené kľúče",
-    "noKeysYet": "Zatiaľ žiadne kľúče. Vytvorte jeden vyššie alebo sa pripojte k existujúcemu kľúču.",
+    "noKeysYet": "Zatiaľ žiadne kľúče. Použite Vytvoriť kľúč alebo Pripojiť vyššie.",
     "generateSecretA11y": "Generovať tajné heslo",
     "saveKeyA11y": "Uložiť kľúč",
     "scanQrA11y": "Skenovať QR kód na import kľúča",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Kľúč uložený",
     "alertKeySavedMessage": "\"{{name}}\" je pripravený. Zdieľajte odtlačok prsta (alebo tajomstvo) s druhým zariadením.",
     "createKeyCard": "Vytvoriť kľúč",
-    "createKeyCardSubtitle": "Vygenerovať nové zdieľané tajomstvo",
+    "createKeyCardSubtitle": "Začnite nové zdieľané tajomstvo",
     "joinKeyCard": "Pripojiť sa",
     "joinKeyCardSubtitle": "Importovať z iného zariadenia",
     "createKeyCardA11y": "Vytvoriť nový kľúč",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Overiť odtlačok"
   },
   "encrypt": {
-    "noKeysYet": "Zatiaľ žiadne kľúče",
-    "noKeysYetMessage": "Prejdite na kartu Kľúče a vytvorte alebo importujte zdieľaný kľúč pred šifrovaním alebo dešifrovaním správ.",
+    "noKeysYet": "Najprv pridajte kľúč",
+    "noKeysYetMessage": "Prejdite na kartu Kľúče, vytvorte alebo pripojte zdieľaný kľúč a vráťte sa sem.",
     "key": "Kľúč",
     "fingerprint": "Odtlačok prsta",
     "hide": "Skryť",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Výstup zašifrovaného textu",
     "useForDecryption": "Použiť zašifrovaný výstup",
     "useForDecryptionA11y": "Vyplniť pole dešifrovania zašifrovaným výstupom vyššie",
-    "decryptedOutputA11y": "Výstup dešifrovanej správy"
+    "decryptedOutputA11y": "Výstup dešifrovanej správy",
+    "encryptSuccessA11y": "Správa bola úspešne zašifrovaná",
+    "decryptSuccessA11y": "Správa bola úspešne dešifrovaná"
   },
   "lock": {
     "locked": "Zamknuté",
@@ -237,12 +244,43 @@
     "pasteInto": "Vložiť do {{field}}",
     "hideSecret": "Skryť tajomstvo",
     "showSecret": "Zobraziť tajomstvo",
-    "concealedField": "Skryté {{label}}, skopírujte pre prístup k celej hodnote"
+    "concealedField": "Skryté {{label}}, skopírujte pre prístup k celej hodnote",
+    "decorativeIcon": "Dekoratívna ikona",
+    "selected": "Vybrané",
+    "loading": "Načítava sa"
   },
   "camera": {
     "title": "Prístup ku kamere",
     "message": "LetsMessageEncrypt potrebuje vašu kameru na skenovanie QR kódov.",
     "allow": "Povoliť",
     "deny": "Zamietnuť"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Na začiatok vytvorte alebo pripojte zdieľaný kľúč",
+    "guidanceKeysReady": "Spravujte kľúče a potom šifrujte na karte Šifrovať",
+    "guidanceEncryptEmpty": "Najprv pridajte kľúč na karte Kľúče",
+    "guidanceEncryptReady": "Vyberte kľúč a potom šifrujte alebo dešifrujte",
+    "helpA11y": "Zobraziť tutoriál",
+    "helpHint": "Znova otvorí návod"
+  },
+  "tutorial": {
+    "skip": "Preskočiť",
+    "next": "Ďalej",
+    "back": "Späť",
+    "getStarted": "Začať",
+    "stepOf": "Krok {{current}} z {{total}}",
+    "welcomeTitle": "Šifrujte správy spoločne",
+    "welcomeBody": "Táto aplikácia používa zdieľané tajomstvo na oboch zariadeniach. Raz vytvorte alebo pripojte kľúč a potom súkromne šifrujte a dešifrujte správy.",
+    "keysTitle": "Vytvorte alebo pripojte kľúč",
+    "keysBody": "Vytvorte nové zdieľané tajomstvo alebo sa pripojte z iného zariadenia cez QR, ručné zadanie alebo šifrovaný súbor .lme.",
+    "encryptTitle": "Šifrovanie a dešifrovanie",
+    "encryptBody": "Na karte Šifrovať vyberte kľúč, napíšte správu a zašifrujte ju. Na druhom zariadení vložte šifrovaný text a dešifrujte.",
+    "verifyTitle": "Overte a zamknite",
+    "verifyBody": "Porovnajte odtlačky, aby obe zariadenia zdieľali rovnaké tajomstvo. Zapnite biometrický zámok a chráňte kľúče na tomto zariadení.",
+    "skipA11y": "Preskočiť tutoriál",
+    "nextA11y": "Ďalší krok",
+    "backA11y": "Predchádzajúci krok",
+    "getStartedA11y": "Dokončiť tutoriál a začať",
+    "closeA11y": "Zavrieť tutoriál"
   }
 }

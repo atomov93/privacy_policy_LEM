@@ -7,7 +7,8 @@
     "keys": "Nøgler",
     "encrypt": "Krypter",
     "keysA11y": "Fanen Nøgler",
-    "encryptA11y": "Fanen Krypter"
+    "encryptA11y": "Fanen Krypter",
+    "tabListA11y": "Hovedfaner"
   },
   "common": {
     "cancel": "Annuller",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Vælg sproget for appens brugerflade.",
     "selectLanguage": "Vælg sprog",
     "toggleBiometricLock": "Slå biometrisk lås til/fra",
-    "biometricLockUnavailableSubtitle": "Angiv en skærmlås (Face ID, Touch ID eller adgangskode) for at aktivere dette."
+    "biometricLockUnavailableSubtitle": "Angiv en skærmlås (Face ID, Touch ID eller adgangskode) for at aktivere dette.",
+    "showTutorial": "Vis vejledning igen",
+    "showTutorialSubtitle": "Afspil den indledende vejledning igen.",
+    "showTutorialA11y": "Vis vejledning igen",
+    "accessibilityNote": "Tekststørrelse og Reducer bevægelse følger dine enhedsindstillinger."
   },
   "keys": {
     "createNewKey": "Opret ny nøgle",
@@ -48,7 +53,7 @@
     "enterManually": "Indtast manuelt",
     "lastSavedFingerprint": "Senest gemte fingeraftryk",
     "savedKeys": "Gemte nøgler",
-    "noKeysYet": "Ingen nøgler endnu. Opret en ovenfor, eller tilslut en eksisterende nøgle.",
+    "noKeysYet": "Ingen nøgler endnu. Brug Opret nøgle eller Tilslut ovenfor for at komme i gang.",
     "generateSecretA11y": "Generér hemmelig adgangssætning",
     "saveKeyA11y": "Gem nøgle",
     "scanQrA11y": "Scan QR-kode for at importere nøgle",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Nøgle gemt",
     "alertKeySavedMessage": "\"{{name}}\" er klar. Del fingeraftrykket (eller hemmeligheden) med den anden enhed.",
     "createKeyCard": "Opret nøgle",
-    "createKeyCardSubtitle": "Generer en ny delt hemmelighed",
+    "createKeyCardSubtitle": "Start en ny delt hemmelighed",
     "joinKeyCard": "Tilslut",
     "joinKeyCardSubtitle": "Importer fra en anden enhed",
     "createKeyCardA11y": "Opret en ny nøgle",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Bekræft fingeraftryk"
   },
   "encrypt": {
-    "noKeysYet": "Ingen nøgler endnu",
-    "noKeysYetMessage": "Gå til fanen Nøgler for at oprette eller importere en delt nøgle, før du krypterer eller dekrypterer beskeder.",
+    "noKeysYet": "Tilføj først en nøgle",
+    "noKeysYetMessage": "Gå til fanen Nøgler for at oprette eller tilslutte en delt nøgle, og kom så tilbage for at kryptere eller dekryptere.",
     "key": "Nøgle",
     "fingerprint": "Fingeraftryk",
     "hide": "Skjul",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Krypteret ciphertext-output",
     "useForDecryption": "Brug krypteret output",
     "useForDecryptionA11y": "Udfyld dekrypteringsfeltet med det krypterede output ovenfor",
-    "decryptedOutputA11y": "Dekrypteret besked-output"
+    "decryptedOutputA11y": "Dekrypteret besked-output",
+    "encryptSuccessA11y": "Besked krypteret",
+    "decryptSuccessA11y": "Besked dekrypteret"
   },
   "lock": {
     "locked": "Låst",
@@ -237,12 +244,43 @@
     "pasteInto": "Indsæt i {{field}}",
     "hideSecret": "Skjul hemmelighed",
     "showSecret": "Vis hemmelighed",
-    "concealedField": "Skjult {{label}}, kopiér for at få fuld værdi"
+    "concealedField": "Skjult {{label}}, kopiér for at få fuld værdi",
+    "decorativeIcon": "Dekorativt ikon",
+    "selected": "Valgt",
+    "loading": "Indlæser"
   },
   "camera": {
     "title": "Kameraadgang",
     "message": "LetsMessageEncrypt har brug for dit kamera til at scanne QR-koder.",
     "allow": "Tillad",
     "deny": "Afvis"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Opret eller tilslut en delt nøgle for at starte",
+    "guidanceKeysReady": "Administrer nøgler, og krypter derefter under fanen Krypter",
+    "guidanceEncryptEmpty": "Tilføj først en nøgle under fanen Nøgler",
+    "guidanceEncryptReady": "Vælg en nøgle, og krypter eller dekrypter",
+    "helpA11y": "Vis vejledning",
+    "helpHint": "Åbner vejledningen igen"
+  },
+  "tutorial": {
+    "skip": "Spring over",
+    "next": "Næste",
+    "back": "Tilbage",
+    "getStarted": "Kom i gang",
+    "stepOf": "Trin {{current}} af {{total}}",
+    "welcomeTitle": "Kryptér beskeder sammen",
+    "welcomeBody": "Denne app bruger en delt hemmelighed på begge enheder. Opret eller tilslut en nøgle én gang, og kryptér og dekryptér derefter beskeder privat.",
+    "keysTitle": "Opret eller tilslut en nøgle",
+    "keysBody": "Opret en ny delt hemmelighed, eller tilslut fra en anden enhed via QR, manuel indtastning eller en krypteret .lme-fil.",
+    "encryptTitle": "Kryptér og dekryptér",
+    "encryptBody": "Under fanen Krypter vælger du din nøgle, skriver en besked og krypterer den. Indsæt chifferteksten på den anden enhed for at dekryptere.",
+    "verifyTitle": "Bekræft, og lås derefter",
+    "verifyBody": "Sammenlign fingeraftryk, så begge enheder deler den samme hemmelighed. Slå biometrisk lås til for at holde nøglerne private på denne enhed.",
+    "skipA11y": "Spring vejledning over",
+    "nextA11y": "Næste trin",
+    "backA11y": "Forrige trin",
+    "getStartedA11y": "Afslut vejledning og kom i gang",
+    "closeA11y": "Luk vejledning"
   }
 }

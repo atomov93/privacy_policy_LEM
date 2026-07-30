@@ -7,14 +7,18 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {getBiometricUnlockLabel} from '../services/biometrics';
 import {LockAnimation} from './LockAnimation';
-import {Button, useTheme} from './ui';
+import {
+  BODY_MAX_FONT_MULTIPLIER,
+  Button,
+  useReducedMotion,
+  useTheme,
+} from './ui';
 
 interface LockScreenProps {
   visible: boolean;
@@ -24,6 +28,7 @@ interface LockScreenProps {
 export function LockScreen({visible, onUnlock}: LockScreenProps) {
   const {colors, isDark} = useTheme();
   const {t} = useTranslation();
+  const reduceMotion = useReducedMotion();
   const [unlockLabel, setUnlockLabel] = useState(
     Platform.OS === 'android'
       ? t('biometric.screenLock')
@@ -48,6 +53,14 @@ export function LockScreen({visible, onUnlock}: LockScreenProps) {
       overlayOpacity.setValue(0);
       contentOpacity.setValue(0);
       contentTranslateY.setValue(24);
+      buttonScale.setValue(1);
+      return;
+    }
+
+    if (reduceMotion) {
+      overlayOpacity.setValue(1);
+      contentOpacity.setValue(1);
+      contentTranslateY.setValue(0);
       buttonScale.setValue(1);
       return;
     }
@@ -104,6 +117,7 @@ export function LockScreen({visible, onUnlock}: LockScreenProps) {
     };
   }, [
     visible,
+    reduceMotion,
     overlayOpacity,
     contentOpacity,
     contentTranslateY,
@@ -125,7 +139,11 @@ export function LockScreen({visible, onUnlock}: LockScreenProps) {
             backgroundColor: colors.background,
             opacity: overlayOpacity,
           },
-        ]}>
+        ]}
+        accessibilityRole="summary"
+        accessibilityLabel={`${t('lock.locked')}. ${t('lock.authenticateWith', {
+          method: unlockLabel,
+        })}`}>
         <StatusBar
           barStyle={isDark ? 'light-content' : 'dark-content'}
           backgroundColor="transparent"
@@ -141,10 +159,15 @@ export function LockScreen({visible, onUnlock}: LockScreenProps) {
               },
             ]}>
             <LockAnimation />
-            <Text style={[styles.title, {color: colors.label}]}>
+            <Text
+              style={[styles.title, {color: colors.label}]}
+              accessibilityRole="header"
+              maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}>
               {t('lock.locked')}
             </Text>
-            <Text style={[styles.subtitle, {color: colors.secondaryLabel}]}>
+            <Text
+              style={[styles.subtitle, {color: colors.secondaryLabel}]}
+              maxFontSizeMultiplier={BODY_MAX_FONT_MULTIPLIER}>
               {t('lock.authenticateWith', {method: unlockLabel})}
             </Text>
             <Animated.View

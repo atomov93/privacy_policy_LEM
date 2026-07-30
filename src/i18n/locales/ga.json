@@ -7,7 +7,8 @@
     "keys": "Eochracha",
     "encrypt": "Criptiú",
     "keysA11y": "Cluaisín Eochracha",
-    "encryptA11y": "Cluaisín Criptiú"
+    "encryptA11y": "Cluaisín Criptiú",
+    "tabListA11y": "Príomhchluaisíní"
   },
   "common": {
     "cancel": "Cealaigh",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Roghnaigh teanga chomhéadan na haipe.",
     "selectLanguage": "Roghnaigh Teanga",
     "toggleBiometricLock": "Scoránaigh glas bithmhéadrach",
-    "biometricLockUnavailableSubtitle": "Socraigh glas scáileáin (Face ID, Touch ID, nó pasfhocal) chun é seo a chumasú."
+    "biometricLockUnavailableSubtitle": "Socraigh glas scáileáin (Face ID, Touch ID, nó pasfhocal) chun é seo a chumasú.",
+    "showTutorial": "Taispeáin an teagaisc arís",
+    "showTutorialSubtitle": "Athsheinn treoir an chéad oscailte.",
+    "showTutorialA11y": "Taispeáin an teagaisc arís",
+    "accessibilityNote": "Leanann méid an téacs agus Laghdaigh Gluaiseacht socruithe an ghléis."
   },
   "keys": {
     "createNewKey": "Cruthaigh Eochair Nua",
@@ -48,7 +53,7 @@
     "enterManually": "Cuir isteach de Láimh",
     "lastSavedFingerprint": "Méarloicmhéad deireanach sábháilte",
     "savedKeys": "Eochracha Sábháilte",
-    "noKeysYet": "Níl aon eochracha fós. Cruthaigh ceann thuas nó glac le heochair atá ann cheana.",
+    "noKeysYet": "Níl eochracha ann fós. Úsáid Cruthaigh eochair nó Téigh leis thuas.",
     "generateSecretA11y": "Gin pasfhrása rúnda",
     "saveKeyA11y": "Sábháil eochair",
     "scanQrA11y": "Scan cód QR chun eochair a allmhairiú",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Eochair sábháilte",
     "alertKeySavedMessage": "Tá \"{{name}}\" réidh. Comhroinn an méarlorg (nó an rún) leis an ngléas eile.",
     "createKeyCard": "Cruthaigh eochair",
-    "createKeyCardSubtitle": "Gin rún comhroinnte nua",
+    "createKeyCardSubtitle": "Tosaigh rún comhroinnte nua",
     "joinKeyCard": "Glac páirt",
     "joinKeyCardSubtitle": "Iompórtáil ó ghléas eile",
     "createKeyCardA11y": "Cruthaigh eochair nua",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Fíoraigh méarloicmhéad"
   },
   "encrypt": {
-    "noKeysYet": "Níl aon Eochracha Fós",
-    "noKeysYetMessage": "Téigh go dtí an cluaisín Eochracha chun eochair chomhroinnte a chruthú nó a allmhairiú sula gcriptíonn nó díchriptíonn tú teachtaireachtaí.",
+    "noKeysYet": "Cuir eochair leis ar dtús",
+    "noKeysYetMessage": "Téigh go dtí an cluaisín Eochracha chun eochair chomhroinnte a chruthú nó a cheangal, ansin fill anseo.",
     "key": "Eochair",
     "fingerprint": "Méarlorg",
     "hide": "Folaigh",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Aschur téacs criptithe",
     "useForDecryption": "Úsáid aschur criptithe",
     "useForDecryptionA11y": "Líon an réimse dícriptithe leis an aschur criptithe thuas",
-    "decryptedOutputA11y": "Aschur teachtaireachta dícriptithe"
+    "decryptedOutputA11y": "Aschur teachtaireachta dícriptithe",
+    "encryptSuccessA11y": "Teachtaireacht criptithe",
+    "decryptSuccessA11y": "Teachtaireacht díchriptithe"
   },
   "lock": {
     "locked": "Glasáilte",
@@ -237,12 +244,43 @@
     "pasteInto": "Greamaigh isteach i {{field}}",
     "hideSecret": "Folaigh rún",
     "showSecret": "Taispeáin rún",
-    "concealedField": "{{label}} ceilte, cóipeáil chun an luach iomlán a fháil"
+    "concealedField": "{{label}} ceilte, cóipeáil chun an luach iomlán a fháil",
+    "decorativeIcon": "Deilbhín maisiúil",
+    "selected": "Roghnaithe",
+    "loading": "Á lódáil"
   },
   "camera": {
     "title": "Rochtain ceamara",
     "message": "Teastaíonn do cheamara ó LetsMessageEncrypt chun códanna QR a scanadh.",
     "allow": "Ceadaigh",
     "deny": "Diúltaigh"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Cruthaigh nó téigh le heochair chomhroinnte chun tosú",
+    "guidanceKeysReady": "Bainistigh eochracha, ansin criptigh sa chluaisín Criptigh",
+    "guidanceEncryptEmpty": "Cuir eochair leis sa chluaisín Eochracha ar dtús",
+    "guidanceEncryptReady": "Roghnaigh eochair, ansin criptigh nó díchriptigh",
+    "helpA11y": "Taispeáin teagaisc",
+    "helpHint": "Osclaíonn an treoir arís"
+  },
+  "tutorial": {
+    "skip": "Scipeáil",
+    "next": "Ar aghaidh",
+    "back": "Siar",
+    "getStarted": "Tosaigh",
+    "stepOf": "Céim {{current}} as {{total}}",
+    "welcomeTitle": "Criptigh teachtaireachtaí le chéile",
+    "welcomeBody": "Úsáideann an aip seo rún comhroinnte ar an dá ghléas. Cruthaigh nó téigh le heochair uair amháin, ansin criptigh agus díchriptigh teachtaireachtaí go príobháideach.",
+    "keysTitle": "Cruthaigh nó téigh le heochair",
+    "keysBody": "Cruthaigh rún comhroinnte nua, nó téigh leis ó ghléas eile le QR, iontráil láimhe, nó comhad .lme criptithe.",
+    "encryptTitle": "Criptigh agus díchriptigh",
+    "encryptBody": "Sa chluaisín Criptigh, roghnaigh d’eochair, clóscríobh teachtaireacht, agus criptigh é. Greamaigh an téacs criptithe ar an ngléas eile chun díchriptiú.",
+    "verifyTitle": "Deimhnigh, ansin glasáil",
+    "verifyBody": "Déan comparáid idir méarloirg ionas go roinneann an dá ghléas an rún céanna. Cas ar ghlas bithmhéadrach chun eochracha a choinneáil príobháideach ar an ngléas seo.",
+    "skipA11y": "Scipeáil an teagaisc",
+    "nextA11y": "An chéad chéim eile",
+    "backA11y": "An chéim roimhe",
+    "getStartedA11y": "Críochnaigh an teagaisc agus tosaigh",
+    "closeA11y": "Dún an teagaisc"
   }
 }

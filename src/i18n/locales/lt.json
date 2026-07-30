@@ -7,7 +7,8 @@
     "keys": "Raktai",
     "encrypt": "Šifruoti",
     "keysA11y": "Skirtukas Raktai",
-    "encryptA11y": "Skirtukas Šifruoti"
+    "encryptA11y": "Skirtukas Šifruoti",
+    "tabListA11y": "Pagrindiniai skirtukai"
   },
   "common": {
     "cancel": "Atšaukti",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Pasirinkite programos sąsajos kalbą.",
     "selectLanguage": "Pasirinkti kalbą",
     "toggleBiometricLock": "Perjungti biometrinį užraktą",
-    "biometricLockUnavailableSubtitle": "Nustatykite ekrano užraktą (Face ID, Touch ID arba slaptažodį), kad įjungtumėte."
+    "biometricLockUnavailableSubtitle": "Nustatykite ekrano užraktą (Face ID, Touch ID arba slaptažodį), kad įjungtumėte.",
+    "showTutorial": "Rodyti mokymą dar kartą",
+    "showTutorialSubtitle": "Pakartoti pirmojo paleidimo vadovą.",
+    "showTutorialA11y": "Rodyti mokymą dar kartą",
+    "accessibilityNote": "Teksto dydis ir Sumažinti judesį seka įrenginio nustatymais."
   },
   "keys": {
     "createNewKey": "Sukurti naują raktą",
@@ -48,7 +53,7 @@
     "enterManually": "Įvesti rankiniu būdu",
     "lastSavedFingerprint": "Paskutinis išsaugotas kontrolinis kodas",
     "savedKeys": "Išsaugoti raktai",
-    "noKeysYet": "Raktų dar nėra. Sukurkite vieną aukščiau arba prisijunkite prie esamo rakto.",
+    "noKeysYet": "Dar nėra raktų. Norėdami pradėti, naudokite Sukurti raktą arba Prisijungti aukščiau.",
     "generateSecretA11y": "Generuoti slaptą slaptafrazę",
     "saveKeyA11y": "Išsaugoti raktą",
     "scanQrA11y": "Skenuoti QR kodą rakto importavimui",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Raktas išsaugotas",
     "alertKeySavedMessage": "\"{{name}}\" paruoštas. Pasidalykite piršto atspaudu (arba paslaptimi) su kitu įrenginiu.",
     "createKeyCard": "Sukurti raktą",
-    "createKeyCardSubtitle": "Sugeneruoti naują bendrą paslaptį",
+    "createKeyCardSubtitle": "Pradėkite naują bendrą paslaptį",
     "joinKeyCard": "Prisijungti",
     "joinKeyCardSubtitle": "Importuoti iš kito įrenginio",
     "createKeyCardA11y": "Sukurti naują raktą",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Patikrink kontrolinį kodą"
   },
   "encrypt": {
-    "noKeysYet": "Raktų dar nėra",
-    "noKeysYetMessage": "Eikite į skirtuką Raktai, kad sukurtumėte arba importuotumėte bendrą raktą prieš šifruodami arba iššifruodami pranešimus.",
+    "noKeysYet": "Pirmiausia pridėkite raktą",
+    "noKeysYetMessage": "Eikite į skirtuką Raktai, kad sukurtumėte ar prisijungtumėte prie bendro rakto, tada grįžkite čia.",
     "key": "Raktas",
     "fingerprint": "Piršto atspaudas",
     "hide": "Slėpti",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Užšifruoto teksto išvestis",
     "useForDecryption": "Naudoti užšifruotą išvestį",
     "useForDecryptionA11y": "Užpildyti iššifravimo lauką užšifruota išvestimi aukščiau",
-    "decryptedOutputA11y": "Iššifruotos žinutės išvestis"
+    "decryptedOutputA11y": "Iššifruotos žinutės išvestis",
+    "encryptSuccessA11y": "Žinutė sėkmingai užšifruota",
+    "decryptSuccessA11y": "Žinutė sėkmingai iššifruota"
   },
   "lock": {
     "locked": "Užrakinta",
@@ -237,12 +244,43 @@
     "pasteInto": "Įklijuoti į {{field}}",
     "hideSecret": "Slėpti paslaptį",
     "showSecret": "Rodyti paslaptį",
-    "concealedField": "Paslėpta {{label}}, kopijuokite norėdami gauti visą reikšmę"
+    "concealedField": "Paslėpta {{label}}, kopijuokite norėdami gauti visą reikšmę",
+    "decorativeIcon": "Dekoratyvi piktograma",
+    "selected": "Pasirinkta",
+    "loading": "Įkeliama"
   },
   "camera": {
     "title": "Kameros prieiga",
     "message": "LetsMessageEncrypt reikia jūsų kameros QR kodų skenavimui.",
     "allow": "Leisti",
     "deny": "Atmesti"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Norėdami pradėti, sukurkite arba prisijunkite prie bendro rakto",
+    "guidanceKeysReady": "Tvarkykite raktus, tada šifruokite skirtuke Šifruoti",
+    "guidanceEncryptEmpty": "Pirmiausia pridėkite raktą skirtuke Raktai",
+    "guidanceEncryptReady": "Pasirinkite raktą, tada šifruokite arba iššifruokite",
+    "helpA11y": "Rodyti mokymą",
+    "helpHint": "Vėl atidaro vadovą"
+  },
+  "tutorial": {
+    "skip": "Praleisti",
+    "next": "Toliau",
+    "back": "Atgal",
+    "getStarted": "Pradėti",
+    "stepOf": "{{current}} žingsnis iš {{total}}",
+    "welcomeTitle": "Šifruokite žinutes kartu",
+    "welcomeBody": "Ši programėlė naudoja bendrą paslaptį abiejuose įrenginiuose. Kartą sukurkite arba prisijunkite prie rakto, tada privačiai šifruokite ir iššifruokite žinutes.",
+    "keysTitle": "Sukurti arba prisijungti prie rakto",
+    "keysBody": "Sukurkite naują bendrą paslaptį arba prisijunkite iš kito įrenginio QR, rankiniu įvedimu ar šifruotu .lme failu.",
+    "encryptTitle": "Šifravimas ir iššifravimas",
+    "encryptBody": "Skirtuke Šifruoti pasirinkite raktą, įrašykite žinutę ir užšifruokite. Įklijuokite šifrotekstą kitame įrenginyje, kad iššifruotumėte.",
+    "verifyTitle": "Patikrinkite, tada užrakinkite",
+    "verifyBody": "Palyginkite pirštų atspaudus, kad abu įrenginiai dalytųsi ta pačia paslaptimi. Įjunkite biometrinį užraktą, kad raktai liktų privatūs šiame įrenginyje.",
+    "skipA11y": "Praleisti mokymą",
+    "nextA11y": "Kitas žingsnis",
+    "backA11y": "Ankstesnis žingsnis",
+    "getStartedA11y": "Baigti mokymą ir pradėti",
+    "closeA11y": "Uždaryti mokymą"
   }
 }

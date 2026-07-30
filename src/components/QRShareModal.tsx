@@ -43,7 +43,8 @@ export function QRShareModal({keyItem, visible, onClose}: QRShareModalProps) {
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+      accessibilityViewIsModal>
       <View style={[styles.container, {backgroundColor: colors.background}]}>
         <Text style={[styles.title, {color: colors.label}]}>
           {t('qrShare.title')}

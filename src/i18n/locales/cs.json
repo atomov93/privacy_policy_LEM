@@ -7,7 +7,8 @@
     "keys": "Klíče",
     "encrypt": "Šifrování",
     "keysA11y": "Záložka Klíče",
-    "encryptA11y": "Záložka Šifrování"
+    "encryptA11y": "Záložka Šifrování",
+    "tabListA11y": "Hlavní karty"
   },
   "common": {
     "cancel": "Zrušit",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Vyberte jazyk rozhraní aplikace.",
     "selectLanguage": "Vybrat jazyk",
     "toggleBiometricLock": "Přepnout biometrické zamknutí",
-    "biometricLockUnavailableSubtitle": "Pro zapnutí nastavte zámek obrazovky (Face ID, Touch ID nebo heslo)."
+    "biometricLockUnavailableSubtitle": "Pro zapnutí nastavte zámek obrazovky (Face ID, Touch ID nebo heslo).",
+    "showTutorial": "Zobrazit tutoriál znovu",
+    "showTutorialSubtitle": "Znovu přehrát úvodní návod.",
+    "showTutorialA11y": "Zobrazit tutoriál znovu",
+    "accessibilityNote": "Velikost textu a omezení pohybu se řídí nastavením zařízení."
   },
   "keys": {
     "createNewKey": "Vytvořit nový klíč",
@@ -48,7 +53,7 @@
     "enterManually": "Zadat ručně",
     "lastSavedFingerprint": "Naposledy uložený otisk",
     "savedKeys": "Uložené klíče",
-    "noKeysYet": "Zatím žádné klíče. Vytvořte jeden výše nebo se připojte k existujícímu klíči.",
+    "noKeysYet": "Zatím žádné klíče. Použijte Vytvořit klíč nebo Připojit výše.",
     "generateSecretA11y": "Generovat tajné heslo",
     "saveKeyA11y": "Uložit klíč",
     "scanQrA11y": "Skenovat QR kód pro import klíče",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Klíč uložen",
     "alertKeySavedMessage": "\"{{name}}\" je připraven. Sdílejte otisk prstu (nebo tajemství) s druhým zařízením.",
     "createKeyCard": "Vytvořit klíč",
-    "createKeyCardSubtitle": "Vygenerovat nové sdílené tajemství",
+    "createKeyCardSubtitle": "Začněte nové sdílené tajemství",
     "joinKeyCard": "Připojit se",
     "joinKeyCardSubtitle": "Importovat z jiného zařízení",
     "createKeyCardA11y": "Vytvořit nový klíč",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Ověření otisku"
   },
   "encrypt": {
-    "noKeysYet": "Zatím žádné klíče",
-    "noKeysYetMessage": "Přejděte na záložku Klíče a vytvořte nebo importujte sdílený klíč před šifrováním nebo dešifrováním zpráv.",
+    "noKeysYet": "Nejprve přidejte klíč",
+    "noKeysYetMessage": "Přejděte na kartu Klíče, vytvořte nebo připojte sdílený klíč a vraťte se sem šifrovat nebo dešifrovat.",
     "key": "Klíč",
     "fingerprint": "Otisk prstu",
     "hide": "Skrýt",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Výstup zašifrovaného textu",
     "useForDecryption": "Použít zašifrovaný výstup",
     "useForDecryptionA11y": "Vyplnit pole dešifrování zašifrovaným výstupem výše",
-    "decryptedOutputA11y": "Výstup dešifrované zprávy"
+    "decryptedOutputA11y": "Výstup dešifrované zprávy",
+    "encryptSuccessA11y": "Zpráva byla úspěšně zašifrována",
+    "decryptSuccessA11y": "Zpráva byla úspěšně dešifrována"
   },
   "lock": {
     "locked": "Zamčeno",
@@ -237,12 +244,43 @@
     "pasteInto": "Vložit do {{field}}",
     "hideSecret": "Skrýt tajemství",
     "showSecret": "Zobrazit tajemství",
-    "concealedField": "Skryté {{label}}, zkopírujte pro přístup k celé hodnotě"
+    "concealedField": "Skryté {{label}}, zkopírujte pro přístup k celé hodnotě",
+    "decorativeIcon": "Dekorativní ikona",
+    "selected": "Vybráno",
+    "loading": "Načítání"
   },
   "camera": {
     "title": "Přístup ke kameře",
     "message": "LetsMessageEncrypt potřebuje vaši kameru pro skenování QR kódů.",
     "allow": "Povolit",
     "deny": "Zamítnout"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Pro začátek vytvořte nebo připojte sdílený klíč",
+    "guidanceKeysReady": "Spravujte klíče a pak šifrujte na kartě Šifrovat",
+    "guidanceEncryptEmpty": "Nejprve přidejte klíč na kartě Klíče",
+    "guidanceEncryptReady": "Vyberte klíč a pak šifrujte nebo dešifrujte",
+    "helpA11y": "Zobrazit tutoriál",
+    "helpHint": "Znovu otevře návod"
+  },
+  "tutorial": {
+    "skip": "Přeskočit",
+    "next": "Další",
+    "back": "Zpět",
+    "getStarted": "Začít",
+    "stepOf": "Krok {{current}} z {{total}}",
+    "welcomeTitle": "Šifrujte zprávy společně",
+    "welcomeBody": "Tato aplikace používá sdílené tajemství na obou zařízeních. Jednou vytvořte nebo připojte klíč a pak soukromě šifrujte a dešifrujte zprávy.",
+    "keysTitle": "Vytvořte nebo připojte klíč",
+    "keysBody": "Vytvořte nové sdílené tajemství, nebo se připojte z jiného zařízení přes QR, ruční zadání či šifrovaný soubor .lme.",
+    "encryptTitle": "Šifrování a dešifrování",
+    "encryptBody": "Na kartě Šifrovat vyberte klíč, napište zprávu a zašifrujte ji. Na druhém zařízení vložte šifrovaný text a dešifrujte.",
+    "verifyTitle": "Ověřte a zamkněte",
+    "verifyBody": "Porovnejte otisky, aby obě zařízení sdílela stejné tajemství. Zapněte biometrický zámek a chraňte klíče na tomto zařízení.",
+    "skipA11y": "Přeskočit tutoriál",
+    "nextA11y": "Další krok",
+    "backA11y": "Předchozí krok",
+    "getStartedA11y": "Dokončit tutoriál a začít",
+    "closeA11y": "Zavřít tutoriál"
   }
 }

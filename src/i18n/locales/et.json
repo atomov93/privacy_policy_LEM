@@ -7,7 +7,8 @@
     "keys": "Võtmed",
     "encrypt": "Krüpteeri",
     "keysA11y": "Vaheleht Võtmed",
-    "encryptA11y": "Vaheleht Krüpteeri"
+    "encryptA11y": "Vaheleht Krüpteeri",
+    "tabListA11y": "Põhivahekaardid"
   },
   "common": {
     "cancel": "Tühista",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Vali rakenduse liidese keel.",
     "selectLanguage": "Vali keel",
     "toggleBiometricLock": "Lülita biomeetriline lukustus",
-    "biometricLockUnavailableSubtitle": "Selle lubamiseks määra ekraanilukk (Face ID, Touch ID või pääsukood)."
+    "biometricLockUnavailableSubtitle": "Selle lubamiseks määra ekraanilukk (Face ID, Touch ID või pääsukood).",
+    "showTutorial": "Näita õpetust uuesti",
+    "showTutorialSubtitle": "Esimese käivituse juhendi taasesitus.",
+    "showTutorialA11y": "Näita õpetust uuesti",
+    "accessibilityNote": "Teksti suurus ja Liikumise vähendamine järgivad seadme sätteid."
   },
   "keys": {
     "createNewKey": "Loo uus võti",
@@ -48,7 +53,7 @@
     "enterManually": "Sisesta käsitsi",
     "lastSavedFingerprint": "Viimati salvestatud sõrmejälg",
     "savedKeys": "Salvestatud võtmed",
-    "noKeysYet": "Võtmeid pole veel. Loo üks ülal või liitu olemasoleva võtmega.",
+    "noKeysYet": "Võtmeid veel pole. Kasuta ülal Loo võti või Ühine.",
     "generateSecretA11y": "Genereeri salajane parool",
     "saveKeyA11y": "Salvesta võti",
     "scanQrA11y": "Skaneeri QR-kood võtme importimiseks",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Võti salvestatud",
     "alertKeySavedMessage": "\"{{name}}\" on valmis. Jaga sõrmejälge (või saladust) teise seadmega.",
     "createKeyCard": "Loo võti",
-    "createKeyCardSubtitle": "Genereeri uus jagatud saladus",
+    "createKeyCardSubtitle": "Alusta uut jagatud saladust",
     "joinKeyCard": "Liitu",
     "joinKeyCardSubtitle": "Impordi teisest seadmest",
     "createKeyCardA11y": "Loo uus võti",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Kontrolli sõrmejälge"
   },
   "encrypt": {
-    "noKeysYet": "Võtmeid pole veel",
-    "noKeysYetMessage": "Mine vahelehele Võtmed, et luua või importida jagatud võti enne sõnumite krüpteerimist või dekrüpteerimist.",
+    "noKeysYet": "Lisa esmalt võti",
+    "noKeysYetMessage": "Mine vahekaardile Võtmed, et luua või ühineda jagatud võtmega, ja tule siis siia tagasi.",
     "key": "Võti",
     "fingerprint": "Sõrmejälg",
     "hide": "Peida",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Krüpteeritud šifroteksti väljund",
     "useForDecryption": "Kasuta krüpteeritud väljundit",
     "useForDecryptionA11y": "Täida dekrüpteerimise väli ülaloleva krüpteeritud väljundiga",
-    "decryptedOutputA11y": "Dekrüpteeritud sõnumi väljund"
+    "decryptedOutputA11y": "Dekrüpteeritud sõnumi väljund",
+    "encryptSuccessA11y": "Sõnum krüptitud",
+    "decryptSuccessA11y": "Sõnum dekrüptitud"
   },
   "lock": {
     "locked": "Lukustatud",
@@ -237,12 +244,43 @@
     "pasteInto": "Kleebi {{field}}",
     "hideSecret": "Peida saladus",
     "showSecret": "Näita saladust",
-    "concealedField": "Peidetud {{label}}, kopeeri täieliku väärtuse saamiseks"
+    "concealedField": "Peidetud {{label}}, kopeeri täieliku väärtuse saamiseks",
+    "decorativeIcon": "Dekoratiivne ikoon",
+    "selected": "Valitud",
+    "loading": "Laadimine"
   },
   "camera": {
     "title": "Kaamera juurdepääs",
     "message": "LetsMessageEncrypt vajab QR-koodide skaneerimiseks sinu kaamerat.",
     "allow": "Luba",
     "deny": "Keela"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Alustamiseks loo või ühine jagatud võtmega",
+    "guidanceKeysReady": "Halda võtmeid ja krüpti seejärel vahekaardil Krüpti",
+    "guidanceEncryptEmpty": "Lisa esmalt võti vahekaardil Võtmed",
+    "guidanceEncryptReady": "Vali võti ning krüpti või dekrüpti",
+    "helpA11y": "Näita õpetust",
+    "helpHint": "Avab juhendi uuesti"
+  },
+  "tutorial": {
+    "skip": "Jäta vahele",
+    "next": "Edasi",
+    "back": "Tagasi",
+    "getStarted": "Alusta",
+    "stepOf": "Samm {{current}} / {{total}}",
+    "welcomeTitle": "Krüptige sõnumeid koos",
+    "welcomeBody": "See rakendus kasutab mõlemal seadmel jagatud saladust. Loo või ühine võtmega üks kord ning krüpti ja dekrüpti seejärel sõnumeid privaatselt.",
+    "keysTitle": "Loo või ühine võtmega",
+    "keysBody": "Loo uus jagatud saladus või ühine teisest seadmest QR-i, käsitsi sisestuse või krüptitud .lme failiga.",
+    "encryptTitle": "Krüpti ja dekrüpti",
+    "encryptBody": "Vahekaardil Krüpti vali võti, kirjuta sõnum ja krüpti see. Kleebi šifritekst teisele seadmele dekrüptimiseks.",
+    "verifyTitle": "Kontrolli ja lukusta",
+    "verifyBody": "Võrdle sõrmejälgi, et mõlemad seadmed jagaksid sama saladust. Lülita sisse biomeetriline lukk, et hoida võtmeid sellel seadmel privaatsena.",
+    "skipA11y": "Jäta õpetus vahele",
+    "nextA11y": "Järgmine samm",
+    "backA11y": "Eelmine samm",
+    "getStartedA11y": "Lõpeta õpetus ja alusta",
+    "closeA11y": "Sulge õpetus"
   }
 }

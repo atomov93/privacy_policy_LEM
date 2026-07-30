@@ -290,6 +290,7 @@ export function QRScanModal({
       animationType="slide"
       presentationStyle="fullScreen"
       onRequestClose={handleClose}
+      accessibilityViewIsModal
       onShow={() => {
         resetScanState();
         setTorchOn(false);

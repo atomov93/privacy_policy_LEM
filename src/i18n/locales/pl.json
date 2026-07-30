@@ -7,7 +7,8 @@
     "keys": "Klucze",
     "encrypt": "Szyfruj",
     "keysA11y": "Zakładka Klucze",
-    "encryptA11y": "Zakładka Szyfruj"
+    "encryptA11y": "Zakładka Szyfruj",
+    "tabListA11y": "Główne karty"
   },
   "common": {
     "cancel": "Anuluj",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Wybierz język interfejsu aplikacji.",
     "selectLanguage": "Wybierz język",
     "toggleBiometricLock": "Przełącz blokadę biometryczną",
-    "biometricLockUnavailableSubtitle": "Ustaw blokadę ekranu (Face ID, Touch ID lub kod), aby to włączyć."
+    "biometricLockUnavailableSubtitle": "Ustaw blokadę ekranu (Face ID, Touch ID lub kod), aby to włączyć.",
+    "showTutorial": "Pokaż samouczek ponownie",
+    "showTutorialSubtitle": "Odtwórz przewodnik pierwszego uruchomienia.",
+    "showTutorialA11y": "Pokaż samouczek ponownie",
+    "accessibilityNote": "Rozmiar tekstu i Ogranicz ruch następują ustawienia urządzenia."
   },
   "keys": {
     "createNewKey": "Utwórz nowy klucz",
@@ -48,7 +53,7 @@
     "enterManually": "Wprowadź ręcznie",
     "lastSavedFingerprint": "Ostatnio zapisany odcisk",
     "savedKeys": "Zapisane klucze",
-    "noKeysYet": "Brak kluczy. Utwórz jeden powyżej lub dołącz do istniejącego klucza.",
+    "noKeysYet": "Brak kluczy. Użyj Utwórz klucz lub Dołącz powyżej, aby zacząć.",
     "generateSecretA11y": "Generuj tajne hasło",
     "saveKeyA11y": "Zapisz klucz",
     "scanQrA11y": "Skanuj kod QR, aby zaimportować klucz",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Klucz zapisany",
     "alertKeySavedMessage": "\"{{name}}\" jest gotowy. Udostępnij odcisk palca (lub sekret) drugiemu urządzeniu.",
     "createKeyCard": "Utwórz klucz",
-    "createKeyCardSubtitle": "Wygeneruj nowy wspólny sekret",
+    "createKeyCardSubtitle": "Rozpocznij nowy wspólny sekret",
     "joinKeyCard": "Dołącz",
     "joinKeyCardSubtitle": "Importuj z innego urządzenia",
     "createKeyCardA11y": "Utwórz nowy klucz",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Zweryfikuj odcisk"
   },
   "encrypt": {
-    "noKeysYet": "Brak kluczy",
-    "noKeysYetMessage": "Przejdź do zakładki Klucze, aby utworzyć lub zaimportować wspólny klucz przed szyfrowaniem lub odszyfrowywaniem wiadomości.",
+    "noKeysYet": "Najpierw dodaj klucz",
+    "noKeysYetMessage": "Przejdź do zakładki Klucze, aby utworzyć lub dołączyć do wspólnego klucza, a potem wróć tutaj.",
     "key": "Klucz",
     "fingerprint": "Odcisk palca",
     "hide": "Ukryj",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Wynik zaszyfrowanego tekstu",
     "useForDecryption": "Użyj zaszyfrowanego wyniku",
     "useForDecryptionA11y": "Wypełnij pole odszyfrowania zaszyfrowanym wynikiem powyżej",
-    "decryptedOutputA11y": "Wynik odszyfrowanej wiadomości"
+    "decryptedOutputA11y": "Wynik odszyfrowanej wiadomości",
+    "encryptSuccessA11y": "Wiadomość zaszyfrowana pomyślnie",
+    "decryptSuccessA11y": "Wiadomość odszyfrowana pomyślnie"
   },
   "lock": {
     "locked": "Zablokowane",
@@ -237,12 +244,43 @@
     "pasteInto": "Wklej do {{field}}",
     "hideSecret": "Ukryj sekret",
     "showSecret": "Pokaż sekret",
-    "concealedField": "Ukryte {{label}}, skopiuj aby uzyskać pełną wartość"
+    "concealedField": "Ukryte {{label}}, skopiuj aby uzyskać pełną wartość",
+    "decorativeIcon": "Ikona dekoracyjna",
+    "selected": "Wybrane",
+    "loading": "Ładowanie"
   },
   "camera": {
     "title": "Dostęp do kamery",
     "message": "LetsMessageEncrypt potrzebuje kamery do skanowania kodów QR.",
     "allow": "Zezwól",
     "deny": "Odmów"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Utwórz lub dołącz do wspólnego klucza, aby zacząć",
+    "guidanceKeysReady": "Zarządzaj kluczami, a potem szyfruj w zakładce Szyfruj",
+    "guidanceEncryptEmpty": "Najpierw dodaj klucz w zakładce Klucze",
+    "guidanceEncryptReady": "Wybierz klucz, a potem szyfruj lub odszyfruj",
+    "helpA11y": "Pokaż samouczek",
+    "helpHint": "Otwiera przewodnik ponownie"
+  },
+  "tutorial": {
+    "skip": "Pomiń",
+    "next": "Dalej",
+    "back": "Wstecz",
+    "getStarted": "Zacznij",
+    "stepOf": "Krok {{current}} z {{total}}",
+    "welcomeTitle": "Szyfrujcie wiadomości razem",
+    "welcomeBody": "Ta aplikacja używa wspólnego sekretu na obu urządzeniach. Utwórz lub dołącz do klucza raz, a potem prywatnie szyfruj i odszyfrowuj wiadomości.",
+    "keysTitle": "Utwórz lub dołącz do klucza",
+    "keysBody": "Utwórz nowy wspólny sekret albo dołącz z innego urządzenia przez QR, ręcznie lub zaszyfrowany plik .lme.",
+    "encryptTitle": "Szyfrowanie i odszyfrowywanie",
+    "encryptBody": "W zakładce Szyfruj wybierz klucz, wpisz wiadomość i zaszyfruj. Wklej szyfrogram na drugim urządzeniu, aby odszyfrować.",
+    "verifyTitle": "Zweryfikuj, potem zablokuj",
+    "verifyBody": "Porównaj odciski, aby oba urządzenia miały ten sam sekret. Włącz blokadę biometryczną, by chronić klucze na tym urządzeniu.",
+    "skipA11y": "Pomiń samouczek",
+    "nextA11y": "Następny krok",
+    "backA11y": "Poprzedni krok",
+    "getStartedA11y": "Zakończ samouczek i zacznij",
+    "closeA11y": "Zamknij samouczek"
   }
 }

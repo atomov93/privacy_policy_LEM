@@ -7,7 +7,8 @@
     "keys": "Nycklar",
     "encrypt": "Kryptera",
     "keysA11y": "Fliken Nycklar",
-    "encryptA11y": "Fliken Kryptera"
+    "encryptA11y": "Fliken Kryptera",
+    "tabListA11y": "Huvudflikar"
   },
   "common": {
     "cancel": "Avbryt",
@@ -32,7 +33,11 @@
     "languageSubtitle": "Välj språk för appens gränssnitt.",
     "selectLanguage": "Välj språk",
     "toggleBiometricLock": "Växla biometriskt lås",
-    "biometricLockUnavailableSubtitle": "Ställ in en skärmlåsning (Face ID, Touch ID eller lösenkod) för att aktivera detta."
+    "biometricLockUnavailableSubtitle": "Ställ in en skärmlåsning (Face ID, Touch ID eller lösenkod) för att aktivera detta.",
+    "showTutorial": "Visa handledningen igen",
+    "showTutorialSubtitle": "Spela upp guiden vid första öppningen igen.",
+    "showTutorialA11y": "Visa handledningen igen",
+    "accessibilityNote": "Textstorlek och Minska rörelse följer enhetens inställningar."
   },
   "keys": {
     "createNewKey": "Skapa ny nyckel",
@@ -48,7 +53,7 @@
     "enterManually": "Ange manuellt",
     "lastSavedFingerprint": "Senast sparade fingeravtryck",
     "savedKeys": "Sparade nycklar",
-    "noKeysYet": "Inga nycklar ännu. Skapa en ovan eller anslut till en befintlig nyckel.",
+    "noKeysYet": "Inga nycklar ännu. Använd Skapa nyckel eller Anslut ovan för att komma igång.",
     "generateSecretA11y": "Generera hemlig lösenfras",
     "saveKeyA11y": "Spara nyckel",
     "scanQrA11y": "Skanna QR-kod för att importera nyckel",
@@ -62,7 +67,7 @@
     "alertKeySaved": "Nyckel sparad",
     "alertKeySavedMessage": "\"{{name}}\" är redo. Dela fingeravtrycket (eller hemligheten) med den andra enheten.",
     "createKeyCard": "Skapa nyckel",
-    "createKeyCardSubtitle": "Generera en ny delad hemlighet",
+    "createKeyCardSubtitle": "Starta en ny delad hemlighet",
     "joinKeyCard": "Anslut",
     "joinKeyCardSubtitle": "Importera från annan enhet",
     "createKeyCardA11y": "Skapa en ny nyckel",
@@ -72,8 +77,8 @@
     "enterManuallyCardSubtitle": "Verifiera fingeravtryck"
   },
   "encrypt": {
-    "noKeysYet": "Inga nycklar ännu",
-    "noKeysYetMessage": "Gå till fliken Nycklar för att skapa eller importera en delad nyckel innan du krypterar eller dekrypterar meddelanden.",
+    "noKeysYet": "Lägg först till en nyckel",
+    "noKeysYetMessage": "Gå till fliken Nycklar för att skapa eller ansluta till en delad nyckel och kom sedan tillbaka hit.",
     "key": "Nyckel",
     "fingerprint": "Fingeravtryck",
     "hide": "Dölj",
@@ -112,7 +117,9 @@
     "ciphertextOutputA11y": "Utdata för krypterad text",
     "useForDecryption": "Använd krypterad utdata",
     "useForDecryptionA11y": "Fyll i dekrypteringsfältet med den krypterade utdatan ovan",
-    "decryptedOutputA11y": "Utdata för dekrypterat meddelande"
+    "decryptedOutputA11y": "Utdata för dekrypterat meddelande",
+    "encryptSuccessA11y": "Meddelandet krypterades",
+    "decryptSuccessA11y": "Meddelandet dekrypterades"
   },
   "lock": {
     "locked": "Låst",
@@ -237,12 +244,43 @@
     "pasteInto": "Klistra in i {{field}}",
     "hideSecret": "Dölj hemlighet",
     "showSecret": "Visa hemlighet",
-    "concealedField": "Dold {{label}}, kopiera för fullständigt värde"
+    "concealedField": "Dold {{label}}, kopiera för fullständigt värde",
+    "decorativeIcon": "Dekorativ ikon",
+    "selected": "Markerad",
+    "loading": "Läser in"
   },
   "camera": {
     "title": "Kameraåtkomst",
     "message": "LetsMessageEncrypt behöver din kamera för att skanna QR-koder.",
     "allow": "Tillåt",
     "deny": "Neka"
+  },
+  "header": {
+    "guidanceKeysEmpty": "Skapa eller anslut till en delad nyckel för att börja",
+    "guidanceKeysReady": "Hantera nycklar och kryptera sedan på fliken Kryptera",
+    "guidanceEncryptEmpty": "Lägg först till en nyckel på fliken Nycklar",
+    "guidanceEncryptReady": "Välj en nyckel och kryptera eller dekryptera",
+    "helpA11y": "Visa handledning",
+    "helpHint": "Öppnar guiden igen"
+  },
+  "tutorial": {
+    "skip": "Hoppa över",
+    "next": "Nästa",
+    "back": "Tillbaka",
+    "getStarted": "Kom igång",
+    "stepOf": "Steg {{current}} av {{total}}",
+    "welcomeTitle": "Kryptera meddelanden tillsammans",
+    "welcomeBody": "Den här appen använder en delad hemlighet på båda enheterna. Skapa eller anslut till en nyckel en gång och kryptera och dekryptera sedan meddelanden privat.",
+    "keysTitle": "Skapa eller anslut till en nyckel",
+    "keysBody": "Skapa en ny delad hemlighet eller anslut från en annan enhet via QR, manuell inmatning eller en krypterad .lme-fil.",
+    "encryptTitle": "Kryptera och dekryptera",
+    "encryptBody": "På fliken Kryptera väljer du nyckel, skriver ett meddelande och krypterar det. Klistra in chiffertexten på den andra enheten för att dekryptera.",
+    "verifyTitle": "Verifiera och lås sedan",
+    "verifyBody": "Jämför fingeravtryck så att båda enheterna delar samma hemlighet. Aktivera biometriskt lås för att skydda nycklarna på den här enheten.",
+    "skipA11y": "Hoppa över handledningen",
+    "nextA11y": "Nästa steg",
+    "backA11y": "Föregående steg",
+    "getStartedA11y": "Avsluta handledningen och kom igång",
+    "closeA11y": "Stäng handledningen"
   }
 }

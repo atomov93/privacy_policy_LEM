@@ -393,7 +393,7 @@ export function CreateKeyTab({
               onPress={() => setShowLanguagePicker(true)}
             />
           </SectionRow>
-          <SectionRow isLast>
+          <SectionRow>
             <View
               style={[
                 styles.settingRow,
@@ -435,6 +435,13 @@ export function CreateKeyTab({
                 accessibilityState={{disabled: !biometricAvailable}}
               />
             </View>
+          </SectionRow>
+          <SectionRow isLast>
+            <Text
+              style={[styles.settingSubtitle, {color: colors.tertiaryLabel}]}
+              accessibilityRole="text">
+              {t('settings.accessibilityNote')}
+            </Text>
           </SectionRow>
         </Section>
 
@@ -542,7 +549,7 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'stretch',
     gap: 12,
     marginBottom: 16,
   },
