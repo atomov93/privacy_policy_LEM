@@ -1,0 +1,75 @@
+<en-US>
+Get started faster with a guided first-run tutorial, clearer on-screen guidance, a help button to replay the walkthrough, and accessibility improvements throughout.
+</en-US>
+<en-GB>
+Get started faster with a guided first-run tutorial, clearer on-screen guidance, a help button to replay the walkthrough, and accessibility improvements throughout.
+</en-GB>
+<bg>
+Започнете по-бързо с урок при първо отваряне, по-ясни насоки на екрана, бутон за помощ за повторно пускане на урока и подобрения в достъпността.
+</bg>
+<hr>
+Brže započnite uz vodič pri prvom pokretanju, jasnije upute na zaslonu, gumb za pomoć za ponavljanje vodiča i poboljšanja pristupačnosti.
+</hr>
+<cs-CZ>
+Začněte rychleji díky průvodci při prvním spuštění, jasnějším pokynům na obrazovce, tlačítku nápovědy pro opětovné spuštění a vylepšením přístupnosti.
+</cs-CZ>
+<da-DK>
+Kom hurtigere i gang med en vejledning ved første start, klarere vejledning på skærmen, en hjælpeknap til at genafspille guiden og forbedringer af tilgængelighed.
+</da-DK>
+<nl-NL>
+Start sneller met een tutorial bij de eerste start, duidelijkere aanwijzingen op het scherm, een helpknop om de rondleiding opnieuw te tonen en toegankelijkheidsverbeteringen.
+</nl-NL>
+<et>
+Alusta kiiremini esimese käivituse juhendiga, selgemate ekraanijuhistega, abi nupuga juhendi uuesti avamiseks ning ligipääsetavuse täiustustega.
+</et>
+<fi-FI>
+Aloita nopeammin ensimmäisen käynnistyksen opastuksella, selkeämmillä näyttöohjeilla, ohjepainikkeella oppaan uudelleen avaamiseen sekä saavutettavuuden parannuksilla.
+</fi-FI>
+<fr-FR>
+Démarrez plus vite avec un tutoriel au premier lancement, des indications plus claires, un bouton d’aide pour revoir le guide, et des améliorations d’accessibilité.
+</fr-FR>
+<de-DE>
+Schneller starten mit Tutorial beim ersten Öffnen, klareren Hinweisen auf dem Bildschirm, einer Hilfe-Taste zum erneuten Anzeigen und Verbesserungen der Barrierefreiheit.
+</de-DE>
+<el-GR>
+Ξεκινήστε πιο γρήγορα με οδηγό στην πρώτη εκκίνηση, σαφέστερες οδηγίες οθόνης, κουμπί βοήθειας για επανάληψη του οδηγού και βελτιώσεις προσβασιμότητας.
+</el-GR>
+<hu-HU>
+Gyorsabb kezdés az első indításkor megjelenő oktatóval, világosabb képernyő-útmutatással, súgógombbal az útmutató újranézéséhez és akadálymentesítési fejlesztésekkel.
+</hu-HU>
+<ga>
+Tosaigh níos tapúla le teagaisc ar an gcéad oscailt, treoir níos soiléire ar an scáileán, cnaipe cabhrach chun an treoir a athsheinm, agus feabhsuithe inrochtaineachta.
+</ga>
+<it-IT>
+Inizia più in fretta con un tutorial al primo avvio, indicazioni più chiare, un pulsante di aiuto per rivedere la guida e miglioramenti di accessibilità.
+</it-IT>
+<lv>
+Sāciet ātrāk ar pamācību pirmajā atvēršanā, skaidrākiem norādījumiem ekrānā, palīdzības pogu, lai atkārtotu ceļvedi, un pieejamības uzlabojumiem.
+</lv>
+<lt>
+Pradėkite greičiau su mokymu pirmą kartą atidarius, aiškesniais nurodymais ekrane, pagalbos mygtuku vadovui pakartoti ir pritaikomumo patobulinimais.
+</lt>
+<mt>
+Ibda aktar malajr b’tutorial fl-ewwel ftuħ, gwida aktar ċara fuq l-iskrin, buttuna tal-għajnuna biex terġa’ tara l-gwida, u titjib fl-aċċessibbiltà.
+</mt>
+<pl-PL>
+Zacznij szybciej dzięki samouczkowi przy pierwszym uruchomieniu, jaśniejszym wskazówkom na ekranie, przyciskowi pomocy do ponownego odtworzenia przewodnika oraz ulepszeniom dostępności.
+</pl-PL>
+<pt-PT>
+Comece mais depressa com um tutorial na primeira abertura, orientações mais claras no ecrã, um botão de ajuda para rever o guia e melhorias de acessibilidade.
+</pt-PT>
+<ro>
+Începeți mai rapid cu un tutorial la prima deschidere, indicații mai clare pe ecran, un buton de ajutor pentru a revedea ghidul și îmbunătățiri de accesibilitate.
+</ro>
+<sk>
+Začnite rýchlejšie s návodom pri prvom spustení, jasnejšími pokynmi na obrazovke, tlačidlom pomoci na opätovné zobrazenie a vylepšeniami prístupnosti.
+</sk>
+<sl>
+Začnite hitreje z vadnico ob prvem zagonu, jasnejšimi napotki na zaslonu, gumbom za pomoč za ponovni prikaz vodnika in izboljšavami dostopnosti.
+</sl>
+<es-ES>
+Empieza antes con un tutorial al primer inicio, indicaciones más claras en pantalla, un botón de ayuda para volver a ver la guía y mejoras de accesibilidad.
+</es-ES>
+<sv-SE>
+Kom igång snabbare med en handledning vid första start, tydligare vägledning på skärmen, en hjälpknapp för att spela upp guiden igen och tillgänglighetsförbättringar.
+</sv-SE>

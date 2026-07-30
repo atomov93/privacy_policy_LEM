@@ -1,0 +1,78 @@
+# App Store Connect — Promotional Text (1.4.0)
+# Max 170 characters per locale. Appears above the description; editable without a new build.
+# Paste each block into App Store Connect → App Information / Version → Promotional Text.
+
+## English (U.S.) — en-US
+New first-run tutorial, clearer guidance, and better accessibility. Open Help anytime to replay the walkthrough.
+
+## English (U.K.) — en-GB
+New first-run tutorial, clearer guidance, and better accessibility. Open Help anytime to replay the walkthrough.
+
+## Bulgarian — bg
+Нов урок при първо отваряне, по-ясни насоки и по-добра достъпност. Отворете Помощ, за да пуснете урока отново.
+
+## Croatian — hr
+Novi vodič pri prvom pokretanju, jasnije upute i bolja pristupačnost. Otvori Pomoć za ponavljanje vodiča.
+
+## Czech — cs
+Nový průvodce při prvním spuštění, jasnější pokyny a lepší přístupnost. Otevřete Nápovědu pro opětovné spuštění.
+
+## Danish — da
+Ny vejledning ved første start, klarere vejledning og bedre tilgængelighed. Åbn Hjælp for at genafspille guiden.
+
+## Dutch — nl-NL
+Nieuwe tutorial bij eerste start, duidelijkere aanwijzingen en betere toegankelijkheid. Open Help om opnieuw te tonen.
+
+## Estonian — et
+Uus juhend esimesel käivitamisel, selgemad juhised ja parem ligipääsetavus. Ava Abi juhendi uuesti avamiseks.
+
+## Finnish — fi
+Uusi opastus ensimmäisellä käynnistyksellä, selkeämmät ohjeet ja parempi saavutettavuus. Avaa Ohje uudelleen.
+
+## French — fr-FR
+Nouveau tutoriel au premier lancement, indications plus claires et accessibilité renforcée. Rouvrez Aide pour le guide.
+
+## German — de-DE
+Neues Tutorial beim ersten Öffnen, klarere Hinweise und bessere Barrierefreiheit. Hilfe öffnen zum erneuten Anzeigen.
+
+## Greek — el
+Νέος οδηγός στην πρώτη εκκίνηση, σαφέστερες οδηγίες και καλύτερη προσβασιμότητα. Ανοίξτε Βοήθεια για επανάληψη.
+
+## Hungarian — hu
+Új oktató az első indításkor, világosabb útmutatás és jobb akadálymentesség. Nyissa meg a Súgót újranézéshez.
+
+## Irish — ga
+Teagaisc nua ar an gcéad oscailt, treoir níos soiléire agus inrochtaineacht níos fearr. Oscail Cabhair chun athsheinm.
+
+## Italian — it-IT
+Nuovo tutorial al primo avvio, indicazioni più chiare e migliore accessibilità. Apri Aiuto per rivedere la guida.
+
+## Latvian — lv
+Jauna pamācība pirmajā atvēršanā, skaidrāki norādījumi un labāka pieejamība. Atveriet Palīdzību, lai atkārtotu.
+
+## Lithuanian — lt
+Naujas mokymas pirmą kartą atidarius, aiškesni nurodymai ir geresnis pritaikomumas. Atidarykite Pagalbą pakartoti.
+
+## Maltese — mt
+Tutorial ġdid fl-ewwel ftuħ, gwida aktar ċara u aċċessibbiltà aħjar. Iftaħ Għajnuna biex terġa’ tara.
+
+## Polish — pl-PL
+Nowy samouczek przy pierwszym uruchomieniu, jaśniejsze wskazówki i lepsza dostępność. Otwórz Pomoc, by odtworzyć.
+
+## Portuguese — pt-PT
+Novo tutorial na primeira abertura, orientações mais claras e melhor acessibilidade. Abra Ajuda para rever o guia.
+
+## Romanian — ro
+Tutorial nou la prima deschidere, indicații mai clare și accesibilitate mai bună. Deschideți Ajutor pentru a revedea.
+
+## Slovak — sk
+Nový návod pri prvom spustení, jasnejšie pokyny a lepšia prístupnosť. Otvorte Pomoc na opätovné zobrazenie.
+
+## Slovenian — sl
+Nova vadnica ob prvem zagonu, jasnejši napotki in boljša dostopnost. Odprite Pomoč za ponovni prikaz.
+
+## Spanish — es-ES
+Nuevo tutorial al primer inicio, indicaciones más claras y mejor accesibilidad. Abre Ayuda para volver a ver la guía.
+
+## Swedish — sv-SE
+Ny handledning vid första start, tydligare vägledning och bättre tillgänglighet. Öppna Hjälp för att spela upp igen.

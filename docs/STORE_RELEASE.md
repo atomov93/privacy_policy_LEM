@@ -9,7 +9,7 @@ Release checklist for **Google Play** and **Apple App Store**.
 | App name | LetsMessageEncrypt |
 | Android package | `com.letsmessageencrypt` |
 | iOS bundle ID | `org.tts.LetsMessageEncrypt` |
-| Version | 1.0.1 (Android versionCode 2) |
+| Version | 1.4.0 (Android versionCode 5) |
 | Category | Productivity / Utilities |
 
 > **Trademark note:** Avoid confusion with the “Let’s Encrypt” certificate authority. This app is a separate offline messaging encryptor named LetsMessageEncrypt.
